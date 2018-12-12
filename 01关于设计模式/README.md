@@ -27,3 +27,43 @@ func CreateLion(){
 # 5 数据映射(Data-Mapper)是另外一种设计模式，它鼓励使用`Mapper`层用来在内存对象和数据库之间移动数据，用来保证各自的独立。这个与活动记录`Active-Record`模式相反，你对这两种设计模式怎么看？在什么情况下使用其中一个，而不是另一个？
 ![](./images/data_mapper.png)
 与`Active Record`模式不同，使用`Data Mapper`通过增加`Mapper`层，将业务层的数据对象和持久化层的数据进行解耦，使它们相互独立。对于包含复杂的业务逻辑和多个对象关联，使用`Data Mapper`能够有效减低系统的复杂度，但是`Mapper`层如何访问数据对象的需要考虑，通常使用反射机制，但是反射性能比较差。
+
+# 6 为什么说引入`null`类型是一个`Billion dollar mistake`，你能说说有什么技术来避免它？比如在`GOF`书中提到的`Null Object Pattern`方法，`Option` 类型。
+`null`可以理解两层含义：
+- 无效的
+- 空值
+  
+正因如此，在程序运行中中出现 `NulPointerException` 的异常，比如`Java`中实例对象调用方法的时候，如果实例为`null`，抛出NPE；在程序编写过程中，包含大量的 `obj != null` 的判断语句；而且在设计`API`过程中，如何正确地处理`null`类型也需要单独设计。
+
+通常`NPE`出现的问题在于程序员在开发过程中，并没有区分两者的正确含义，对于空值，正确的做法应当是抛出异常；或者采用`go`语言中返回多个值，其中最后一个`error`接口表前面的返回值是否有效。在`GOF`中的`Null Object Pattern`模式，定义了`Option<T>`类型，包含了两个子类型：
+![](./images/null.png)
+```go
+// interface
+type Option interface {
+    GetValue() interface{}
+    IsNull() bool
+}
+
+// `Some` struct
+type Some struct {
+    val interface{}
+}
+
+func (s *Some) GetValue() interface{}{
+    return s.val
+}
+func (s *Some) IsNull() bool {
+    return false
+}
+
+// `None` struct
+type None struct{
+
+}
+func (n *None) GetValue() interface{}{
+    return nil
+}
+func (n *None) IsNull() bool {
+    return true
+}
+```
