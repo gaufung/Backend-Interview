@@ -10,7 +10,7 @@ This is Chinese version of [Back-End-Developer-Interview-Questions](https://gith
 - [x] 为什么说引入`null`类型是一个`Billion dollar mistake`，你能说说有什么技术来避免它？比如在`GOF`书中提到的`Null Object Pattern`方法，`Option` 类型。
 - 许多观点是这样的：在面向对象编程(`OOP`)中，组合往往是比继承更好的选择，你观点是怎样的？
 - [x] 什么叫反腐化(`Anti-corruption`)层？
-- 单例模式设计模式限制了每一个类只能创建唯一的对象，你能否写一个线程安全的单例模式？
+- [x] 单例模式设计模式限制了每一个类只能创建唯一的对象，你能否写一个线程安全的单例模式？
 - 改变实现方式而不影响客户端的能力叫做数据抽象`Data Abstraction`，那么编写一个违反这个属性的例子，并且修复它。
 - 编写一个代码片段并且违法`DRY` (Don't Repeat Yourself)原则，并且修复它。
 - 如何处理依赖灾难（`Dependency Hell`)

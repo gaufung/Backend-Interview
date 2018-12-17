@@ -84,3 +84,42 @@ func (n *None) IsNull() bool {
 - 考虑反腐化层在架构迁移后是否退出整个应用程序；
 
 那么反腐化层设计和设计模式的`Adapter`模式和`Facade`模式有什么区别呢？反腐化层用在哪些设计有缺陷的子系统或者模块中，而`Adapter`模式和`Facade`模式则不认为原先设计有什么问题，而是目前的需求无法满足，需要进行改造来完成特定需求。
+
+
+# 9 单例模式设计模式限制了每一个类只能创建唯一的对象，你能否写一个线程安全的单例模式？
+在`go`语言中，使用字母大小写来控制访问权限，因此最简单的单例模式是将类型的和字段名全部小写，使在`package`外面无法构造实例，通过唯一的`Instance`方法获取实对象实例。同时为了保证线程安全，使用锁机制。
+```go
+package animal
+type dog struct {
+    name string
+}
+
+var instance *dog
+var mux sync.Mux
+
+func Instance() *dog {
+    if instance == nil {
+        mux.Lock()
+        defer mux.Unlock()
+        //double check
+        if instance == nil {
+            instance = new(dog)
+        }
+    }
+    return instance
+}
+```
+该单例模式事项为`懒汉`模式，在需要的时候调用`Instance`方法才会构造单例，还有一种方法是`饿汉`模式，在初始化的时候就创建好单例。在`go`中，每一个`package`包中`init`函数是初始化执行的。因此我们可以这样设计：
+```go
+package animal
+type dog struct {
+    name string
+}
+var Dog *dog
+func init(){
+    if Dog == nil {
+        Dog = new(dog)
+    }
+}
+```
+那么所有引用这个`animal.Dog`都是同一个实例对象。
