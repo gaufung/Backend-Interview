@@ -87,7 +87,7 @@ This is Chinese version of [Back-End-Developer-Interview-Questions](https://gith
 - 为什么在`Mercuial`或者`git`中，创建分支比`SVN`分支容易；
 - 分布式版本控制系统和集中式版本管理系统有什么各自的缺点和优点？
 - 你能描述`github flow`和`gitflow`各自的工作流？
-- 什么是`rebase`?
+- [x] 什么是`rebase`?
 - 在`Mercurial`或者`git`中合并比`SVN`中容易；
 
 # 8 并发
