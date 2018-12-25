@@ -13,7 +13,7 @@ This is Chinese version of [Back-End-Developer-Interview-Questions](https://gith
 - [x] 单例模式设计模式限制了每一个类只能创建唯一的对象，你能否写一个线程安全的单例模式？
 - 改变实现方式而不影响客户端的能力叫做数据抽象`Data Abstraction`，那么编写一个违反这个属性的例子，并且修复它。
 - 编写一个代码片段并且违法`DRY` (Don't Repeat Yourself)原则，并且修复它。
-- 如何处理依赖灾难（`Dependency Hell`)
+- [x] 如何处理依赖灾难（`Dependency Hell`)
 - [x] `goto`语句是邪恶的吗？你或许听过一篇由`Edsger Dijkstra`写的著名论文 `Go To Statement Considered Harmful`，在这篇论文中他批评了`goto`语句，并且推崇结构化编程。 使用`goto`通常非常有争议，甚至`Dijkstra`这篇文章也被批评了，诸如`'GOTO Considered Harmful' Considered Harmful`，那么你的观点是怎样的？
 - 鲁棒性原则是软件开发中广泛的采用的原则，通常用 `对你的输出按照约定，对你的输入保持宽容`(`Be conservative in what you send, be liberal in what you accept`)，你能说说这个原则的合理性吗？
 - 问题拆分（`Separation of Concerns`)是一种设计原则，它将编程问题划分到不同的领域，每一个领域关注自己的的问题。有许多不同的机制来完成这个目标，比如使用对象，函数，模块，或者MVC等等。 你能讨论一下这个话题吗？
