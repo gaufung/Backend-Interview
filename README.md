@@ -20,7 +20,7 @@ This is Chinese version of [Back-End-Developer-Interview-Questions](https://gith
   
 # 2 代码设计
 - 在面向对象编程中，一个很重要的目标是高内聚（High Cohesion)和松耦合（Loose Coupling). 那么它意味着什么？为什么这个很重要？如何实现它呢？
-- 为什么在大部分语言中数组的下标从`0`开始？
+- [x] 为什么在大部分语言中数组的下标从`0`开始？
 - 测试和测试驱动开发(TDD)如何影响代码设计？
 - 编写一个代码片段违反`DRY`原则，并且解释它为什么是坏的设计，然后修复它。
 - 内聚和耦合有什么区别？
