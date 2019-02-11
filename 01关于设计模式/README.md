@@ -17,7 +17,33 @@ func CreateLion(){
 在这里`count`为包`animal`的全局变量，那么包类所有的成员都能访问该对象，一旦对`count`做出修改，就会影响包类全部使用该变量的成员。
 
 # 2 介绍一下控制反转(IoC)，它是如何提高代码设计的？
-  
+控制反转(`Inverse of Control, IoC`)是将程序控制流交出去，比如使用控制台进行用户信息请求输入
+```ruby
+puts 'What is your name?'
+name = gets
+process_name(name)
+puts 'What is your quest?'
+quest = gets
+process_quest(quest)
+```
+`process_name` 和 `process_quest` 两个函数处理流都是用户程序控制，如果使用window窗口界面完成用户信息请求
+```ruby
+require 'tk'
+root = TkRoot.new()
+name_label = TkLabel.new() {text "What is Your Name?"}
+name_label.pack
+name = TkEntry.new(root).pack
+name.bind("FocusOut") {process_name(name)}
+quest_label = TkLabel.new() {text "What is Your Quest?"}
+quest_label.pack
+quest = TkEntry.new(root).pack
+quest.bind("FocusOut") {process_quest(quest)}
+Tk.mainloop()
+```
+现在所有的程序控制逻辑交给了`TK.mainloop`，`process_name` 和 `process_quest` 被绑定到相应窗口的控件，至于什么时候执行相应的函数无法控制。
+
+框架(`framework`)是控制反转的代表，框架包含了大量的抽象设计，应用程序在使用过程中，自定义所需的行为，然后被框架调用，整个自定义行为的动作控制流程为框架所接管。在`.NET`中，通过事件`Event`机制，用户注册相应的事件即可完成控制反转。
+
 # 3 迪米特法则（Low of Demeter）表述每个单元最外部了解的越少越好，编写违反这个原则的代码，说明它是不好的设计模式，并且修复它。
 
 # 4 活动记录(Active-Record)是一种设计模式，它表述了代表数据库中表的对象应该拥有`Insert`,`Update`和`Delete`等相关操作。在你的观点和工作经验中，这中设计模式有什么限制和缺陷？
