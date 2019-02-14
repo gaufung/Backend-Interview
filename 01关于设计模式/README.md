@@ -96,6 +96,36 @@ func (n *None) IsNull() bool {
 
 # 7 许多观点是这样的：在面向对象编程(`OOP`)中，组合往往是比继承更好的选择，你观点是怎样的？
 
+继承(`Inheritance`)是面向对象编程的基础，如果没有继承就不能面向对象编程，另外两个是`封装`和`多态`。
+组合(`Composition`)几乎所有语言都支持，也是人们思维的方式，比如一张椅子，包含了四条腿；一堵墙由砖头和水泥合成等等。
+
+继承包含了语义上的继承，通常将一个概念从抽象到具体化排列开来，通过一个子树的形式将继承的组织起来；而且继承也将对象中的字段和方法
+能够被重用。
+继承往往被错误使用，下面的例子
+```java
+class Stack extends ArrayList {
+    public void push(Object value) { … }
+    public Object pop() { … }
+}
+```
+这个类完成`Stack`功能那个，这个类只需要提供 `pop` 和 `push` 方法，但是通过继承的方式，也获得了`get`, `set`, `add`等方法，这样通过继承获得缺陷有：
+- 在语义上，`Stack`并不是`ArrayList`, 也就是不满足`is-a`的条件；
+- 在机制上，继承破坏了封装，`ArrayList`的应该向`Stack`使用者隐藏起来；
+- 通过`ArrayList`来实现`Stack`，这是一种跨领域的关系，`ArrayList`是随机访问的结构，而`Stack`则是`FILO`访问的结构。
+
+那么下面再举一个误用继承的例子
+```java
+class CustomGroup extends ArrayList<Customer> {
+    //....
+}
+```
+这也是一个跨领域继承，`ArrayList<Customer>`是一个集合，是一个`implmentation`类，而`CustomGroup`则是`domain`类，
+任何`domain`类应该使用`implementation`类，而不是继承它们。
+总而言之
+> 除了你在创建`implementation`类，否则都不应该使用继承。
+
+
+
 # 8 什么叫反腐化(`Anti-corruption`)层？
 当一个应用程序从从原先的设计中向新的架构设计迁移，因为迁移的过程是逐步的，所以新的架构仍然需要调用原先接口。但是新的架构维持调用接口是非常费时费力，所以在调用中间增加一个反腐化层（`Anti-corruption Layer`)。同样问题也会出现在我们调用的外部模块的接口，该模块在设计上有质量的问题，通过反腐化层，来避免设计上的缺陷。
 下图是反腐化层设计的示意图：
