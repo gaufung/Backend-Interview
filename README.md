@@ -91,9 +91,9 @@ This is Chinese version of [Back-End-Developer-Interview-Questions](https://gith
 - 在`Mercurial`或者`git`中合并比`SVN`中容易；
 
 # 8 并发
-- 为什么我们需要并发？
+- [x] 为什么我们需要并发？
 - 为什么测试多线程或者并发比较困难？
-- 什么是竞争条件？举一个例子来描述？
+- [x] 什么是竞争条件？举一个例子来描述？
 - 什么是死锁？编写一些代码是由死锁导致的；
 - 什么是进程饥饿？如果需要，重新回顾一下定义
 - 什么是`Wait Free`算法？
