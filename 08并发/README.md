@@ -20,3 +20,57 @@ if x == 0 {
 ```
 
 执行的过程如何首先读取 `x` 的值是否为`0`，如果满足条件，则修改它加1，然后在写回到内存那种。中间的过程通常借助寄存器完成计算，如果在执行中间过程中，线程被切换出去，那么导致另外的线程取得的`x`值任然为内存，导致最终的结果不一致。
+
+
+# 4 什么是死锁？编写一些代码是由死锁导致的；
+
+由于并发执行线程或者进程设计不合理，导致它们互相等待对象释放资源，从而导致程序无法进行下去。假设线程 `A` 锁住了资源 `x`，并且等待资源 `y`
+的释放；然而线程 `B` 目前锁住了资源 `y`, 并且等待资源 `x` 的释放。这样带来所有程序无法继续往下进行，导致死锁 (`dead lock`)
+
+```go
+var x int
+var y int
+var xlocker sync.Mutex
+var ylocker sync.Mutex
+
+func main(){
+    var wg sync.WaitGroup
+    wg.Add(2)
+    go func(){
+        xlocker.Lock()
+        x++
+        // do something for x
+        xlocker.Unlock()
+
+        ylocker.Lock()
+        y++
+        // do something for y
+        ylocker.Unlock()
+        wg.Done()
+    }()
+
+    go func(){
+        ylocker.Lock()
+        // do something for y
+        y++
+        ylocker.Unlock()
+
+        xlocker.Lock()
+        // do something for x
+        x++
+        xlocker.Unlock()
+        wg.Done()
+    }
+    wg.Wait()
+}
+```
+
+解决死锁的方法有：
+
+- 对资源的进行排序，每次获取锁按照训练进行；
+- 增大锁的粒度，每次锁住全部所需的全部资源。
+
+
+# 5 什么是进程饥饿？如果需要，重新回顾一下定义
+
+在一个动态系统中，资源请求与释放是经常性发生的进程行为．对于每类系统资源，操作系统需要确定一个分配策略，当多个进程同时申请某类资源时，由分配策略确定资源分配给进程的次序。 资源分配策略可能是公平的(fair)，能保证请求者在有限的时间内获得所需资源；资源分配策略也可能是不公平的(unfair)，即不能保证等待时间上界的存在。 在后一种情况下，即使系统没有发生死锁，某些进程也可能会长时间等待．当等待时间给进程推进和响应带来明显影响时，称发生了进程饥饿(starvation)，当饥饿到一定程度的进程所赋予的任务即使完成也不再具有实际意义时称该进程被饿死(starve to death)。
