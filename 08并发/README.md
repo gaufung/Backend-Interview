@@ -70,7 +70,29 @@ func main(){
 - 对资源的进行排序，每次获取锁按照训练进行；
 - 增大锁的粒度，每次锁住全部所需的全部资源。
 
-
 # 5 什么是进程饥饿？如果需要，重新回顾一下定义
 
 在一个动态系统中，资源请求与释放是经常性发生的进程行为．对于每类系统资源，操作系统需要确定一个分配策略，当多个进程同时申请某类资源时，由分配策略确定资源分配给进程的次序。 资源分配策略可能是公平的(fair)，能保证请求者在有限的时间内获得所需资源；资源分配策略也可能是不公平的(unfair)，即不能保证等待时间上界的存在。 在后一种情况下，即使系统没有发生死锁，某些进程也可能会长时间等待．当等待时间给进程推进和响应带来明显影响时，称发生了进程饥饿(starvation)，当饥饿到一定程度的进程所赋予的任务即使完成也不再具有实际意义时称该进程被饿死(starve to death)。
+
+# 6 什么是`Wait Free`算法？
+
+在并发编程中，对共享数据的读写保护非常重要，通常的手段就是同步。同步分为两种
+
+- 阻塞型同步(`Blocking Synchronization`)
+- 非阻塞型同步(`Non-blocking Synchronization`)
+
+常见的阻塞同步的方法当某个线程到达某个临界区间，如果另外一个线程持有访问该共享数据的锁，那么这个线程将会阻塞，直到另一个线程释放该锁。常见的同步原语有 `mutex`, `semaphore`。但是这种方法存在`deadlock`, `livelock` 和 优先级反转 (`priority inversion`)等问题。
+
+比较流行的 `Non-blocking Synchronization`方法有
+
+- Wait Free
+`Wait-free` 是指任意线程的任何操作都可以在有限步之内结束，而不用关心其它线程的执行速度。 `Wait-free` 是基于 `per-thread` 的，可以认为是 `starvation-free` 的。非常遗憾的是实际情况并非如此，采用 `Wait-free` 的程序并不能保证 `starvation-free`，同时内存消耗也随线程数量而线性增长。目前只有极少数的非阻塞算法实现了这一点。
+
+- Lock-free
+`Lock-Free` 是指能够确保执行它的所有线程中至少有一个能够继续往下执行。由于每个线程不是 `starvation-free` 的，即有些线程可能会被任意地延迟，然而在每一步都至少有一个线程能够往下执行，因此系统作为一个整体是在持续执行的，可以认为是 `system-wide` 的。所有 `Wait-free` 的算法都是 `Lock-Free` 的。
+
+- Obstruction-free
+
+Obstruction-free 是指在任何时间点，一个孤立运行线程的每一个操作可以在有限步之内结束。只要没有竞争，线程就可以持续运行。一旦共享数据被修改，Obstruction-free 要求中止已经完成的部分操作，并进行回滚。 所有 Lock-Free 的算法都是 Obstruction-free 的。
+
+一般采用原子级的 read-modify-write 原语来实现 Lock-Free 算法，其中 LL 和 SC 是 Lock-Free 理论研究领域的理想原语，但实现这些原语需要 CPU 指令的支持，非常遗憾的是目前没有任何 CPU 直接实现了 SC 原语。根据此理论，业界在原子操作的基础上提出了著名的 CAS（Compare - And - Swap）操作来实现 Lock-Free 算法，Intel 实现了一条类似该操作的指令：cmpxchg8。

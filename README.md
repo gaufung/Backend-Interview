@@ -96,7 +96,7 @@ This is Chinese version of [Back-End-Developer-Interview-Questions](https://gith
 - [x] 什么是竞争条件？举一个例子来描述？
 - [x] 什么是死锁？编写一些代码是由死锁导致的；
 - [x] 什么是进程饥饿？如果需要，重新回顾一下定义
-- 什么是`Wait Free`算法？
+- [x] 什么是`Wait Free`算法？
 
 # 9 分布式系统
 - 如何测试分布式系统？
