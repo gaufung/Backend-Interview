@@ -44,7 +44,68 @@ Tk.mainloop()
 
 框架(`framework`)是控制反转的代表，框架包含了大量的抽象设计，应用程序在使用过程中，自定义所需的行为，然后被框架调用，整个自定义行为的动作控制流程为框架所接管。在`.NET`中，通过事件`Event`机制，用户注册相应的事件即可完成控制反转。
 
-# 3 迪米特法则（Low of Demeter）表述每个单元最外部了解的越少越好，编写违反这个原则的代码，说明它是不好的设计模式，并且修复它。
+# 3 迪米特法则（Law of Demeter）表述每个单元最外部了解的越少越好，编写违反这个原则的代码，说明它是不好的设计模式，并且修复它。
+
+迪米特法则也就是最少知识原则，该原则认为任何一个对象或者方法，它应该只能调用下列对象
+- 该对象本身
+- 作为参数传进来的对象（也可以是该对象的字段）
+- 在方法内创建的对象
+
+这个原则用以指导正确的对象协作，分清楚哪些丢向产生写作，哪些对象则对于该对象而言又应该是无知的。现在假设一个购物的场景，主要有客户(Customer)，收营员（Paper Boy）负责收钱。
+
+```C#
+public class Customer {
+    public string FirstName { get; init; }
+    public string SecondName { get; init; }
+    public Wallet Wallet { get; init; }
+}
+
+public class Wallet {
+    public double Balance { get; set; }
+    public void AddMoney(double deposit) => this.Balance += deposit;
+    public void SubtractMoney(double debit) => this.Balance -= debit;
+}
+
+public class Paperboy {
+    public void Pay(Customer customer, double payment)
+    {
+        Wallet wallet = customer.Wallet;
+        if (wallet.Balance > payment)
+        {
+            wallet.SubtractMoney(payment);
+        }
+    }
+}
+```
+
+对于 `PaperBoy` 而言，`Wallet` 不满足迪米特法则的三个条件中的任何一个，让 `PaperBoy` 与 `Wallet` 对象直接交互是错误的行为，`Wallet` 是 `Customer`的隐私，不能交接交给收银员。从职责角度来看，对于收银员，他的职责是负责收钱，而不用管客户钱包的钱是否足够。信息专家模式告诉我们，信息的持有者为操作该信息的专家，数据和行为应该封装在一起。
+
+所以我们应该这样重构，将 `pay` 的方法移动到 `Customer` 中
+
+```diff
+public class Customer
+{
+    public string FirstName { get; init; }
+    public string SecondName { get; init; }
+-   public Wallet Wallet { get; init; }
++   public Wallet Wallet { private get; init; }
+
++   public void Pay(double payment)
++   {
++       if (Wallet.Balance > payment)
++       {
++           Wallet.SubtractMoney(payment);     
++       }
++       else
++       {
++           //money not enough 
++       } 
++   }
+}
+```
+在这里，我们将 `pay` 的责任交给了 `Customer`，并且我们不再需要暴露 `Wallet` 这个属性。
+
+判断一段代码是否违背了迪米特法则，有一个小窍门。查看代码中是否出现形如 `a.m1().m2().m3().m4()` 子类的代码，在 **Refactor** 一书中，称之为消息链条。但是对于 `Linq` 组成的处理流，我们称之为 *流畅接口或者连贯接口(Fluent Interface)*，两者的区别是这些是否返回相同的对象。
 
 # 4 活动记录(Active-Record)是一种设计模式，它表述了代表数据库中表的对象应该拥有`Insert`,`Update`和`Delete`等相关操作。在你的观点和工作经验中，这中设计模式有什么限制和缺陷？
 ![](./images/active_record.png)
@@ -62,7 +123,9 @@ Tk.mainloop()
 正因如此，在程序运行中中出现 `NulPointerException` 的异常，比如`Java`中实例对象调用方法的时候，如果实例为`null`，抛出NPE；在程序编写过程中，包含大量的 `obj != null` 的判断语句；而且在设计`API`过程中，如何正确地处理`null`类型也需要单独设计。
 
 通常`NPE`出现的问题在于程序员在开发过程中，并没有区分两者的正确含义，对于空值，正确的做法应当是抛出异常；或者采用`go`语言中返回多个值，其中最后一个`error`接口表前面的返回值是否有效。在`GOF`中的`Null Object Pattern`模式，定义了`Option<T>`类型，包含了两个子类型：
+
 ![](./images/null.png)
+
 ```go
 // interface
 type Option interface {
@@ -75,7 +138,7 @@ type Some struct {
     val interface{}
 }
 
-func (s *Some) GetValue() interface{}{
+func (s *Some) GetValue() interface{}{
     return s.val
 }
 func (s *Some) IsNull() bool {
@@ -123,8 +186,6 @@ class CustomGroup extends ArrayList<Customer> {
 任何`domain`类应该使用`implementation`类，而不是继承它们。
 总而言之
 > 除了你在创建`implementation`类，否则都不应该使用继承。
-
-
 
 # 8 什么叫反腐化(`Anti-corruption`)层？
 当一个应用程序从从原先的设计中向新的架构设计迁移，因为迁移的过程是逐步的，所以新的架构仍然需要调用原先接口。但是新的架构维持调用接口是非常费时费力，所以在调用中间增加一个反腐化层（`Anti-corruption Layer`)。同样问题也会出现在我们调用的外部模块的接口，该模块在设计上有质量的问题，通过反腐化层，来避免设计上的缺陷。
@@ -180,19 +241,7 @@ func init(){
 ```
 那么所有引用这个`animal.Dog`都是同一个实例对象。
 
-# 10 `goto`语句是邪恶的吗？你或许听过一篇由`Edsger Dijkstra`写的著名论文 `Go To Statement Considered Harmful`，在这篇论文中他批评了`goto`语句，并且推崇结构化编程。 使用`goto`通常非常有争议，甚至`Dijkstra`这篇文章也被批评了，诸如`'GOTO Considered Harmful' Considered Harmful`，那么你的观点是怎样的？
-[Go To Statement Considered Harmful](http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html)
-`Dijkstra` 发现在程序设计中，程序的质量和使用的`GoTo`语句数量成法反比，因此呼吁在高级语言中取消`GoTo`，因为这些完全可以使用`选择`和`循环`来完成。他给出的理由如下：
-- 程序的生命流程不单单是完成所有代码，还有程序在实际运行的时候全部过程；
-- 开发人员在动态流程掌控能力上开发远远落后于静态关系掌握。
-  
-在程序开发中，程序代码的流程称为 `Program` ，程序在实际运行的流程称为 `Process` ，两者的差异越小越能容易掌控这个程序。假设一个程序是顺序执行的，也就是说只有赋值语句，那么 `Program` 的索引和 `Process` 的索引是一致的，同样对于条件语句程序也是同样如此。
-
-但是如果程序包含了子过程 `Procedure`，那么`Program` 的索引和 `Process` 的索引开始不一致了，因为每一个过程内部也包含各自的`Program`和运行的时候的`Processs`；对于循环语句，从某种程度上来讲也是多余的，因为都可以用递归来表达。但是由于我们的思维方式更加熟悉`归纳`模式，循环语句是值得保留的，每次进入循环，运行时的动态索引发生内置嵌套，所以变得复杂起来；对于`GOTO`语句，则完全放弃了动态运行时候的坐标，这个给程序掌控带来巨大的灾难。
-
-总体而言 `GOTO` 语句打破了程序的结构化流程，在一般的开发中应该避免使用，但是在底层的开发中，比如汇编，类似`GOTO`的跳转语句被广泛使用。在开发过程中，也可以为了程序的简洁性，统一的退出可以使用`GOTO`语句来控制。
-
-# 11 如何处理依赖灾难（`Dependency Hell`)
+# 10 如何处理依赖灾难（`Dependency Hell`)
 依赖灾难主要有以下几种形式：
 1. 大量依赖：一个应用程序依赖大量的外部模块，运行程序需要安装外部依赖，这些依赖占用大量的磁盘空间，而且很多应用只使用了一小部分功能；
 2. 长依赖链：一个应用程序依赖`liba`，它又依赖`libb`, 而他又依赖`libc`等等，运行程序需要依次安装多个依赖，一旦这些依赖产生冲突就会导致接下来的问题：
@@ -203,3 +252,16 @@ func init(){
 1. 语义化版本管理，软件版本通常用`x.y.z`表示，其中`x`为`Major version`，当发生`API`不兼容的时候更新这个`Major version`;`y`为`Minor version`，当内部发生功能性改变，更新这个版本号；而`z`为`Patch version`, 是修复bug时候更新的版本。
 2. 私有应用程序版本，每一个应用程序使用各自的依赖版本，而不是应用公共的或者系统依赖；
 3. 更小的包管理机制。
+
+# 11 `goto`语句是邪恶的吗？你或许听过一篇由`Edsger Dijkstra`写的著名论文 `Go To Statement Considered Harmful`，在这篇论文中他批评了`goto`语句，并且推崇结构化编程。 使用`goto`通常非常有争议，甚至`Dijkstra`这篇文章也被批评了，诸如`'GOTO Considered Harmful' Considered Harmful`，那么你的观点是怎样的？
+[Go To Statement Considered Harmful](http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html)
+`Dijkstra` 发现在程序设计中，程序的质量和使用的`GoTo`语句数量成法反比，因此呼吁在高级语言中取消`GoTo`，因为这些完全可以使用`选择`和`循环`来完成。他给出的理由如下：
+- 程序的生命流程不单单是完成所有代码，还有程序在实际运行的时候全部过程；
+- 开发人员在动态流程掌控能力上开发远远落后于静态关系掌握。
+  
+在程序开发中，程序代码的流程称为 `Program` ，程序在实际运行的流程称为 `Process` ，两者的差异越小越能容易掌控这个程序。假设一个程序是顺序执行的，也就是说只有赋值语句，那么 `Program` 的索引和 `Process` 的索引是一致的，同样对于条件语句程序也是同样如此。
+
+但是如果程序包含了子过程 `Procedure`，那么`Program` 的索引和 `Process` 的索引开始不一致了，因为每一个过程内部也包含各自的`Program`和运行的时候的`Processs`；对于循环语句，从某种程度上来讲也是多余的，因为都可以用递归来表达。但是由于我们的思维方式更加熟悉`归纳`模式，循环语句是值得保留的，每次进入循环，运行时的动态索引发生内置嵌套，所以变得复杂起来；对于`GOTO`语句，则完全放弃了动态运行时候的坐标，这个给程序掌控带来巨大的灾难。
+
+总体而言 `GOTO` 语句打破了程序的结构化流程，在一般的开发中应该避免使用，但是在底层的开发中，比如汇编，类似`GOTO`的跳转语句被广泛使用。在开发过程中，也可以为了程序的简洁性，统一的退出可以使用`GOTO`语句来控制。
+
