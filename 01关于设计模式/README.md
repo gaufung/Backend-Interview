@@ -190,7 +190,7 @@ class CustomGroup extends ArrayList<Customer> {
 # 8 什么叫反腐化(`Anti-corruption`)层？
 当一个应用程序从从原先的设计中向新的架构设计迁移，因为迁移的过程是逐步的，所以新的架构仍然需要调用原先接口。但是新的架构维持调用接口是非常费时费力，所以在调用中间增加一个反腐化层（`Anti-corruption Layer`)。同样问题也会出现在我们调用的外部模块的接口，该模块在设计上有质量的问题，通过反腐化层，来避免设计上的缺陷。
 下图是反腐化层设计的示意图：
-![](./images/anti-corruption-layer-layer.png)
+![](./images/anti-corruption-layer.png)
 上图中应用程序包含了两个子系统，子系统A在调用子系统B的时候通过了反腐化层。子系统A和反腐化层的通信使用的子系统A的数据模型和架构，而反腐化层和子系统B的通信使用子系统B的数据模型和架构。在使用反腐化层设计的时候，需要考虑以下几点：
 - 反腐化层可能增加两个子系统之间调用的延迟；
 - 反腐化层增加的服务必须可以被管理和维护的；
@@ -264,4 +264,61 @@ func init(){
 但是如果程序包含了子过程 `Procedure`，那么`Program` 的索引和 `Process` 的索引开始不一致了，因为每一个过程内部也包含各自的`Program`和运行的时候的`Processs`；对于循环语句，从某种程度上来讲也是多余的，因为都可以用递归来表达。但是由于我们的思维方式更加熟悉`归纳`模式，循环语句是值得保留的，每次进入循环，运行时的动态索引发生内置嵌套，所以变得复杂起来；对于`GOTO`语句，则完全放弃了动态运行时候的坐标，这个给程序掌控带来巨大的灾难。
 
 总体而言 `GOTO` 语句打破了程序的结构化流程，在一般的开发中应该避免使用，但是在底层的开发中，比如汇编，类似`GOTO`的跳转语句被广泛使用。在开发过程中，也可以为了程序的简洁性，统一的退出可以使用`GOTO`语句来控制。
+
+# 12 鲁棒性原则是软件开发中广泛的采用的原则，通常用 `对你的输出按照约定，对你的输入保持宽容`(`Be conservative in what you send, be liberal in what you accept`)，你能说说这个原则的合理性吗？
+
+该原则的目标是构建稳健的系统，假设开发了一套系统，该系统对输入的集合元素求和，如果实现方式如下
+
+```C#
+public int Sum(List<int> arr)
+{
+    int sum = 0;
+    foreach(var elem in arr)
+    {
+        sum += elem;
+    }
+    
+    return sum;
+}
+```
+看上去还不错，但是这里违反的鲁棒性原则中
+> 对你的输入保持宽容
+
+因为这个方法只接受 `List<int>` 类型，而在使用程序过程中没有使用 `List` 其他功能。这个方法并没有对其他类型的宽容。
+
+```diff
+- public int Sum(List<int> arr)
++ public int Sum(IEnumberable<int> arr)
+{
+    int sum = 0;
+    foreach(var elem in arr)
+    {
+        sum += elem;
+    }
+    
+    return sum;
+}
+```
+
+在这里将参数类型调整为 `IEnumberable<int>`，那么这个方法可以接受任何实现 `IEnumberable<int>` 的类型。这就是 **对你的输入保持宽容**。
+
+对于方法的返回值，鲁棒性体现为 
+> 对你的输出按照约定
+
+```C#
+public FileStream Read(string filePath)
+{
+    return new FileStream(filePath, FileMode.Read);
+}
+```
+
+在 `Read` 方法中，我们返回值是 `FileStream` 类型，但是从语义的角度来看，只需要返回返回 `Stream` 类型，而不是特定的 `FileStream`。所以修改为
+
+```diff
+- public FileStream Read(string filePath)
++ public Stream Read(string filePath)
+{
+    return new FileStream(filePath, FileMode.Read);
+}
+```
 
