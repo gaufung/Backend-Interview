@@ -68,7 +68,7 @@ This is Chinese version of [Back-End-Developer-Interview-Questions](https://gith
 # 5 数据库
 - 如果你将你的应用程序迁移数据库，比如从MySQL迁移到PostgreSQL，你会怎么做？如果你来管理这个项目，那些问题需要考虑？
 - 为什么数据库需要特别对待`null`，比如在SQL语言中: `SELECT * FROM table WHERE field=null`并不能匹配为空的记录？
-- ACID通常是`Atomicity`, `Consistency`，`Isolation`和`Durabiltiy`。这四个属性通常有数据库引擎的事务来保证，你能谈谈这个话题吗？
+- [x] ACID通常是`Atomicity`, `Consistency`，`Isolation`和`Durabiltiy`。这四个属性通常有数据库引擎的事务来保证，你能谈谈这个话题吗？
 - 你是如何做到数据库模式的迁移，你是如何版本更改中，如何自动更改数据库模式修改的影响？
 - 懒加载（lazy loading)是如何做到？它有什么作用？也有哪些缺陷？
 - 什么是`N+1`问题？
@@ -141,6 +141,7 @@ This is Chinese version of [Back-End-Developer-Interview-Questions](https://gith
 - 编写基础的web服务器，并且绘制出将来的要完成的功能；
 - 如何对10GB的文件排序，那么10TB文件如何呢？
 - 如何自动检测冗余的文件？
+- 请实现 `rnd()` 函数
 
 # 12 软件架构
 - 什么时候缓存是无用的，甚至是危险的？
@@ -150,7 +151,19 @@ This is Chinese version of [Back-End-Developer-Interview-Questions](https://gith
 - 横向扩展和纵向扩展有什么区别？什么时候使用其中一个，而不是另外一个？
 - 如何处理"故障切换(failover)"和"用户会话(user session)"？
 - 什么是CQRS（Command Query Responsibility Segregation)? 它和最初的有什么区别？
-- ...
+- 什么是三层架构？
+- 如何设计一个可扩展性高的系统？
+- 处理C10k问题的策略有哪些？
+- 如果让你来设计一个去中心化的P2P系统，你会如何设计？
+- 为什么CGI的扩展性不好？
+- 在设计系统时，你如何防止供应商依赖(Vendor Lock-in)？
+- 在可扩展性上，发布/订阅(Publish-Subscribe)模式有什么缺点？
+- 80年代以后，CPU有哪些变化？这些变化，对编程产生了什么影响？
+- 性能生命周期(performace lifecycle)中，你认为哪个部分是需要考虑进去的？ 如何管理？
+- 除了恶意攻击造成的拒绝服务现象以外，哪些设计或者架构上的问题会导致拒绝服务？
+- 性能和可扩展性之间有什么关系？
+- 什么时候紧耦合是OK的？
+- 一个系统要有什么特征才能适配云计算环境(Cloud Ready)？
 
 # 13 SOA 和 Microservices
 - 为什么在SOA中，长时间事务是不推荐的，而是使用`Sagas`?
@@ -174,27 +187,29 @@ This is Chinese version of [Back-End-Developer-Interview-Questions](https://gith
 - 怎样防止用户的会话（session）被偷？
 
 # 15 通用问题
+- 语言设计中空引用(null reference)的存在有什么问题？假设你想要将空引用的概念从你的首选语言中移除，可能导致什么结果？
 - 函数式语言是做什么的？什么时候我们需要使用函数语言？
-- Microsoft，Google，Opera和Mozilla公司从他们的浏览器中如何获利的？
+- Microsoft，Google，Opera和 Mozilla 公司从他们的浏览器中如何获利的？
 - 为什么打开TCP套接字有很大的开销？
 - 封装对于那些有重要的作用？
 - 什么是实时系统？它和普通的系统有什么区别？
 - 实时语言(real-time language)和堆内存分配(heap memory allocation)之间的关系是什么？
-- 不可变性是怎么帮助我们提高编写更安全的代码？
-- 可变性变量和不可变量有什么优势和弊端？
+- 不变性(Immutability)是指: (变量的)值只能在创建的时候被设置一次，之后就不能被改变。为什么不变性对写更加安全的代码有帮助？
+- 可变值(mutable values)和不可变值(immutable values)有哪些优缺点？
 - 什么是O/R阻抗失衡(Object-Relational impedence mismatch)？
 - 缓存大小在设计的时候需要考虑哪些原则？
 - 客户端渲染和服务端渲染有什么各自弊端，如何取舍？
+- TCP和HTTP有什么区别？
 - 如何在不可靠的协议上开发出可靠通讯协议？
-- 想象一下如果在你最喜欢的语言移除空引用的问题，你该如何做？会导致什么样的后果？
 
 # 16 开放问题
 - 为什么人们讨厌改变？
 - 向你的奶奶解释线程
 - 作为一个软件工程师，你想要既要有创新力，又要产出具有可预测性。采用什么策略才能使这两个目标可以共存呢？
-- 什么让好代码变得更好？
-- 解析什么是流，并且实现它；
-- 你在这一周学到了什么？
+- 什么是好代码？
+- 解释什么是流 (Streaming) 和如何实现一个流？
+- 假设你的公司给你一周的时间，用来改善你和同事的生活: 你将如何使用这一周？
+- 本周你学会了什么？
 - 所有的设计中都会有美学元素(aesthetic element)的存在。问题是，你认为美学元素是你的朋友还是敌人？
 - 列出你最近读的五本书
 - 如何让大公司从瀑布式开发模式到持续交付的模式改变？
