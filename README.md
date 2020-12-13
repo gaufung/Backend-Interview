@@ -58,7 +58,7 @@ This is Chinese version of [Back-End-Developer-Interview-Questions](https://gith
 - 假设你有一台时光机，能够穿梭到Java语言创建的时间点，并且能够和JDK的架构者交流，那么你将会说服他什么？比如移除检查异常（checked  exception)机制?增加非符号的的基础类型？增加多继承？
   
 # 4 Web开发
-- 为什么`第一方`缓存和`第三方`缓存不同对待？
+- [x] 为什么`第一方`和`第三方`Cookie不同对待？
 - 如何管理你的`Web`符合的API版本？
 - 从后端的角度来看，采取单页面应用程序(`Single Page Application`)有什么弊端和缺陷？
 - 为什么我们通常在无状态服务做出巨大的付出，那么在无状态代码中有哪些好处以及有状态有什么坏处？
