@@ -207,7 +207,7 @@ This is Chinese version of [Back-End-Developer-Interview-Questions](https://gith
 - 向你的奶奶解释线程
 - 作为一个软件工程师，你想要既要有创新力，又要产出具有可预测性。采用什么策略才能使这两个目标可以共存呢？
 - 什么是好代码？
-- 解释什么是流 (Streaming) 和如何实现一个流？
+- [x] 解释什么是流 (Streaming) 和如何实现一个流？
 - 假设你的公司给你一周的时间，用来改善你和同事的生活: 你将如何使用这一周？
 - 本周你学会了什么？
 - 所有的设计中都会有美学元素(aesthetic element)的存在。问题是，你认为美学元素是你的朋友还是敌人？
