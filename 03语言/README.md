@@ -101,3 +101,54 @@ func factorialRec(n int, val int) int {
 - 地址 `0xc0000000` 往下为栈空间。
 
 操作系统为为每一个函数调用提供了栈帧，主要保存函数的参数、返回地址和一些局部变量。如果程序设计不当，将会导致栈帧使用完毕，导致栈溢出，常见的主要有无限递归。
+
+# 7 命名空间（namespace)是做什么的？能够发明一个可替代性的东西？
+
+在编程领域中，命令空间主要解决变量，函数以及类它们之间的冲突。假设你的应用程序使用了两个库。
+
+```C#
+// library A 
+public class FooBar 
+{
+    //...
+}
+
+// library B
+public class FooBar
+{
+    //...
+}
+```
+我们可以看到，`FooBar` 两个类出现了两个库，我们的应用程序编译器不能区分它们，所以我们引入了命名空间。
+
+```C#
+// libray A
+namespace Tindo.SDK
+{
+    public class FooBar {}
+}
+
+// library B
+namespace Aurisoft.Tool
+{
+    public class FooBar {}
+}
+```
+
+现在我们就能很好的区分它们，不会发生对象解析错误。
+
+如果我们能够解析冲突，就不需要命令空间。我们可以为每个库的对象能唯一值标记即可。
+
+```C#
+// libaray A -> libraryA.dll
+public class FooBar {}
+
+// library B -> libraryB.dll
+public class FooBar {}
+
+
+// programa
+using FooBarA = import("libraryA.dll", "FooBar");
+using FooBarB = import("libraryB.dll", "FooBar");
+```
+
