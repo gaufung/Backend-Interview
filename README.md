@@ -47,7 +47,7 @@ This is Chinese version of [Back-End-Developer-Interview-Questions](https://gith
 - 讨论一下JAVA和C#之间的互通性？
 - 为什么许多开发人员不喜欢JAVA？
 - 好语言的好和坏语言的坏各自在什么地方？
-- 编写两个函数，一个是引用透明（`Referentially Transparent`)，另一个是引用不透明（`Referentially Opaque`）;
+- [x] 编写两个函数，一个是引用透明（`Referentially Transparent`)，另一个是引用不透明（`Referentially Opaque`）;
 - [x] 什么是栈和堆？什么叫栈溢出？
 - 为什么在一个语言中，函数是一等公民是非常重要的？
 - 在一些语言中，尤其是函数化倾向的语言中，有一种叫模式匹配（Pattern Matching)的技术，那么在模式匹配和`Switch`语言有什么区别？

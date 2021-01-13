@@ -150,5 +150,59 @@ public class FooBar {}
 // programa
 using FooBarA = import("libraryA.dll", "FooBar");
 using FooBarB = import("libraryB.dll", "FooBar");
+
 ```
+
+# 8 编写两个函数，一个是引用透明（`Referentially Transparent`)，另一个是引用不透明（`Referentially Opaque`）
+
+首先什么是引用透明呢? 它用来描述定义一个表达式的事实，在一个程序中，如果一个表达式可以被一个具体的值取代而不影响结果那么我们就可以称为改引用透明，从某种程度来讲就是改表达式由特定的参数输入一定会输出相同的结果，这是函数式编程的概念。
+
+假设我们由下面几个函数
+
+```C#
+int Add(int a, int b){
+    return a + b;
+}
+
+int Mult(int a, int b){
+    return a * b;
+}
+
+int x = Add(2, Mult(3, 4));
+```
+
+在上面的例子中， `Mult` 函数就是引用透明的，因为我们可以用 `12` 替换掉 `Mult(3, 4)` 而不会有任何影响；同样我们也可以用 `14` 替换 `Add(2, 12)`。
+
+下面再介绍一下引用不透明的例子 
+
+```C#
+int Add(int a, int b){
+    int result = a + b;
+    Console.WriteLine($"Returning {result}");
+    return result;
+}
+```
+
+如果我们用特定的值替换 `Add` 方法，那么 `Returning` 方法就不会输出，产生了副作用 (Side Effect）。有些情况下，非但带来了副作用，而且导致的结果也不正确。
+
+```C#
+class Fibs {
+    private int previous = 1;
+    private int last = 1;
+
+    public int Next() {
+        last = previous + (previous = last);
+        return prevous + last;
+    }
+}
+
+public void PrintFibs(int limit){
+    Fibs fibs = new Fibs();
+    for(int i =0; i < limit; i++){
+        Console.WriteLine(fibs.Next());
+    }
+}
+```
+
+在这里我们不能用任何值代替 `Next` 方法的调用，因为这个方法在每次调用的时候就是不一样的。
 
