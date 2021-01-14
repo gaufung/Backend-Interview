@@ -74,7 +74,7 @@ This is Chinese version of [Back-End-Developer-Interview-Questions](https://gith
 - 什么是`N+1`问题？
 - 如何在你的应用中查出代价最大的查询？
 - 在你的观点中，数据库范式化是否永远必须的？什么时候数据库可以不需要范式化？
-- 什么叫持续集成？也叫做`Blue-Green Deloyment`
+- [x] 什么叫做`Blue-Green Deloyment`
 
 # 6 NoSQL
 - 什么叫最终一致性（Eventual  Consisitency)?
