@@ -32,3 +32,83 @@
 这样做减少了宕机的时间，而且降低了风险，因为一旦新的软件版本出现问题，可以立马将路由切回到原来的环境，完成回滚。
 
 这个设计通常要保证 `Green` 和 `Blue` 两套环境一摸一样，而且使用同一份数据。这样对于数据库的设计提出了挑战，尤其是在新的软件版本中需要修改数据库的 schema，因为一旦 rollback 就会导致不同版本之间的兼容性，解决办法就是将数据库升级和软件升级区分开来。
+
+# 3 什么是 `N + 1` 问题 
+
+N+1 问题通常是在使用 ORM 的时候发生，尤其是在使用懒加载的时候。当一个应用程序从数据库中获取了数据，然后迭代这个这个结果。这就意味着我么一遍遍的访问数据库。最终这个应用程序会在处理结果的每一行都有一个查询操作（N）和最原始的依次查询 （+1）。这就是 N+1 问题。
+我们以 C# 中广泛使用的 Entity Framework 为例
+
+```C#
+using (var context = new StackOverFlowContext())
+{
+    var posts = context.Posts
+                .Where(t => t.PostTags.Any(pt => pt.Tag == "sqlbulkcopy"))
+                .Select(p => p);
+    foreach(var post in posts)
+    {
+        foreach(var linkPost in post.LinkedPosts)
+        {
+            // Do something important.
+        }
+    }
+}
+```
+
+上面的代码生成的 SQL 代码如下
+
+```sql
+Select
+    [Extent1].[Id] as [Id],
+    [Extent1].[TagVarchar] AS [TagsVarchar]
+    FROM [dbo].[Posts] AS [Extent1]
+    Where Exists (Select 
+        1 as [C1]
+        From [dbo].[PostTag] as [Extent2]
+        Where ([Extent1].[Id] = [Extent2].[PostId]) And (N'sqlbulkcopy' = [EXtent2].[Tag]))
+```
+
+在这个例子中，我们从 Posts 表和 PostTags 表中获取 Tags 等于 `sqlbulkcopy`， 问题出在下面这么一行代码
+
+```C#
+foreach (var linkPost in post.LinkedPosts)
+```
+
+原因是原先的查询并由从 `LinkedPost` 实体中获取数据，仅仅从 `Posts` 和  `PostTags`。 Entity Framework 知道它没有从 `LinkedPosts` 实体中获取数据，所以会自动在每一行中自动从数据库中查询。这个糟糕透了，因为我们知道多次查询肯定比依次查询慢。
+
+那么该如何解决这个问题呢？很简单只需要使用 `Include` 方法即可，也叫做激进加载。使用 `Include` 可以将所有的 `LinkedPosts` 实体加载进来。
+
+```C# 
+var posts = context.Posts
+            .Where(t => t.PostTags.Any(pt => pt.Tag == "sqlbulkcopy"))
+            .Include(p => p.LinkedPosts)
+            .Select(p => p);
+```
+
+在这里，当 LinkedPosts 实体被访问的时候，Posts 实体已经加载了全部的数据，这样就不在需要额外的数据库访问。
+那么我们生成的 SQL 语句有
+
+```sql
+SELECT 
+    [Project2].[Id] AS [Id], 
+    /* All columns from the Post table are in the SELECT. Extra columns removed for brevity */
+    [Project2].[LinkTypeId] AS [LinkTypeId]
+    FROM ( SELECT 
+        [Extent1].[Id] AS [Id], 
+        /* All columns from the Post table are in the SELECT. Extra columns removed for brevity */
+        [Extent1].[TagsVarchar] AS [TagsVarchar], 
+        [Extent2].[Id] AS [Id1], 
+        [Extent2].[CreationDate] AS [CreationDate1], 
+        [Extent2].[PostId] AS [PostId], 
+        [Extent2].[RelatedPostId] AS [RelatedPostId], 
+        [Extent2].[LinkTypeId] AS [LinkTypeId], 
+        CASE WHEN ([Extent2].[Id] IS NULL) THEN CAST(NULL AS int) ELSE 1 END AS [C1]
+        FROM  [dbo].[Posts] AS [Extent1]
+        LEFT OUTER JOIN [dbo].[PostLinks] AS [Extent2] ON [Extent1].[Id] = [Extent2].[PostId]
+        WHERE  EXISTS (SELECT 
+            1 AS [C1]
+            FROM [dbo].[PostTags] AS [Extent3]
+            WHERE ([Extent1].[Id] = [Extent3].[PostId]) AND (N'sqlbulkcopy' = [Extent3].[Tag])
+        )
+    )  AS [Project2]
+    ORDER BY [Project2].[Id] ASC, [Project2].[C1] ASC
+```

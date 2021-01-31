@@ -71,7 +71,7 @@ This is Chinese version of [Back-End-Developer-Interview-Questions](https://gith
 - [x] ACID通常是`Atomicity`, `Consistency`，`Isolation`和`Durabiltiy`。这四个属性通常有数据库引擎的事务来保证，你能谈谈这个话题吗？
 - 你是如何做到数据库模式的迁移，你是如何版本更改中，如何自动更改数据库模式修改的影响？
 - 懒加载（lazy loading)是如何做到？它有什么作用？也有哪些缺陷？
-- 什么是`N+1`问题？
+- [x] 什么是`N+1`问题？
 - 如何在你的应用中查出代价最大的查询？
 - 在你的观点中，数据库范式化是否永远必须的？什么时候数据库可以不需要范式化？
 - [x] 什么叫做`Blue-Green Deloyment`
