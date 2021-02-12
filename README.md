@@ -60,7 +60,7 @@ This is Chinese version of [Back-End-Developer-Interview-Questions](https://gith
 # 4 Web开发
 - [x] 为什么`第一方`和`第三方`Cookie不同对待？
 - 如何管理你的`Web`符合的API版本？
-- 从后端的角度来看，采取单页面应用程序(`Single Page Application`)有什么弊端和缺陷？
+- [x] 从后端的角度来看，采取单页面应用程序(`Single Page Application`)有什么弊端和缺陷？
 - [x] 为什么我们通常在无状态服务做出巨大的付出，那么在无状态代码中有哪些好处以及有状态有什么坏处？
 - `REST`和`SOAP`两种方式，什么时候选择其中一个，而不用另外一个？
 - 在Web开发中，MVC和MVVM两种模式非常常见，在前端和后端中都是常见的，那么它们各自是什么？为什么它们是值得使用的？

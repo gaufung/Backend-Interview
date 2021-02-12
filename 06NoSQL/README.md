@@ -1,4 +1,4 @@
-- `Brewer`理论，也叫做`CAP`理论，说明在网络分区（network Partition)中，一个系统设计者需要在以一致性`Consistency`和可用性`Availiablity`中做出选择，你能举出`CP`， `AP`和`CA`系统的例子吗？
+# 1 `Brewer`理论，也叫做`CAP`理论，说明在网络分区（network Partition)中，一个系统设计者需要在以一致性`Consistency`和可用性`Availiablity`中做出选择，你能举出`CP`， `AP`和`CA`系统的例子吗？
 
 ### 什么是 CAP 理论
 
