@@ -34,7 +34,7 @@ This is Chinese version of [Back-End-Developer-Interview-Questions](https://gith
 - 你是如何知道一个代码是坏的设计？
 
 # 3 语言
-- 说一下你最喜欢语言的三个缺陷;
+- [x] 说一下你最喜欢语言的三个缺陷;
 - [x] 为什么现在对函数式编程语言越来越受到欢迎？
 - [x] 什么是闭包，闭包有什么作用？它和类有什么区别？
 - 泛型是用来做什么的？
