@@ -49,9 +49,8 @@ This is Chinese version of [Back-End-Developer-Interview-Questions](https://gith
 - 好语言的好和坏语言的坏各自在什么地方？
 - [x] 编写两个函数，一个是引用透明（`Referentially Transparent`)，另一个是引用不透明（`Referentially Opaque`）;
 - [x] 什么是栈和堆？什么叫栈溢出？
-- 为什么在一个语言中，函数是一等公民是非常重要的？
 - 在一些语言中，尤其是函数化倾向的语言中，有一种叫模式匹配（Pattern Matching)的技术，那么在模式匹配和`Switch`语言有什么区别？
-- 为什么在有些语言设计中没有异常机制？那么它们有什么优势和弊端？
+- [x] 为什么在有些语言设计中没有异常机制？那么它们有什么优势和弊端？
 - 如果`Cat`是`Animal`，那么设计的时候是`TakeCare<Cat>`还是`TakeCare<Animal>`?
 - 为什么在JAVA，或者C#中，构造函数不是接口的一部分？
 - 最近几年，有很多关于`Node`的不实的宣传，那么你对这些原本运行在浏览器中的语言用作后端开发语言的看法是什么？

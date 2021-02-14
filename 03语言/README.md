@@ -227,3 +227,113 @@ public void PrintFibs(int limit){
 
 在这里我们不能用任何值代替 `Next` 方法的调用，因为这个方法在每次调用的时候就是不一样的。
 
+
+# 9 为什么在有些语言设计中没有异常机制？那么它们有什么优势和弊端？
+
+异常的设计是随着语言的发展而发展的，在早期的语言，比如汇编语言并没有应用程序层面的异常，只需要顺序和跳转两中执行控制语句就可以完成全部的工作。现代语言通常封装了底层的逻辑，因此也提供了大量的高级的语言的特性，所以异常自然而然提出。
+
+## 优势
+- 异常可以将错误处理代码和正常的逻辑流区分开来，这样代码就可以很容易的阅读，健壮和可拓展性
+
+举个例子如下
+
+使用异常处理
+```c++
+// sample 1: A function that uses exceptions
+string get_html(const char* url, int port)
+{
+    Socket client(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    client.connect(url, port);
+    
+    stringstream request_stream;
+    request_stream << "GET / HTTP/1.1\r\nHost: " 
+       << url << "\r\nConnection: Close\r\n\r\n";
+
+    client.send(request_stream.str());
+
+    return client.receive();
+}
+```
+
+如果使用错误代码
+
+```c++
+// sample 2: A function that uses error codes
+Socket::Err_code get_html(const char* url, int port, string* result)
+{
+    Socket client;
+    Socket::Err_code err = client.init(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (err) return err;
+        
+    err = client.connect(url, port);
+    if (err) return err;
+    
+    stringstream request_stream;
+    request_stream << "GET / HTTP/1.1\r\nHost: " << url 
+       << "\r\nConnection: Close\r\n\r\n";
+
+    err = client.send(request_stream.str());
+    if (err) return err;
+
+    return client.receive(result);
+}
+```
+
+上面的两个例子都是完成同样的事情，但是从错误处理的版本来看，代码需要处理很多错误的情况，使代码的可读性不高。
+
+- 只有抛出异常才能解决构造函数的的错误
+
+在类的构造函数中，通常需要申请一些系统资源，如果申请失败，就会让对象处于不稳定的状态。如果使用错误处理就不能处理这种情况。
+
+- 异常很难被忽略
+
+对于没有捕获的异常，系统就会 crash 掉，这个有助于系统维护者更早的发现发现问题，解决问题，而不是忽略它们。但是对于错误处理这种方式，就很难做到。
+
+- 异常可以从嵌套的函数中传播出来
+
+使用异常可以很方便地将错误从发生地地方到最外面调用地地方。
+
+- 异常可以使用自定义地类型，它们可以比错误代码包含更多地信息
+
+通常错误代码使用整型，而且没有更多的信息。当然可以为错误代码设计为一个 Object，但是需要复制很多次这种对象。但是异常的话，本身就是一个对象，而且可以通过类型系统来处理它们。
+
+```c++
+// Exception  handler
+
+void AppDialog::on_button()
+{
+    try {
+        string url = url_text_control.get_text();
+        result_pane.set_text(
+            get_title(url));
+    }
+    catch(Socket::SocketConnectionException& sock_conn_exc) {
+        display_network_connection_error_message();
+    }
+    catch(Socket::Exception& sock_exc) {
+        display_general_network_error_message();
+    }
+    catch(Parser::Exception& pars_exc) {
+        display_parser_errorMessage();
+    }
+    catch(...) {
+        display_unknown_error_message();
+    }
+}
+```
+
+通过异常类型的条件，处理不同的情况。
+
+## 劣势
+
+- 异常为代码逻辑增加了很多不可见的退出点，这样的增加的代码检查的难度。
+
+以为异常可以跳出正在正在执行的逻辑代码流，所以在无形之中为代码函数增加了退出的机制
+
+- 异常可能导致资源泄露，尤其使没有内置垃圾回收的编程语言
+
+由于异常可以提前退出整个代码逻辑，所以可能导致已经分配系统资源的没有执行释放代码。
+
+- 异常的发生会导致性能上的损失
+
+众所周知，异常对系统的性能是由损失的。
