@@ -48,3 +48,62 @@
 单页面应用的缺陷：
 - SEO处理不够友好：大部分搜索引擎的度量标准是这个站点有多少页面，有于单页面应用只有一个页面，所以不能很好的做到优化。
 - 使用了大量的浏览器资源：在单页面应用程序中，大部分任务都是由浏览器完成，所以浏览器会使用很多资源。
+
+# 4 在Web开发中，MVC和MVVM两种模式非常常见，在前端和后端中都是常见的，那么它们各自是什么？为什么它们是值得使用的？
+
+## 4.1 MVC 模式
+
+![](./images/mvcpattern.png)
+
+- Model: 包含了数据和它们之间的逻辑
+- View: 向用户展示数据或者处理用户交互
+- Controller: 介于 Model 和 View 之间的接口的组件
+
+MVC 模式有下面的特色：
+- 这是一个非常容易测试和拓展的框架
+- 现有的 ASP.NET, Django, JSP 都支持这种模式
+- 你可以非常容易控制 HTML 页面和 URL 
+- 支持 Test Driven Development (TDD) 
+- 对 SEO 也非常友好
+- 支持映射复合和可搜索的 URL 
+
+MVC 模式的优点主要有
+- 支持各式各样的客户端
+- 开发不同的组件的过程可以并行执行
+- 支持 Web 应用程序
+- 提供了清晰的 Separation of Concerns (SoC)
+- MVC 可以将多逻辑操作组合成一个 Controller 
+
+MVC 模式缺点如下
+- 业务逻辑和 UI 混合在一起
+- 很难复用和实现测试
+- 随着数据增加，复杂度和无效性逐步增加
+- 需要同时掌握不同的技术
+
+## 4.2 MVVM 模式
+
+![](./images/mvvmpattern.png)
+
+- Model: 存储了数据和它们之间的逻辑，
+- View: 代表了 UI 组件，比如 HTML, CSS, JQuery 等等。
+- View-Model: 它代表了展示函数，命令和方法，来支持 View 的状态。
+
+MVVM 提供了在 View 和 View-Model 之间的双向绑定功能，而且提供了一种修改自动通知的功能从 View-Model 到 View 之间。同样的 View-Model 使用了观察者模式来将 View 上改变到 view-model 中。
+
+MVVM 有下面的特色
+- MVVM 一开始是为桌面应用程序设计的，通过数据绑定的方式实现，`XAML` 和 `INotifiyPropertyChanged` 接口
+- 如果你想在 View-Model 上做修改，那么 View-Model 使用了观察者模式
+- MVVM 模式通常用在 WPF，Sliverlight，nRoute 中
+
+MVVM 模式的优点有
+- 业务逻辑和 UI 解耦
+- 非常容易维护和测试
+- 非常容易重用组件
+- 低耦合架构
+- 可以为 View-model 和 Model 单独编写单元测试，而不需要引用 View
+
+MVVM 的缺陷有
+- 在 Controller 中要维护大量的代码
+- 有些人认为在简单的 UI 中使用 MVVM 是 “大炮打蚊子”
+
+
