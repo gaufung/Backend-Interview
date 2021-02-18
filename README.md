@@ -28,7 +28,7 @@ This is Chinese version of [Back-End-Developer-Interview-Questions](https://gith
 - [x] 代码中注释是有用吗？一些人说我们应该尽可能的避免注释，而且它们大部分是无用的，你同意吗？
 - 设计和架构有什么区别？
 - [x] 为什么测试驱动开发`TDD`中的测试时在开发之前？
-- C++支持多继承，而JAVA允许一个类实现多个接口。在正交性上有什么影响？使用多继承和多接口有什么区别？使用委托和继承有什么区别？（问题来自`The Progmatic Programmer`一书中）
+- C++支持多继承，而JAVA允许一个类实现多个接口。在正交性上有什么影响？使用多继承和多接口有什么区别？使用委托和继承有什么区别？（问题来自`The Pragmatic Programmer`一书中）
 - [x] 在存储过程中使用领域逻辑有什么好处和坏处？
 - [x] 在你观点来看，使用面向对象编程为什么能够占据市场这么长时间？
 - 你是如何知道一个代码是坏的设计？
@@ -67,18 +67,18 @@ This is Chinese version of [Back-End-Developer-Interview-Questions](https://gith
 # 5 数据库
 - 如果你将你的应用程序迁移数据库，比如从MySQL迁移到PostgreSQL，你会怎么做？如果你来管理这个项目，那些问题需要考虑？
 - 为什么数据库需要特别对待`null`，比如在SQL语言中: `SELECT * FROM table WHERE field=null`并不能匹配为空的记录？
-- [x] ACID通常是`Atomicity`, `Consistency`，`Isolation`和`Durabiltiy`。这四个属性通常有数据库引擎的事务来保证，你能谈谈这个话题吗？
+- [x] ACID通常是`Atomicity`, `Consistency`，`Isolation`和`Durability`。这四个属性通常有数据库引擎的事务来保证，你能谈谈这个话题吗？
 - 你是如何做到数据库模式的迁移，你是如何版本更改中，如何自动更改数据库模式修改的影响？
 - 懒加载（lazy loading)是如何做到？它有什么作用？也有哪些缺陷？
 - [x] 什么是`N+1`问题？
 - 如何在你的应用中查出代价最大的查询？
 - 在你的观点中，数据库范式化是否永远必须的？什么时候数据库可以不需要范式化？
-- [x] 什么叫做`Blue-Green Deloyment`
+- [x] 什么叫做`Blue-Green Deployment`
 
 # 6 NoSQL
-- 什么叫最终一致性（Eventual  Consisitency)?
-- [x]`Brewer`理论，也叫做`CAP`理论，说明在网络分区（network Partition)中，一个系统设计者需要在以一致性`Consistency`和可用性`Availiablity`中做出选择，你能举出`CP`， `AP`和`CA`系统的例子吗？
-- 你能解释一下最近对`NoSQL`热度越来越高的原因吗？
+- 什么叫最终一致性（Eventual  Consistency)?
+- [x]`Brewer`理论，也叫做`CAP`理论，说明在网络分区（network Partition)中，一个系统设计者需要在以一致性`Consistency`和可用性`Availability`中做出选择，你能举出`CP`， `AP`和`CA`系统的例子吗？
+- [x] 你能解释一下最近对`NoSQL`热度越来越高的原因吗？
 - 为什么`NoSQL`解决了可扩展性的挑战？
 - 在那种情况下你会选择文档型数据库比如`MongoDB`而不是关系型数据库比如`MySQL`?
   
