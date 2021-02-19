@@ -80,7 +80,7 @@ This is Chinese version of [Back-End-Developer-Interview-Questions](https://gith
 - [x]`Brewer`理论，也叫做`CAP`理论，说明在网络分区（network Partition)中，一个系统设计者需要在以一致性`Consistency`和可用性`Availability`中做出选择，你能举出`CP`， `AP`和`CA`系统的例子吗？
 - [x] 你能解释一下最近对`NoSQL`热度越来越高的原因吗？
 - 为什么`NoSQL`解决了可扩展性的挑战？
-- 在那种情况下你会选择文档型数据库比如`MongoDB`而不是关系型数据库比如`MySQL`?
+- [x] 在那种情况下你会选择文档型数据库比如`MongoDB`而不是关系型数据库比如`MySQL`?
   
 # 7 代码版本管理
 - 为什么在`Mercuial`或者`git`中，创建分支比`SVN`分支容易；
