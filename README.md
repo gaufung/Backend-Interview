@@ -52,7 +52,7 @@ This is Chinese version of [Back-End-Developer-Interview-Questions](https://gith
 - 在一些语言中，尤其是函数化倾向的语言中，有一种叫模式匹配（Pattern Matching)的技术，那么在模式匹配和`Switch`语言有什么区别？
 - [x] 为什么在有些语言设计中没有异常机制？那么它们有什么优势和弊端？
 - 如果`Cat`是`Animal`，那么设计的时候是`TakeCare<Cat>`还是`TakeCare<Animal>`?
-- 为什么在JAVA，或者C#中，构造函数不是接口的一部分？
+- [x] 为什么在JAVA，或者C#中，构造函数不是接口的一部分？
 - 最近几年，有很多关于`Node`的不实的宣传，那么你对这些原本运行在浏览器中的语言用作后端开发语言的看法是什么？
 - 假设你有一台时光机，能够穿梭到Java语言创建的时间点，并且能够和JDK的架构者交流，那么你将会说服他什么？比如移除检查异常（checked  exception)机制?增加非符号的的基础类型？增加多继承？
   
@@ -83,7 +83,7 @@ This is Chinese version of [Back-End-Developer-Interview-Questions](https://gith
 - [x] 在那种情况下你会选择文档型数据库比如`MongoDB`而不是关系型数据库比如`MySQL`?
   
 # 7 代码版本管理
-- 为什么在`Mercuial`或者`git`中，创建分支比`SVN`分支容易；
+- 为什么在`Mercurial`或者`git`中，创建分支比`SVN`分支容易；
 - 分布式版本控制系统和集中式版本管理系统有什么各自的缺点和优点？
 - [x] 你能描述`github flow`和`gitflow`各自的工作流？
 - [x] 什么是`rebase`?
