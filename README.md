@@ -106,7 +106,7 @@ This is Chinese version of [Back-End-Developer-Interview-Questions](https://gith
 - 在分布式系统中如何处理故障？
 - 如何在分布式网络中保证一致性？
 - 分布式系统中有哪些谬论？
-- 什么时候用`Request/Reply`模式或者`Publish/Subscribe`模式？
+- [x] 什么时候用`Request/Response`模式或者`Publish/Subscribe`模式？
 - 假设你的系统不支持事务，那么你该如何从头实现一个？
   
 # 10 软件生命周期和团队管理
