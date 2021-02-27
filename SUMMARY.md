@@ -15,5 +15,5 @@
 * [13 SOA 和 MicroService](./13SOA和MicroService/README.md)
 * [14 安全](./14安全/README.md)
 * [15 通用问题](./15通用问题/README.md)
-* [16 开发问题](./16开发问题/README.md)
+* [16 开放问题](./16开放问题/README.md)
 * [17 Bill Gates 问题](./17BillGates问题/README.md)

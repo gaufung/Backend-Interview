@@ -112,3 +112,22 @@ SELECT
     )  AS [Project2]
     ORDER BY [Project2].[Id] ASC, [Project2].[C1] ASC
 ```
+
+## 4 如果你将你的应用程序迁移数据库，比如从MySQL迁移到PostgreSQL，你会怎么做？如果你来管理这个项目，那些问题需要考虑？
+
+*todo*
+
+## 5 为什么数据库需要特别对待null，比如在SQL语言中: SELECT * FROM table WHERE field=null并不能匹配为空的记录？
+*todo*
+
+## 6 你是如何做到数据库模式的迁移，你是如何版本更改中，如何自动更改数据库模式修改的影响？
+
+*todo* 
+
+## 7 如何在你的应用中查出代价最大的查询？
+*todo*
+
+## 8 在你的观点中，数据库范式化是否永远必须的？什么时候数据库可以不需要范式化？
+
+*todo*
+

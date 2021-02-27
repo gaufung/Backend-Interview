@@ -1,7 +1,13 @@
-## 1 为什么在`Mercuial`或者`git`中，创建分支比`SVN`分支容易；
+## 1 为什么在`Mercuial`或者`git`中，创建分支比`SVN`分支容易
+*todo*
+
 ## 2  分布式版本控制系统和集中式版本管理系统有什么各自的缺点和优点？
+*todo*
+
 ## 3  你能描述`github flow`和`gitflow`各自的工作流？
-###  `github flow` 
+*todo*
+
+**github flow**
 github flow 以部署为中心的开发模式，功能简单可靠，持续、安全和高效的部署，以`Pull Request`为中心
 ![](images/githubflow.png)
 - `master`分支保持可部署的状态；
@@ -10,7 +16,7 @@ github flow 以部署为中心的开发模式，功能简单可靠，持续、�
 - 在合并时候时候，提交`Pull Request`，以`Pull Request`为交流工具；
 - 其他开发者对`Pull Request`进行`Review`
 
-### `git flow`
+**git flow**
 ![](images/gitflow.png)
 `master`分支和`develop`分支贯穿于整个开发过程
 - master： 软件可以正常运行的状态，不允许直接在该分支上直接开发，其他分支的开发工作合并到`master`分支上，在发布的时候附加上`tag`号
@@ -27,3 +33,13 @@ github flow 以部署为中心的开发模式，功能简单可靠，持续、�
 `rebase`主要用于有当前的工作的分支的`基`太老了，需要更新以获得最新的提交。还有`rebase`也经常用在修正分支的`commit`提交记录，使之变得更加有清晰明了。
 
 注意：千万不要在一个*共享*的分支上做`rebase`操作，只能`reabse`私有化的分支。
+
+## 5 为什么在Mercuial或者git中，创建分支比SVN分支容易?
+*todo*
+
+
+## 6 分布式版本控制系统和集中式版本管理系统有什么各自的缺点和优点？
+*todo*
+
+## 7 在Mercurial或者git中合并比SVN中容易；
+*todo*
