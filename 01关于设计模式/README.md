@@ -1,8 +1,6 @@
 # Table of contents
-1. [为什么全局或者静态对象是邪恶的？能够有代码的例子?](#q1)
-2. [介绍一下控制反转(IoC)，它是如何提高代码设计的?](#q2)
-
-<div id="q1"/> 
+1. [为什么全局或者静态对象是邪恶的？能够有代码的例子?](#1-wei-shen-me-quan-ju-huo-zhe-jing-tai-dui-xiang-shi-xieede-neng-gou-you-dai-ma-de-li-zi)
+2. [介绍一下控制反转(IoC)，它是如何提高代码设计的?](#2-jie-shao-yi-xia-kong-zhi-fan-zhuan-ioc-ta-shi-ru-he-ti-gao-dai-ma-she-ji-de)
 
 ## 1 为什么全局或者静态对象是邪恶的？能够有代码的例子?
 
