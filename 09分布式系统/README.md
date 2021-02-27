@@ -48,13 +48,13 @@ RPC 也有下面的缺陷
 
 那么什么时候使用 `pub-sub` 模式呢？如果有很多服务器和很多客户端，那么 `Request/Response` 模式中的数据流量就非常大。每个客户端都选用链接各自的服务器，每个链接都需要经历打开，查询，响应和关闭这些步骤，如此反复进行。
 
-![](./images/ClientServerModel.jpg)
+![](./images/clientServerModel.jpg)
 
 与此相反的是，`pub-sub` 架构就简化了通信，直接链接和不停的查询将不复存在。网络链接被设备到 `broker` 链接取代。client 和 `Broker` 之间的链接将会被保持，但是这是轻量级的。只有两样数据会在连接中传递：
 
 - 数据改变
 - 客户端的心跳以便让 `broker` 知道客户端仍然存在
 
-![](./images/clientBrokerModel.jpg)
+![](./images/clientsBrokerModel.jpg)
 
 所以 `pub-sub` 模式非常实用与很多服务端和很多客户端的场景。由于大大减少了直接链接，网络中流量大大减低了，而且只有数据改变的时候才会发送数据，而不是特定的间隔。`pub-sub` 也非常适用于那些客户端和服务端非常困难的建立链接这种情况。
