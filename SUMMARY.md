@@ -3,7 +3,7 @@
 * [1 关于设计模式](./01关于设计模式/README.md)
 * [2 代码设计](./02代码设计/README.md)
 * [3 语言](./03语言/README.md)
-* [4 Web开发](./04WEb开发/README.md)
+* [4 Web开发](./04Web开发/README.md)
 * [5 数据库](./05数据库/README.md)
 * [6 NoSQL](./06NoSQL/README.md)
 * [7 代码版本管理](./07代码版本管理/README.md)

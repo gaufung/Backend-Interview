@@ -1,4 +1,4 @@
-# 1 RPC调用有什么缺陷？
+## 1 RPC调用有什么缺陷？
 
 RPC (Remote Procedure Call) 是一种技术，它允许一个函数可以在 Remote 的环境中执行。RPC 拓展了本地调用的概念，不过这个借助了 HTTP 协议。
 
@@ -22,7 +22,7 @@ RPC 也有下面的缺陷
 - 方法爆炸：创建新的方法非常容易，但是创建新的方法将会创建无数互相覆盖的函数，并且增加了维护的难度。
 
 
-# 2 什么时候用`Request/Response`模式或者`Publish/Subscribe`模式？
+## 2 什么时候用`Request/Response`模式或者`Publish/Subscribe`模式？
 
 在分布式系统中，服务之间都需要进行通信。在网络通信中有两种主要的模式，分别是 `Request/Response` 和 `Publish/Subscribe` 两种形式，接下来我们探讨在哪种场景下使用其中的一种而不是另一种。
 

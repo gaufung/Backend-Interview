@@ -1,4 +1,4 @@
-# 1 `Brewer`理论，也叫做`CAP`理论，说明在网络分区（network Partition)中，一个系统设计者需要在以一致性`Consistency`和可用性`Availability`中做出选择，你能举出`CP`， `AP`和`CA`系统的例子吗？
+## 1 `Brewer`理论，也叫做`CAP`理论，说明在网络分区（network Partition)中，一个系统设计者需要在以一致性`Consistency`和可用性`Availability`中做出选择，你能举出`CP`， `AP`和`CA`系统的例子吗？
 
 ### 什么是 CAP 理论
 
@@ -36,7 +36,7 @@ G1 和 G2 是两台跨区的服务器，当 G1 向 G2 发送消息的时候，G2
 - 在 AP 分布式系统中，我们更加青睐于 `Availability` 和 `Partition Tolerancy`，比如 Web 缓存，以及 DNS 系统。
 - 在 CP 系统中，我们更加期待一致性，比如分布式锁协议。
 
-# 2 你能解释一下最近对`NoSQL`热度越来越高的原因吗？
+## 2 你能解释一下最近对`NoSQL`热度越来越高的原因吗？
 
 `NoSQL` 通常是指 `Not Only SQL`, 它将非结构化，缺少 Schema 的数据存储在不同的集合或者节点中，因此它不需要固定的表结构，支持有限的 Join 查询，但是可以支持水平化扩展。`NoSQL` 越来越流行的原因主要有下面几点：
 
@@ -58,7 +58,7 @@ G1 和 G2 是两台跨区的服务器，当 G1 向 G2 发送消息的时候，G2
 
 3. 快速开发的能力：如果想要敏捷开发整个软件或者服务，`NoSQL` 对于关系型数据库并不需要很严格的准备工作。
 
-# 4 什么叫最终一致性（Eventual  Consistency)?
+## 3 什么叫最终一致性（Eventual  Consistency)?
 
 最终一致性是一致性模型，主要用在分布式计算中用来达到高可用性。如果给定的数据项没有新的更新，最终所有访问这个数据项的请求都会返回相同的结果。最终一致性也叫做乐观备份。
 如果一个系统实现了最终一致性，那么也叫做 coverage. 最终一致性也是一种弱保证。对于实现最终一致性的服务也叫做 BASE （Basically Available， Soft State, Eventual consistency)，它是传统的 ACID 的对立面。
