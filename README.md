@@ -2,7 +2,7 @@
 
 - 英文原版： [Back end developer interview questions](https://github.com/arialdomartini/Back-End-Developer-Interview-Questions)
 - 中文作者： [高峰](https://gaufung.github.com) (gaufung@outlook.com)
-- GitBook 地址： [BackendInterview](https://fungkao.gitbook.io/backendinterview/)
+- GitBook 地址： [BackendInterview](https://tindi-1.gitbook.io/backendinterview/)
 - 使用 [Typora](https://www.typora.io) 或 Gitbook 以获取最佳阅读体验
 
 ## 目录
