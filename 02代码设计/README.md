@@ -1,3 +1,15 @@
+1. [在面向对象编程中，一个很重要的目标是高内聚（High Cohesion)和松耦合（Loose Coupling). 那么它意味着什么？为什么这个很重要？如何实现它呢？](#1-zai-mian-xiang-dui-xiang-bian-cheng-zhong-yi-ge-hen-zhong-yao-de-mu-biao-shi-gao-nei-ju-high-cohesion-he-song-ou-he-loose-coupling-na-me-ta-yi-wei-zhe-shen-me-wei-shen-me-zhe-ge-hen-zhong-yao-ru-he-shi-xian-ta-ne)
+2. [为什么在大部分语言中数组的下标从0开始？](#2-wei-shen-me-zai-da-bu-fen-yu-yan-zhong-shu-zu-de-xia-biao-cong-0-kai-shi)
+3. [内聚和耦合有什么区别？](#3-nei-ju-he-ou-he-you-shen-me-qu-bie)
+4. [重构的作用是怎样的？](#4-zhong-gou-de-zuo-yong-shi-zen-yang-de)
+5. [代码中注释是有用吗？一些人说我们应该尽可能的避免注释，而且它们大部分是无用的，你同意吗？](#5-dai-ma-zhong-zhu-shi-shi-you-yong-ma-yi-xie-ren-shuo-wo-men-ying-gai-jin-ke-neng-de-bi-mian-zhu-shi-er-qie-ta-men-da-bu-fen-shi-wu-yong-de-ni-tong-yi-ma)
+6. [为什么测试驱动开发TDD中的测试时在开发之前？](#6-wei-shen-me-ce-shi-qu-dong-kai-fa-tdd-zhong-de-ce-shi-shi-zai-kai-fa-zhi-qian)
+7. [在存储过程中使用领域逻辑有什么好处和坏处？](#7-zai-cun-chu-guo-cheng-zhong-shi-yong-ling-yu-luo-ji-you-shen-me-hao-chu-he-huai-chu)
+8. [在你观点来看，使用面向对象编程为什么能够占据市场这么长时间？](#8-zai-ni-guan-dian-lai-kan-shi-yong-mian-xiang-dui-xiang-bian-cheng-wei-shen-me-neng-gou-zhan-ju-shi-chang-zhe-me-chang-shi-jian)
+9. [测试和测试驱动开发(TDD)如何影响代码设计？](#9-ce-shi-he-ce-shi-qu-dong-kai-fa-tdd-ru-he-ying-xiang-dai-ma-she-ji)
+10. [设计和架构有什么区别？](#10-she-ji-he-jia-gou-you-shen-me-qu-bie)
+11. [C++支持多继承，而JAVA允许一个类实现多个接口。在正交性上有什么影响？使用多继承和多接口有什么区别？使用委托和继承有什么区别？（问题来自The Progmatic Programmer一书中）](#11-c-zhi-chi-duo-ji-cheng-er-java-yun-xu-yi-ge-lei-shi-xian-duo-ge-jie-kou-zai-zheng-jiao-xing-shang-you-shen-me-ying-xiang-shi-yong-duo-ji-cheng-he-duo-jie-kou-you-shen-me-qu-bie-shi-yong-wei-tuo-he-ji-cheng-you-shen-me-qu-bie-wen-ti-lai-zi-the-progmatic-programmer-yi-shu-zhong)
+
 ## 1 在面向对象编程中，一个很重要的目标是高内聚（High Cohesion)和松耦合（Loose Coupling). 那么它意味着什么？为什么这个很重要？如何实现它呢？
 
 **内聚**用来度量一个软件的组成部分所专注的内容或者职责；**耦合**用来判定一个软件组成部分与其他部分的联系程度。软件的组成成分可以是类，包，组件，子系统或者完成的系统，然后在设计系统的时候，都会建议软件的各个组成拥有高内聚和松耦合。

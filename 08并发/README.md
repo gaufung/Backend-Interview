@@ -1,3 +1,10 @@
+1. [为什么我们需要并发？](#1-wei-shen-me-wo-men-xu-yao-bing-fa)
+2. [什么是竞争条件？举一个例子来描述？](#2-shen-me-shi-jing-zheng-tiao-jian-ju-yi-ge-li-zi-lai-miao-shu)
+3. [什么是死锁？编写一些代码是由死锁导致的；](#3-shen-me-shi-si-suo-bian-xie-yi-xie-dai-ma-shi-you-si-suo-dao-zhi-de)
+4. [什么是进程饥饿？如果需要，重新回顾一下定义](#4-shen-me-shi-jin-cheng-jie-ru-guo-xu-yao-zhong-xin-hui-gu-yi-xia-ding-yi)
+5. [什么是Wait Free算法？](#6-shen-me-shi-wait-free-suan-fa)
+6. [为什么测试多线程或者并发比较困难？](#9-wei-shen-me-ce-shi-duo-xian-cheng-huo-zhe-bing-fa-bi-jiao-kun-nan)
+
 ## 1 为什么我们需要并发？
 
 首先，并发(`concurrency`)和并行 (`parallelism`)是两个不同的概念

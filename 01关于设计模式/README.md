@@ -1,6 +1,9 @@
 # Table of contents
 1. [为什么全局或者静态对象是邪恶的？能够有代码的例子?](#1-wei-shen-me-quan-ju-huo-zhe-jing-tai-dui-xiang-shi-xieede-neng-gou-you-dai-ma-de-li-zi)
 2. [介绍一下控制反转(IoC)，它是如何提高代码设计的?](#2-jie-shao-yi-xia-kong-zhi-fan-zhuan-ioc-ta-shi-ru-he-ti-gao-dai-ma-she-ji-de)
+3. [迪米特法则（Law of Demeter）表述每个单元最外部了解的越少越好，编写违反这个原则的代码，说明它是不好的设计模式，并且修复它。](#3-di-mi-te-fa-ze-law-of-demeter-biao-shu-mei-ge-dan-yuan-zui-wai-bu-le-jie-de-yue-shao-yue-hao-bian-xie-wei-fan-zhe-ge-yuan-ze-de-dai-ma-shuo-ming-ta-shi-bu-hao-de-she-ji-mo-shi-bing-qie-xiu-fu-ta)
+4. [活动记录(Active-Record)是一种设计模式，它表述了代表数据库中表的对象应该拥有Insert, Update和Delete等相关操作。在你的观点和工作经验中，这中设计模式有什么限制和缺陷？](#4-huo-dong-ji-lu-activerecord-shi-yi-zhong-she-ji-mo-shi-ta-biao-shu-le-dai-biao-shu-ju-ku-zhong-biao-de-dui-xiang-ying-gai-yong-you-insertupdate-he-delete-deng-xiang-guan-cao-zuo-zai-ni-de-guan-dian-he-gong-zuo-jing-yan-zhong-zhe-zhong-she-ji-mo-shi-you-shen-me-xian-zhi-he-que-xian)
+
 
 ## 1 为什么全局或者静态对象是邪恶的？能够有代码的例子?
 

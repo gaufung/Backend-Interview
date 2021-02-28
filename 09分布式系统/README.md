@@ -1,3 +1,14 @@
+1. [RPC调用有什么缺陷？](#1-rpc-tiao-yong-you-shen-me-que-xian)
+2. [什么时候用Request/Response模式或者Publish/Subscribe模式？](#2-shen-me-shi-hou-yong-requestresponse-mo-shi-huo-zhe-publishsubscribe-mo-shi)
+3. [如何测试分布式系统？](#3-ru-he-ce-shi-fen-bu-shi-xi-tong)
+4. [在哪种方式下在两个系统之间通信使用异步方式？](#4-zai-na-zhong-fang-shi-xia-zai-liang-ge-xi-tong-zhi-jian-tong-xin-shi-yong-yi-bu-fang-shi)
+5. [如果你在构建一个分布式系统以便可扩展性和鲁棒性，那么在网络环境安全和地理分布上的考虑和其他系统有什么区别？](#5-ru-guo-ni-zai-gou-jian-yi-ge-fen-bu-shi-xi-tong-yi-bian-ke-kuo-zhan-xing-he-lu-bang-xing-na-me-zai-wang-luo-huan-jing-an-quan-he-di-li-fen-bu-shang-de-kao-lv-he-qi-ta-xi-tong-you-shen-me-qu-bie)
+6. [如何管理一个web应用程序的错误容忍性？](#6-ru-he-guan-li-yi-ge-web-ying-yong-cheng-xu-de-cuo-wu-rong-ren-xing)
+7. [在分布式系统中如何处理故障？](#7-zai-fen-bu-shi-xi-tong-zhong-ru-he-chu-li-gu-zhang)
+8. [如何在分布式网络中保证一致性？](#8-ru-he-zai-fen-bu-shi-wang-luo-zhong-bao-zheng-yi-zhi-xing)
+9. [分布式系统中有哪些谬论？](#9-fen-bu-shi-xi-tong-zhong-you-na-xie-miu-lun)
+10. [假设你的系统不支持事务，那么你该如何从头实现一个？](#10-jia-she-ni-de-xi-tong-bu-zhi-chi-shi-wu-na-me-ni-gai-ru-he-cong-tou-shi-xian-yi-ge)
+
 ## 1 RPC调用有什么缺陷？
 
 RPC (Remote Procedure Call) 是一种技术，它允许一个函数可以在 Remote 的环境中执行。RPC 拓展了本地调用的概念，不过这个借助了 HTTP 协议。

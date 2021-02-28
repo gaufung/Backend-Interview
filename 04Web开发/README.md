@@ -1,3 +1,11 @@
+1. [为什么第一方和第三方Cookie不同对待？](#1-wei-shen-me-di-yi-fang-he-di-san-fang-cookie-bu-tong-dui-dai)
+2. [为什么我们通常在无状态服务做出巨大的付出，那么在无状态代码中有哪些好处以及有状态有什么坏处？](#2-wei-shen-me-wo-men-tong-chang-zai-wu-zhuang-tai-fu-wu-zuo-chu-ju-da-de-fu-chu-na-me-zai-wu-zhuang-tai-dai-ma-zhong-you-na-xie-hao-chu-yi-ji-you-zhuang-tai-you-shen-me-huai-chu)
+3. [从后端的角度来看，采取单页面应用程序(Single Page Application)有什么弊端和缺陷？](#3-cong-hou-duan-de-jiao-du-lai-kan-cai-qu-dan-ye-mian-ying-yong-cheng-xu-single-page-application-you-shen-me-bi-duan-he-que-xian)
+4. [在Web开发中，MVC和MVVM两种模式非常常见，在前端和后端中都是常见的，那么它们各自是什么？为什么它们是值得使用的？](#4-zai-web-kai-fa-zhong-mvc-he-mvvm-liang-zhong-mo-shi-fei-chang-chang-jian-zai-qian-duan-he-hou-duan-zhong-du-shi-chang-jian-de-na-me-ta-men-ge-zi-shi-shen-me-wei-shen-me-ta-men-shi-zhi-de-shi-yong-de)
+5. [如何管理你的Web符合的API版本？](#5-ru-he-guan-li-ni-de-web-fu-he-de-api-ban-ben)
+6. [为什么我们通常在无状态服务做出巨大的付出，那么在无状态代码中有哪些好处以及有状态有什么坏处？](#6-wei-shen-me-wo-men-tong-chang-zai-wu-zhuang-tai-fu-wu-zuo-chu-ju-da-de-fu-chu-na-me-zai-wu-zhuang-tai-dai-ma-zhong-you-na-xie-hao-chu-yi-ji-you-zhuang-tai-you-shen-me-huai-chu)
+7. [REST 和 SOAP两种方式，什么时候选择其中一个，而不用另外一个？](#7-rest-he-soap-liang-zhong-fang-shi-shen-me-shi-hou-xuan-ze-qi-zhong-yi-ge-er-bu-yong-ling-wai-yi-ge)
+
 ## 1 为什么`第一方`和`第三方`Cookie不同对待？
 
 - 第一方 Cookie 是你直接访问的域名，它允许网站的拥有者可以搜集分析数据，记住语言设置或者提供很好的用户体验。举例来讲，在你访问社交网站的时候，你并不需要每次都需要重复登陆操作。

@@ -1,8 +1,9 @@
 # 后端开发者面试问题
 
-- 英文原版： [Back end developer interview questions](https://github.com/arialdomartini/Back-End-Developer-Interview-Questions)
+- 英文原版： [Backend developer interview questions](https://github.com/arialdomartini/Back-End-Developer-Interview-Questions)
 - 中文作者： [高峰](https://gaufung.github.com) (gaufung@outlook.com)
-- GitBook 地址： [BackendInterview](https://tindi-1.gitbook.io/backendinterview/)
+- GitHub 地址： [Backend Interview](https://github.com/gaufung/Backend-Interview)
+- GitBook 地址： [后端程序员面试问题集锦](https://tindi-1.gitbook.io/backendinterview/)
 - 使用 [Typora](https://www.typora.io) 或 Gitbook 以获取最佳阅读体验
 
 ## 目录
@@ -24,3 +25,11 @@
 ### [15 通用问题](./15通用问题/README.md)
 ### [16 开放问题](./16开放问题/README.md)
 ### [17 Bill Gates 问题](./17BillGates问题/README.md)
+
+
+## CONTRIBUTION
+非常欢迎为这些问题提供答案，欢迎提出 Issue。
+
+## LICENSE
+
+[CC-BY 4.0](LICENSE)

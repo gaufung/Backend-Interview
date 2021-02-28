@@ -1,3 +1,9 @@
+1. [Brewer理论，也叫做CAP理论，说明在网络分区（network Partition)中，一个系统设计者需要在以一致性Consistency和可用性Availability中做出选择，你能举出CP， AP和CA系统的例子吗？](#1-brewer-li-lun-ye-jiao-zuo-cap-li-lun-shuo-ming-zai-wang-luo-fen-qu-network-partition-zhong-yi-ge-xi-tong-she-ji-zhe-xu-yao-zai-yi-yi-zhi-xing-consistency-he-ke-yong-xing-availability-zhong-zuo-chu-xuan-ze-ni-neng-ju-chu-cp-ap-he-ca-xi-tong-de-li-zi-ma)
+2. [你能解释一下最近对NoSQL热度越来越高的原因吗？](#2-ni-neng-jie-shi-yi-xia-zui-jin-dui-nosql-re-du-yue-lai-yue-gao-de-yuan-yin-ma)
+3. [在那种情况下你会选择文档型数据库比如MongoDB而不是关系型数据库比如MySQL?](#3-zai-na-zhong-qing-kuang-xia-ni-hui-xuan-ze-wen-dang-xing-shu-ju-ku-bi-ru-mongodb-er-bu-shi-guan-xi-xing-shu-ju-ku-bi-ru-mysql)
+4. [什么叫最终一致性（Eventual  Consistency)?](#4-shen-me-jiao-zui-zhong-yi-zhi-xing-eventual-consistency)
+5. [为什么NoSQL解决了可扩展性的挑战？](#5-wei-shen-me-nosql-jie-jue-le-ke-kuo-zhan-xing-de-tiao-zhan)
+
 ## 1 `Brewer`理论，也叫做`CAP`理论，说明在网络分区（network Partition)中，一个系统设计者需要在以一致性`Consistency`和可用性`Availability`中做出选择，你能举出`CP`， `AP`和`CA`系统的例子吗？
 
 **什么是 CAP 理论**

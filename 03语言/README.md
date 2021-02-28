@@ -1,3 +1,27 @@
+1. [说一下你最喜欢语言的三个缺陷](#1-shuo-yi-xia-ni-zui-xi-huan-yu-yan-de-san-ge-que-xian)
+2. [为什么现在对函数式编程语言越来越受到欢迎？](#2-wei-shen-me-xian-zai-dui-han-shu-shi-bian-cheng-yu-yan-yue-lai-yue-shou-dao-huan-ying)
+3. [什么是闭包，闭包有什么作用？它和类有什么区别？](#3-shen-me-shi-bi-bao-bi-bao-you-shen-me-zuo-yong-ta-he-lei-you-shen-me-qu-bie)
+4. [什么是高阶函数？它是用来做什么的？用你最喜欢的语言写一个高阶函数;](#4-shen-me-shi-gao-jie-han-shu-ta-shi-yong-lai-zuo-shen-me-de-yong-ni-zui-xi-huan-de-yu-yan-xie-yi-ge-gao-jie-han-shu)
+5. [编写一个循环，然后将它转换成递归的形式，并且只能使用不可变结构（比如避免使用变量）](#5-bian-xie-yi-ge-xun-huan-ran-hou-jiang-ta-zhuan-huan-cheng-di-gui-de-xing-shi-bing-qie-zhi-neng-shi-yong-bu-ke-bian-jie-gou-bi-ru-bi-mian-shi-yong-bian-liang)
+6. [什么是栈和堆？什么叫栈溢出？](#6-shen-me-shi-zhan-he-dui-shen-me-jiao-zhan-yi-chu)
+7. [命名空间（namespace)是做什么的？能够发明一个可替代性的东西？](#7-ming-ming-kong-jian-namespace-shi-zuo-shen-me-de-neng-gou-fa-ming-yi-ge-ke-ti-dai-xing-de-dong-xi)
+8. [编写两个函数，一个是引用透明（Referentially Transparent)，另一个是引用不透明（Referentially Opaque）](#8-bian-xie-liang-ge-han-shu-yi-ge-shi-yin-yong-tou-ming-referentially-transparent-ling-yi-ge-shi-yin-yong-bu-tou-ming-referentially-opaque)
+9. [为什么在有些语言设计中没有异常机制？那么它们有什么优势和弊端？](#9-wei-shen-me-zai-you-xie-yu-yan-she-ji-zhong-mei-you-yi-chang-ji-zhi-na-me-ta-men-you-shen-me-you-shi-he-bi-duan)
+10. [为什么在JAVA，或者C#中，构造函数不是接口的一部分？](#10-wei-shen-me-zai-java-huo-zheczhong-gou-zao-han-shu-bu-shi-jie-kou-de-yi-bu-fen)
+11. [泛型是用来做什么的？](#11-fan-xing-shi-yong-lai-zuo-shen-me-de)
+12. [语言将函数当做一等公民意味什么？](#12-yu-yan-jiang-han-shu-dang-zuo-yi-deng-gong-min-yi-wei-shen-me)
+13. [展示一个例子来说明匿名函数是有用的；](#13-zhan-shi-yi-ge-li-zi-lai-shuo-ming-ni-ming-han-shu-shi-you-yong-de)
+14. [有许多不同的类型系统：静态类型和动态类型，强类型和弱类型等等。你能分享和讨论一下在开发一个企业级软件的时候，如何去选择特定的类型系统？](#14-you-xu-duo-bu-tong-de-lei-xing-xi-tong-jing-tai-lei-xing-he-dong-tai-lei-xing-qiang-lei-xing-he-ruo-lei-xing-deng-deng-ni-neng-fen-xiang-he-tao-lun-yi-xia-zai-kai-fa-yi-ge-qi-ye-ji-ruan-jian-de-shi-hou-ru-he-qu-xuan-ze-te-ding-de-lei-xing-xi-tong)
+15. [讨论一下JAVA和C#之间的互通性？](#15-tao-lun-yi-xia-java-heczhi-jian-de-hu-tong-xing)
+16. [为什么许多开发人员不喜欢JAVA？](#16-wei-shen-me-xu-duo-kai-fa-ren-yuan-bu-xi-huan-java)
+17. [好语言的好和坏语言的坏各自在什么地方？](#17-hao-yu-yan-de-hao-he-huai-yu-yan-de-huai-ge-zi-zai-shen-me-di-fang)
+18. [在一些语言中，尤其是函数化倾向的语言中，有一种叫模式匹配（Pattern Matching)的技术，那么在模式匹配和Switch语言有什么区别？](#18-zai-yi-xie-yu-yan-zhong-you-qi-shi-han-shu-hua-qing-xiang-de-yu-yan-zhong-you-yi-zhong-jiao-mo-shi-pi-pei-pattern-matching-de-ji-shu-na-me-zai-mo-shi-pi-pei-he-switch-yu-yan-you-shen-me-qu-bie)
+19. [为什么在有些语言设计中没有异常机制？那么它们有什么优势和弊端？](#19-wei-shen-me-zai-you-xie-yu-yan-she-ji-zhong-mei-you-yi-chang-ji-zhi-na-me-ta-men-you-shen-me-you-shi-he-bi-duan)
+20. [如果Cat是Animal，那么设计的时候是TakeCare还是TakeCare?](#20-ru-guo-cat-shi-animal-na-me-she-ji-de-shi-hou-shi-takecare-hai-shi-takecare)
+21. [最近几年，有很多关于Node的不实的宣传，那么你对这些原本运行在浏览器中的语言用作后端开发语言的看法是什么?](#21-zui-jin-ji-nian-you-hen-duo-guan-yu-node-de-bu-shi-de-xuan-chuan-na-me-ni-dui-zhe-xie-yuan-ben-yun-hang-zai-liu-lan-qi-zhong-de-yu-yan-yong-zuo-hou-duan-kai-fa-yu-yan-de-kan-fa-shi-shen-me)
+22. [假设你有一台时光机，能够穿梭到Java语言创建的时间点，并且能够和JDK的架构者交流，那么你将会说服他什么？比如移除检查异常（checked exception)机制?增加非符号的的基础类型？增加多继承？](#22-jia-she-ni-you-yi-tai-shi-guang-ji-neng-gou-chuan-suo-dao-java-yu-yan-chuang-jian-de-shi-jian-dian-bing-qie-neng-gou-he-jdk-de-jia-gou-zhe-jiao-liu-na-me-ni-jiang-hui-shuo-fu-ta-shen-me-bi-ru-yi-chu-jian-cha-yi-chang-checked-exception-ji-zhi-zeng-jia-fei-fu-hao-de-de-ji-chu-lei-xing-zeng-jia-duo-ji-cheng)
+
+
 ## 1 说一下你最喜欢语言的三个缺陷
 
 C# 语言

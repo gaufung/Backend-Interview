@@ -1,3 +1,12 @@
+1. [ACID通常是 Atomicity, Consistency，Isolation 和 Durabiltiy。这四个属性通常有数据库引擎的事务来保证，你能谈谈这个话题吗？](#1-acid-tong-chang-shi-atomicity-consistencyisolation-he-durabiltiy-zhe-si-ge-shu-xing-tong-chang-you-shu-ju-ku-yin-qing-de-shi-wu-lai-bao-zheng-ni-neng-tan-tan-zhe-ge-hua-ti-ma)
+2. [什么叫做Blue-Green Deployment](#2-shen-me-jiao-zuo-bluegreen-deployment)
+3. [什么是 N + 1 问题](#3-shen-me-shi-n-1-wen-ti)
+4. [如果你将你的应用程序迁移数据库，比如从MySQL迁移到PostgreSQL，你会怎么做？如果你来管理这个项目，那些问题需要考虑？](#4-ru-guo-ni-jiang-ni-de-ying-yong-cheng-xu-qian-yi-shu-ju-ku-bi-ru-cong-mysql-qian-yi-dao-postgresql-ni-hui-zen-me-zuo-ru-guo-ni-lai-guan-li-zhe-ge-xiang-mu-na-xie-wen-ti-xu-yao-kao-lv)
+5. [为什么数据库需要特别对待null，比如在SQL语言中: SELECT * FROM table WHERE field=null并不能匹配为空的记录？](#5-wei-shen-me-shu-ju-ku-xu-yao-te-bie-dui-dai-null-bi-ru-zai-sql-yu-yan-zhong-select-from-table-where-fieldnull-bing-bu-neng-pi-pei-wei-kong-de-ji-lu)
+6. [你是如何做到数据库模式的迁移，你是如何版本更改中，如何自动更改数据库模式修改的影响？](#6-ni-shi-ru-he-zuo-dao-shu-ju-ku-mo-shi-de-qian-yi-ni-shi-ru-he-ban-ben-geng-gai-zhong-ru-he-zi-dong-geng-gai-shu-ju-ku-mo-shi-xiu-gai-de-ying-xiang)
+7. [如何在你的应用中查出代价最大的查询？](#7-ru-he-zai-ni-de-ying-yong-zhong-cha-chu-dai-jia-zui-da-de-cha-xun)
+8. [在你的观点中，数据库范式化是否永远必须的？什么时候数据库可以不需要范式化？](#8-zai-ni-de-guan-dian-zhong-shu-ju-ku-fan-shi-hua-shi-fou-yong-yuan-bi-xu-de-shen-me-shi-hou-shu-ju-ku-ke-yi-bu-xu-yao-fan-shi-hua)
+
 ## 1 ACID通常是 `Atomicity`, `Consistency`，`Isolation` 和 `Durabiltiy`。这四个属性通常有数据库引擎的事务来保证，你能谈谈这个话题吗？
 
 数据库通过事务来保证数据的完全性，通常用 `ACID` 来表示。

@@ -1,3 +1,11 @@
+1. [为什么在Mercuial或者git中，创建分支比SVN分支容易](#1-wei-shen-me-zai-mercuial-huo-zhe-git-zhong-chuang-jian-fen-zhi-bi-svn-fen-zhi-rong-yi)
+2. [分布式版本控制系统和集中式版本管理系统有什么各自的缺点和优点？](#2-fen-bu-shi-ban-ben-kong-zhi-xi-tong-he-ji-zhong-shi-ban-ben-guan-li-xi-tong-you-shen-me-ge-zi-de-que-dian-he-you-dian)
+3. [你能描述github flow和gitflow各自的工作流？](#3-ni-neng-miao-shu-github-flow-he-gitflow-ge-zi-de-gong-zuo-liu)
+4. [什么是rebase?](#4-shen-me-shi-rebase)
+5. [为什么在Mercuial或者git中，创建分支比SVN分支容易?](#5-wei-shen-me-zai-mercuial-huo-zhe-git-zhong-chuang-jian-fen-zhi-bi-svn-fen-zhi-rong-yi)
+6. [分布式版本控制系统和集中式版本管理系统有什么各自的缺点和优点？](#6-fen-bu-shi-ban-ben-kong-zhi-xi-tong-he-ji-zhong-shi-ban-ben-guan-li-xi-tong-you-shen-me-ge-zi-de-que-dian-he-you-dian)
+7. [在Mercurial或者git中合并比SVN中容易；](#7-zai-mercurial-huo-zhe-git-zhong-he-bing-bi-svn-zhong-rong-yi)
+
 ## 1 为什么在`Mercuial`或者`git`中，创建分支比`SVN`分支容易
 *todo*
 
