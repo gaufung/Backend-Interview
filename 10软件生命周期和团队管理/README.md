@@ -13,6 +13,7 @@
 13. [除了代码之外，你认为你要找的同事最重要的三个特质是什么？](#13-chu-le-dai-ma-zhi-wai-ni-ren-wei-ni-yao-zhao-de-tong-shi-zui-zhong-yao-de-san-ge-te-zhi-shi-shen-me)
 14. [对于非技术背景的人，你认为三个最重要的事情是什么？](#14-dui-yu-fei-ji-shu-bei-jing-de-ren-ni-ren-wei-san-ge-zui-zhong-yao-de-shi-qing-shi-shen-me)
 15. [如果公司给你一个月时间和一些预算来提高你同事的日常生活，你会怎么做？](#15-ru-guo-gong-si-gei-ni-yi-ge-yue-shi-jian-he-yi-xie-yu-suan-lai-ti-gao-ni-tong-shi-de-ri-chang-sheng-huo-ni-hui-zen-me-zuo)
+
 ## 1 什么是敏捷？
 *todo*
 ## 2 你是如何处理历史遗留代码？
