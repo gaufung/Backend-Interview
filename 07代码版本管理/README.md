@@ -17,7 +17,9 @@
 
 **github flow**
 github flow 以部署为中心的开发模式，功能简单可靠，持续、安全和高效的部署，以`Pull Request`为中心
+
 ![](images/githubflow.png)
+
 - `master`分支保持可部署的状态；
 - 从`master`分支切换出功能分支，并进行开发工作；
 - 在`github`仓库创建同名的远端分支，并`push`到远端分支上；
@@ -25,7 +27,9 @@ github flow 以部署为中心的开发模式，功能简单可靠，持续、�
 - 其他开发者对`Pull Request`进行`Review`
 
 **git flow**
+
 ![](images/gitflow.png)
+
 `master`分支和`develop`分支贯穿于整个开发过程
 - master： 软件可以正常运行的状态，不允许直接在该分支上直接开发，其他分支的开发工作合并到`master`分支上，在发布的时候附加上`tag`号
 - develop: 是开发过程中的中心分支，所有开发工作以该分支作为起点；
