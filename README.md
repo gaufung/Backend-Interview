@@ -1,9 +1,9 @@
 # 后端开发者面试问题
 
+- GitBook 地址： [后端程序员面试问题集锦](https://fungkao.gitbook.io/backendinterview/)
 - 英文原版： [Backend developer interview questions](https://github.com/arialdomartini/Back-End-Developer-Interview-Questions)
 - 中文作者： [高峰](https://gaufung.github.com) (gaufung@outlook.com)
 - GitHub 地址： [Backend Interview](https://github.com/gaufung/Backend-Interview)
-- GitBook 地址： [后端程序员面试问题集锦](https://tindi-1.gitbook.io/backendinterview/)
 - 使用 [Typora](https://www.typora.io) 或 Gitbook 以获取最佳阅读体验
 
 ## 目录
