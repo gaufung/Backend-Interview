@@ -43,6 +43,7 @@
 ## 6 能够通过代码静态检查分析来检测SQL注入，能够给出大致的思路；
 *todo*
 ## 7 什么是 Cross-Site Scripting?
+
 Cross-Site Scripting 也叫做 XSS ，它允许攻击者将客户端代码侵入到用户的的浏览的页面中。为什么它可以做到这一点呢？因为它绕过了同源策略（Same Origin Policy)。
 
 所谓同源策略也就是说浏览器针对同一个站点的内容都授予权限来访问资源，比如说 cookie 什么的。如果网站内容下面三者相同，就表明是同源的
@@ -73,8 +74,38 @@ XSS 主要分为四种
 - [XSS 检查清单](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)
 - [DOM 类型检查清单](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)
 - [代码 Review 注意事项](https://owasp.org/www-project-code-review-guide/migrated_content)
+
 ## 8 什么是Cross-Site Forgery Attack?
-*todo*
+
+CSFA 是一种网络攻击，它强制终端用户执行一些原本不想执行的操作，这些操作使用了当前的用户的认证信息，比如 `cookie` 等等。那么 `CSFA` 是如何工作的呢？ 接下来我们举一个例子：
+假设有一个网站叫做 `http://vulnerable.com`，我们在这个网站上有各自的账户，如果这个网站上的个人账户页面上提供了一个删除按钮，那么当我们点击这个按钮，那么这个按钮就会执行下面的 `HTTP` 请求
+
+```
+POST /delete_my_account HTTP/1.1
+Host: vulnerable.com
+Content-Type: application/x-www-form-urlencoded
+Cookie: SessionID=d34dc0d3
+
+delete = 1
+```
+
+由于请求中包含了 Cookie，因为包含了 `cookie` 因为服务端会授权这次删除操作。假设有个攻击者通过邮件或者网页上的超链接发送用户，但是这个超链接的缺包含了下面一段代码
+
+```html
+<form action="http://vulnerable.com/delete_my_account"
+      method="POST"
+      id="csrf_form">
+    <input type="hidden" name="delete" value="1">
+</form>
+<script>
+    document.getElementById("csrf_form").submit()
+</script>
+```
+由于这个 `form` 是隐藏的，所以用户并没有看到这个表单，而且通过 `Javascript` 脚本自动执行了表单的提交，由于这次的请求是发送给 `http://vulnerable.com`，根据同源策略，浏览器会将相应的 `host` 下面的 `cookie` 一同发送过去。这样服务端会认为这是一个真正用户的请求，从而完成删除操作。
+
+这就是 `Cross-Site Forgery Attack`， 那么有没有办法阻止这种情况发生呢？当然有，目前服务端采用 `anti-CSRF` 的策略，该策略是在为 `POST` 之类的 `form` 随机生成一个数字，只有请求发送过来的数值相同才认同这次的请求。
+
+
 ## 9 HTTPS是如何工作的？
 *todo*
 ## 10 什么是中间人攻击（Man-in-the-middle Attack)? HTTPS如何保护的？
