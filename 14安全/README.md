@@ -150,6 +150,37 @@ delete = 1
 点击其中一个，可以查看这个证书的详细信息，比如公钥。
 
 ## 10 什么是中间人攻击（Man-in-the-middle Attack)? HTTPS如何保护的？
-*todo*
+
+![](./images/miim.jpg)
+
+中间人攻击是攻击者截获客户端和服务端之间的流量，它既可以去监听流量的内容，可以修改流量。
+
+假设现在 `Alice` 打算和 `Bob` 进行通信，但是 `Mallory` 打算在网络的中间进行攻击。
+![](./images/amb.png)
+
+对于 Alice 和 Bob 的会话就会变得如下所示
+
+1. Alice 发送一个消息给 Blob 
+> *Alice* "Bob, 给我你的公钥" -> Mallory -> Bob
+
+2. Mallory 截获了这条消息，修改并发送诶 Bob
+> *Alice*  *Mallory* "我是 Alice，给我你的公钥" -> Bob
+
+3. Bob 将他的公钥发给了 Mallory
+> *Alice* *Mallory* <- "Bob 的公钥" Bob
+
+4. Mallory 将自己的公钥替换为 Bob 的，并且声明这是 Bob 的公钥
+> *Alice* <- "Mallory 的公钥" *Mallory* *Bob*
+
+5. Alice 将她的信息使用 Mallory 的公钥进行加密，并且发送给 Bob
+> *Alice* -> "我的银行卡号是123，请转账" *Mallory* *Bob*
+
+6. Mallory 使用自己私钥解密，并且修改内容发给 Bob
+> *Alice* *Mallory* "我的银行卡号是456，请转账" -> Bob
+
+
+在 HTTPS 中，我们通过证书来验证服务端是否是我们想要的服务端。我们只信任 CA 机构颁发的证书或者 CA 机构颁发证书信任的证书。通过私钥对证书的签名，然后通过公钥进行解密，如果一致就表明对方的确是想要连接的对象。
+由于无法在缺少私钥的情况下，对证书进行加密，所以攻击者不可能修改内容，哪怕是截获到流量，也是加密后的内容。
+
 ## 11 怎样防止用户的会话（session）被偷？
 *todo*
