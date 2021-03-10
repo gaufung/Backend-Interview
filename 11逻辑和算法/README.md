@@ -55,7 +55,15 @@ func (s *Stack) Pop()(interface{}, error){
 ```
 
 ## 2 使用代码片段来实现栈溢出
-*todo*
+对于递归，如果没有递归基，也就是递归的出口。那么就会导致栈溢出。
+
+```C#
+public int Fib(n)
+{
+    return Fib(n-1) + Fib(n-2);
+}
+```
+
 ## 3 使用尾递归版本的Fraction方法
 *todo*
 ## 4 使用你最熟悉的语言，来实现一个REPL，它将输出任何输出；执行RPN表达式
