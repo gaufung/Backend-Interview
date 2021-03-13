@@ -76,7 +76,65 @@ public int Fib(n)
 *todo*
 
 ## 7 编写一个实例代码能够导致内存泄漏
-*todo*
+
+内存泄露（Memory Leak) 是令软件开发工程师非常头疼的一件事，在托管开发语言中，比如 `C/C++`，内存的申请和释放都是由开发人员自己处理。因此如果申请的内存没有释放，就会导致出现内存泄露情况的发生。最常见的就是没有显示的调用 `free/delete` 语句来释放指针。
+
+```C++
+class MyClass {
+    public:
+        int MyNum;
+        string myString;
+}
+
+void CreatePointer()
+{
+    MyClass* p = new MyClass();
+    // do something
+    return;
+}
+```
+
+在这里指针 `p` 在申请内存后，并没有释放这个内存空间。所以当程序中多次调用这个方法之后，就会导致内存空间耗尽，知道出现 `Out of Memory` 这个异常使程序终止。
+
+目前内存托管的开发语言的出现，使开发人员从内存管理任务中解放出来。它们都会带有一个垃圾回收机制(`GC`)。它们会定期清理内存中申请但是不再使用的对象，以便释放出内存。虽然这类开发语言帮我们解决这内存的问题，但是如果使用不当仍然也会导致内存泄露。
+
+```C#
+public string Read()
+{
+    FileStream fs = new FileStream(@"C:\data.txt", FileMode.Open, FileAccess.Read);
+    return fs.ReadString();
+}
+```
+
+在 `C#` 在读取外部资源，比如文件，网络，数据库的时候，如果没有调用 `Dispose` 方法，那么该资源占用的内存是不会被 `GC` 回收的，因此需要使用 `Dispose Pattern`。
+
+还有一种内存泄露比较隐蔽，`GC` 通过扫描不可达的对象标记为待回收的对象。但是如果我们代码的中，如果存在隐藏的引用，也会导致内存泄露。
+
+```C#
+class Container<T> {
+    private T[] _arr;
+
+    public int Count = 0;
+
+    public void Push<T>(T elem)
+    {
+        _arr[Count] = elem;
+        Count++;
+    }
+
+    public T Pop<T>()
+    {
+        Count--
+        return _arr[Count];
+    }
+}
+```
+
+这里我们用 `Count` 来作为一个数组的游标，但是我们要注意的是一点是在 `Pop` 操作之后，如果这个对象不会再使用，垃圾回收也不会将它们回收，因为我们 `_arr` 仍然隐式的引用了这个对象。所以使用不当的话，仍然会导致内存泄露。
+
+
+
+
 
 ## 8 生成一系列不同的随机数
 *todo*
