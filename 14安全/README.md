@@ -39,7 +39,62 @@
 ## 4 如果不是仔细处理，存在日志中包含敏感信息的风险，比如密码？如何处理这些事情呢？
 *todo*
 ## 5 编写代码能够被SQL注入影响，并修改它；
-*todo*
+
+`SQL` 注入 （SQL Injection）是网络安全中领域中一项内容，它允许攻击者通过应用程序的查询语句访问不允许访问的数据，或者修改数据库的内容，甚至删除数据。
+
+假设网络应用程序中有这么一个地址 
+
+> https://sqlinjection.com/user?id=10
+
+它的目的是查询 `user` 的 `id=10` 用户，那么在后台的应用程序就表现为。
+
+```C#
+public User GetUser(string id)
+{
+    string sql = $"select * from User where id = ${id};"
+    SqlCommand command = new SqlCommand(sql, connection);
+    SqlDataReader reader = command.ExecuteReader();
+    return ConvertToUser(reader);
+}
+```
+
+但是如果网络攻击者调用我们的地址是这样的
+
+> https://sqlinjection.com/user?id=10%3Bdrop%26table%20User
+
+那么查询语句就会变成
+
+```sql
+select * from User where id = 10; drop table User
+```
+
+当执行完这段语句，我们就会发现我们 `User` 表就会被删除，达到了 `SQL` 注入攻击的目的。
+
+那么我们该如何防范这种攻击呢？
+第一我们可以使用 `ORM` 框架来进行查询操作，由于没有主动的 `SQL` 语句的拼接，就不会给网络攻击可乘之机；另一种方法是参数化查询。
+
+```C#
+public User GetUser(string id)
+{
+    string sql = $"select * from User where id = $ID;"
+    SqlCommand command = new SqlCommand(sql, connection);
+    command.Parameter.Add("@ID", SqlDbType.String);
+    command.Parameter["@ID"].Value = id;
+    SqlDataReader reader = command.ExecuteReader();
+    return ConvertToUser(reader);
+}
+```
+
+通过查询参数化，我们可以让参数转换成特定的数据类型。哪怕攻击者将 `id` 设置为 `10;drop table User`, 最终的查询语句也会变成 
+
+```sql
+select * from User where id = '10; drop table User'
+```
+
+这样就能避免 SQL 注入带来的风险。
+
+
+
 ## 6 能够通过代码静态检查分析来检测SQL注入，能够给出大致的思路；
 *todo*
 ## 7 什么是 Cross-Site Scripting?
