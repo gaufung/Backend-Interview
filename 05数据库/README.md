@@ -127,7 +127,25 @@ SELECT
 *todo*
 
 ## 5 为什么数据库需要特别对待null，比如在SQL语言中: SELECT * FROM table WHERE field=null并不能匹配为空的记录？
-*todo*
+
+现在有下面两个 `SQL` 语句
+
+```sql 
+select * from table where field = null;
+select * from table where filed <> null;
+```
+这两句都返回空的数据集，这是为什么呢？ 这是主要原因 `SQL` 不同于其他的编程语言，在其他编程语言中
+
+> NULL 永远不等于其他任何事情
+
+那么这导致了理解 `NULL != <something>` 这个语句返回 `true`。但是在数据库中，`NULL` 既不等于任何事物，也*不*不等于任何事物，这也是在数据库中我们需要特别对待 `Null`。当我们在等于或者不等于的比较的时候，我们应该还有大于或者小于同样的概念，但是对于 `NULL` 而言这是不成立的，我们只能说这个值是不是 `NULL`。
+
+所以数据库 `NULL` 字段的正确地处理方式是这样的 
+
+```sql
+select * from where field is null;
+select * from where field is not null;
+```
 
 ## 6 你是如何做到数据库模式的迁移，你是如何版本更改中，如何自动更改数据库模式修改的影响？
 
