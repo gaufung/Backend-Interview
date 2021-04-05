@@ -16,10 +16,9 @@
 16. [为什么许多开发人员不喜欢JAVA？](#16-wei-shen-me-xu-duo-kai-fa-ren-yuan-bu-xi-huan-java)
 17. [好语言的好和坏语言的坏各自在什么地方？](#17-hao-yu-yan-de-hao-he-huai-yu-yan-de-huai-ge-zi-zai-shen-me-di-fang)
 18. [在一些语言中，尤其是函数化倾向的语言中，有一种叫模式匹配（Pattern Matching)的技术，那么在模式匹配和Switch语言有什么区别？](#18-zai-yi-xie-yu-yan-zhong-you-qi-shi-han-shu-hua-qing-xiang-de-yu-yan-zhong-you-yi-zhong-jiao-mo-shi-pi-pei-pattern-matching-de-ji-shu-na-me-zai-mo-shi-pi-pei-he-switch-yu-yan-you-shen-me-qu-bie)
-19. [为什么在有些语言设计中没有异常机制？那么它们有什么优势和弊端？](#19-wei-shen-me-zai-you-xie-yu-yan-she-ji-zhong-mei-you-yi-chang-ji-zhi-na-me-ta-men-you-shen-me-you-shi-he-bi-duan)
-20. [如果Cat是Animal，那么设计的时候是TakeCare还是TakeCare?](#20-ru-guo-cat-shi-animal-na-me-she-ji-de-shi-hou-shi-takecare-hai-shi-takecare)
-21. [最近几年，有很多关于Node的不实的宣传，那么你对这些原本运行在浏览器中的语言用作后端开发语言的看法是什么?](#21-zui-jin-ji-nian-you-hen-duo-guan-yu-node-de-bu-shi-de-xuan-chuan-na-me-ni-dui-zhe-xie-yuan-ben-yun-hang-zai-liu-lan-qi-zhong-de-yu-yan-yong-zuo-hou-duan-kai-fa-yu-yan-de-kan-fa-shi-shen-me)
-22. [假设你有一台时光机，能够穿梭到Java语言创建的时间点，并且能够和JDK的架构者交流，那么你将会说服他什么？比如移除检查异常（checked exception)机制?增加非符号的的基础类型？增加多继承？](#22-jia-she-ni-you-yi-tai-shi-guang-ji-neng-gou-chuan-suo-dao-java-yu-yan-chuang-jian-de-shi-jian-dian-bing-qie-neng-gou-he-jdk-de-jia-gou-zhe-jiao-liu-na-me-ni-jiang-hui-shuo-fu-ta-shen-me-bi-ru-yi-chu-jian-cha-yi-chang-checked-exception-ji-zhi-zeng-jia-fei-fu-hao-de-de-ji-chu-lei-xing-zeng-jia-duo-ji-cheng)
+19. [如果Cat是Animal，那么设计的时候是TakeCare还是TakeCare?](#19-ru-guo-cat-shi-animal-na-me-she-ji-de-shi-hou-shi-takecare-hai-shi-takecare)
+20. [最近几年，有很多关于Node的不实的宣传，那么你对这些原本运行在浏览器中的语言用作后端开发语言的看法是什么?](#20-zui-jin-ji-nian-you-hen-duo-guan-yu-node-de-bu-shi-de-xuan-chuan-na-me-ni-dui-zhe-xie-yuan-ben-yun-hang-zai-liu-lan-qi-zhong-de-yu-yan-yong-zuo-hou-duan-kai-fa-yu-yan-de-kan-fa-shi-shen-me)
+21. [假设你有一台时光机，能够穿梭到Java语言创建的时间点，并且能够和JDK的架构者交流，那么你将会说服他什么？比如移除检查异常（checked exception)机制?增加非符号的的基础类型？增加多继承？](#21-jia-she-ni-you-yi-tai-shi-guang-ji-neng-gou-chuan-suo-dao-java-yu-yan-chuang-jian-de-shi-jian-dian-bing-qie-neng-gou-he-jdk-de-jia-gou-zhe-jiao-liu-na-me-ni-jiang-hui-shuo-fu-ta-shen-me-bi-ru-yi-chu-jian-cha-yi-chang-checked-exception-ji-zhi-zeng-jia-fei-fu-hao-de-de-ji-chu-lei-xing-zeng-jia-duo-ji-cheng)
 
 
 ## 1 说一下你最喜欢语言的三个缺陷
@@ -403,10 +402,125 @@ void AppDialog::on_button()
 *todo*
 
 ## 18 在一些语言中，尤其是函数化倾向的语言中，有一种叫模式匹配（Pattern Matching)的技术，那么在模式匹配和Switch语言有什么区别？
-*todo*
+在计算机科学中，模式匹配是一种行为，它用来检查一系列 `Token` 是否满足特定的模式条件，它只有**是/否**的两种选择。
 
-## 19 为什么在有些语言设计中没有异常机制？那么它们有什么优势和弊端？
-*todo*
+假设你熟悉 `if` 和 `Switch` 编程语法，接下来我们以 `C#` 编程语言支持的模式匹配为例。我们现有有不同的几何图形的类，但是不同于之前的继承关系，我们并没有引入这些概念。
+
+```C#
+public class Square
+{
+    public double Side { get; }
+
+    public Square(double side)
+    {
+        Side = side;
+    }
+}
+public class Circle
+{
+    public double Radius { get; }
+
+    public Circle(double radius)
+    {
+        Radius = radius;
+    }
+}
+public struct Rectangle
+{
+    public double Length { get; }
+    public double Height { get; }
+
+    public Rectangle(double length, double height)
+    {
+        Length = length;
+        Height = height;
+    }
+}
+public class Triangle
+{
+    public double Base { get; }
+    public double Height { get; }
+
+    public Triangle(double @base, double height)
+    {
+        Base = @base;
+        Height = height;
+    }
+}
+```
+
+现在我们有四个集合图形的类，需要来提供了公共的方法来计算它们的面积。
+
+**方案1**
+
+采用 `is` 表达式，这是最经典的表达，通过判断传入的类型来分别计算。
+
+```C#
+public static double ComputeArea(object shape)
+{
+    if (shape is Square)
+    {
+        var s = (Square)shape;
+        return s.Side * s.Side;
+    }
+    else if (shape is Circle)
+    {
+        var c = (Circle)shape;
+        return c.Radius * c.Radius * Math.PI;
+    }
+    // elided
+    throw new ArgumentException(
+        message: "shape is not a recognized shape",
+        paramName: nameof(shape));
+}
+```
+
+**方案2**
+
+使用 `Switch` 表达式，在之前的 `C#` 语法中，每个 `Switch` 中的条件都是常量，而且只能是数字和 `String` 类型。
+
+```C#
+public static string GenerateMessage(params string[] parts)
+{
+    switch (parts.Length)
+    {
+        case 0:
+            return "No elements to the input";
+        case 1:
+            return $"One element: {parts[0]}";
+        case 2:
+            return $"Two elements: {parts[0]}, {parts[1]}";
+        default:
+            return $"Many elements. Too many to write";
+    }
+}
+```
+
+但是在模式匹配中，这些限制条件被放开了，只需要每个 `case` 中的表达式能够返回 `True/False` 即可
+
+```C#
+public static double ComputeAreaModernSwitch(object shape)
+{
+    switch (shape)
+    {
+        case Square s:
+            return s.Side * s.Side;
+        case Circle c:
+            return c.Radius * c.Radius * Math.PI;
+        case Rectangle r:
+            return r.Height * r.Length;
+        default:
+            throw new ArgumentException(
+                message: "shape is not a recognized shape",
+                paramName: nameof(shape));
+    }
+}
+```
+
+在这里，每个 `case` 语句不再是限制为 `int` 和 `string`, 而是一个个判断条件。
+
+通过模式匹配，避免了冗长繁琐的 `if-else` 比较操作，而且丰富的程序的表达形式。
+
 
 ## 20 如果Cat是Animal，那么设计的时候是TakeCare<Cat>还是TakeCare<Animal>?
 *todo*
