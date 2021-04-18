@@ -375,7 +375,80 @@ void AppDialog::on_button()
 
 ## 11 泛型是用来做什么的？
 
-*todo*
+泛型编程主要是解决下面三个问题
+
+1. 算法的泛型；
+2. 类型的泛型；
+3. 数据结构的泛型。
+
+假设我们这里有一个 `Search` 的方法，它的主要作用是在一个集合中查找一个特定的元素
+
+```C
+
+int search(void* a, size_t size, void* target, 
+  size_t elem_size, int(*cmpFn)(void*, void*) )
+{
+  for(int i=0; i<size; i++) {
+    if ( cmpFn (a + elem_size * i, target) == 0 ) {
+      return i;
+    }
+  }
+  return -1;
+}
+```
+
+这里 `C` 语言实现有个重要的问题是它不适用非线性数据结构，比如像哈希表，二叉树等等，算法返回的索引值并没有实际意义，而且 `i++` 也没有具体的意义。
+
+那么如果使用 `C++` 模板的泛型来实现是怎样的的？
+
+```C++
+
+template<typename T, typename Iter>
+Iter search(Iter pStart, Iter pEnd, T target) 
+{
+  for(Iter p = pStart; p != pEnd; p++) {
+    if ( *p == target ) 
+      return p;
+  }
+  return NULL;
+}
+```
+
+这里有个泛型参数
+- T 用来表示集合中数据的类型
+- Iter 用来表示迭代器，从而支持了不同集合的类型。
+
+这个也是 `C++` 的 `STL` 使用的泛型方法，其中包括了
+- 泛型的数据容器
+- 泛型数据容器的迭代器
+- 泛型的算法
+
+泛型还解决了更高维度的抽象，因为我们希望这个算法只管遍历，具体要干什么，那么业务逻辑，由外面的调用方法定义就好了，这样代码的重用度就提高了。
+
+```C++
+template<class Iter, class T, class Op>
+T reduce (Iter start, Iter end, T init, Op op) {
+  T result = init;
+  while ( start != end ) {
+    result = op( result, *start );
+    start++;
+  }
+  return result;
+}
+```
+
+这里整个迭代器传入了一个 `operation`, 在迭代的每一步都是由传入的操作完成。在定义了这个 `reduce` 函数后，我们可以从 `Employees` 列表中获取总薪水和最高薪水。
+
+```C++
+double sum_salaries = 
+    reduce(staff.begin(), staff.end(), 0.0,
+    [](double s, Employee e) { return s + e.salary; });
+
+double max_salary = 
+    reduce(staff.begin(), staff.end(), 0.0,
+    [](double s, Employee e) { return s > e.salary ? s : e.salary; });
+```
+
 
 ## 12 语言将函数当做一等公民意味什么？
 
