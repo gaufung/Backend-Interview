@@ -596,7 +596,11 @@ public static double ComputeAreaModernSwitch(object shape)
 
 
 ## 20 如果Cat是Animal，那么设计的时候是TakeCare<Cat>还是TakeCare<Animal>?
-*todo*
+
+从面向对象的角度来看，如果 `Cat` 是 `Animal` 的一个子类，那么应当是选择 `TakeCare<Animal>` 而不是 `TakeCare<Cat>`，主要原因有一下几点：
+
+- 从软件工程的角度来看，我们在实现 API 的时候应当选择: **对输入保持宽容，对输出保持严格**， 如果 API 的定义选择了 `Animal`, 那么任何继承 `Animal` 的类都可以调用这个 API。 
+- 从语义的角度来看，使用 `Take<Animal>` 更加符合直挂的定义；通常我们会在 `Animal` 中定义好动物的行为，比如 `Sleep`, `Drink` 或者 `Eat` 等行为，每个具体的 `Animal` 都可以重载这些行为，而 `TakeCare` 方法中不用关心具体的实现。
 
 ## 21 最近几年，有很多关于Node的不实的宣传，那么你对这些原本运行在浏览器中的语言用作后端开发语言的看法是什么?
 
