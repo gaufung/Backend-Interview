@@ -2,9 +2,7 @@
 2. [分布式版本控制系统和集中式版本管理系统有什么各自的缺点和优点？](#2-fen-bu-shi-ban-ben-kong-zhi-xi-tong-he-ji-zhong-shi-ban-ben-guan-li-xi-tong-you-shen-me-ge-zi-de-que-dian-he-you-dian)
 3. [你能描述github flow和gitflow各自的工作流？](#3-ni-neng-miao-shu-github-flow-he-gitflow-ge-zi-de-gong-zuo-liu)
 4. [什么是rebase?](#4-shen-me-shi-rebase)
-5. [为什么在Mercuial或者git中，创建分支比SVN分支容易?](#5-wei-shen-me-zai-mercuial-huo-zhe-git-zhong-chuang-jian-fen-zhi-bi-svn-fen-zhi-rong-yi)
-6. [分布式版本控制系统和集中式版本管理系统有什么各自的缺点和优点？](#6-fen-bu-shi-ban-ben-kong-zhi-xi-tong-he-ji-zhong-shi-ban-ben-guan-li-xi-tong-you-shen-me-ge-zi-de-que-dian-he-you-dian)
-7. [在Mercurial或者git中合并比SVN中容易；](#7-zai-mercurial-huo-zhe-git-zhong-he-bing-bi-svn-zhong-rong-yi)
+5. [在Mercurial或者git中合并比SVN中容易；](#5-zai-mercurial-huo-zhe-git-zhong-he-bing-bi-svn-zhong-rong-yi)
 
 ## 1 为什么在`Mercuial`或者`git`中，创建分支比`SVN`分支容易
 
@@ -58,10 +56,32 @@ parent <previous commit sha256>
 
 
 ## 2  分布式版本控制系统和集中式版本管理系统有什么各自的缺点和优点？
-*todo*
+集中式版本管理的优点
+
+- 搭建起来比较方便
+- 有很高的透明度
+- 方便管理员控制流程
+
+但是也有下面的缺点
+- 如果主服务器宕机，所有人都无法在使用版本控制服务
+- 远程提交比较慢
+- 不合理的更改可能导致开发环境的不可用
+- 如果主服务器的数据库损坏，就导致所有的提交历史无法查询
+
+分布式版本管理的优点
+- 因为可以本地提交， 所有的历史都能查询
+- 无需访问远端服务器
+- 可以持续 push 修改
+- 节省时间
+- 对于分布式的开发这非常友好
+
+分布式版本管理的缺点
+- 别人的修改可能不透明
+- 文件的冲突修改可能导致开发进度变慢
+- 分布式系统允许克隆整个仓库，可能有安全隐患
+- 二进制文件之间的 diff 非常困难。
 
 ## 3  你能描述`github flow`和`gitflow`各自的工作流？
-*todo*
 
 **github flow**
 github flow 以部署为中心的开发模式，功能简单可靠，持续、安全和高效的部署，以`Pull Request`为中心
@@ -94,12 +114,5 @@ github flow 以部署为中心的开发模式，功能简单可靠，持续、�
 
 注意：千万不要在一个*共享*的分支上做`rebase`操作，只能`reabse`私有化的分支。
 
-## 5 为什么在Mercuial或者git中，创建分支比SVN分支容易?
-*todo*
-
-
-## 6 分布式版本控制系统和集中式版本管理系统有什么各自的缺点和优点？
-*todo*
-
-## 7 在Mercurial或者git中合并比SVN中容易；
+## 5 在Mercurial或者git中合并比SVN中容易；
 *todo*
