@@ -242,4 +242,40 @@ delete = 1
 由于无法在缺少私钥的情况下，对证书进行加密，所以攻击者不可能修改内容，哪怕是截获到流量，也是加密后的内容。
 
 ## 11 怎样防止用户的会话（session）被偷？
-*todo*
+
+假设我们有个网站需要用户的登录，比如输入账户和密码。那么接下来一段时间，用户就不需要继续登录，因为我们这段时间内，维持了用户账户的登录的 `Session`。我们都知道 `Http` 协议是无状态的，需要借助 `Cookie` 让服务端知道当前用户的信息。比如说我们这样一个 `Cookie` 记录
+
+![](./images/cookie.png)
+
+- Name: `.ASpNETCore.Cookie` 是 `Cookie` 的名称
+- Value: `CfDj8Hx...`  `Cookie` 加密之后的值，这个值只对于服务端来才有意义。
+
+服务端在拿到这个值之后，然后在存储层拿到这个用户的基本信息，这样用户就不需要重新授权登录。
+
+但是如果中间人能够拿到这个 `Cookie` 值并且向服务器发送请求，这样就能获得响应的授权。那么第三方在什么时候会难道这些 `Cookie` 能？我们都知道在网页中运行的都是 `Javascript` 代码，如果中间人在网页中注入一段 `Document.Cookies` 的代码，就能获取当前页面所有的 `Cookie` 数据。
+
+那么我们该如何修复这个问题呢？
+
+- HttpOnly 
+
+首先我们需要在返回 `Cookie` 的时候添加 `HttpOnly` 这个记录
+
+```
+Set-Cookie: .AspNETCore.Cookie=CfDj8Hx; HttpOnly
+```
+
+通过添加 `HttpOnly` 这个字段，告诉浏览器这个 `Cookie` 不能被 `Javascript` 代码读取，只能通过浏览器的请求发送。
+
+![](./images/documentCookie.png)
+
+这里我们可以看到，`document.cookie` 为空
+
+- Secure
+
+我们都知道 `Http` 是不安全的，所有的传输数据都是明文形式传送。那我们如何避免这个数据被第三方人看到呢？我们需要使用 `SSL` 协议来加密我们的请求和响应。因此我们从服务端指定只有 `Https` 的请求才会返回 `Cookie`，而且告诉浏览器只有 `Https` 的请求才会带上这个 `Cookie`。
+
+```
+Set-Cookie: .AspNETCore.Cookie=CfDj8Hx; HttpOnly；Secure
+```
+
+刚刚我们看到的例子中，`.AspNetCore.Cookie` 这个 Cookie 将这两个选项全部打开了。
