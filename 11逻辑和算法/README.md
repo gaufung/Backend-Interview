@@ -137,7 +137,78 @@ class Container<T> {
 
 
 ## 8 生成一系列不同的随机数
-*todo*
+这里介绍三种不使用库函数生成随机数的方法
+
+1. 中间平方数方法
+
+该方法由 `John Von Neumann` 在 1946 年发明的，该方法主要由下面几个步骤完成的
+- 将一个 N 位的数字作为种子，比如说 42
+- 将这个数平方计算，那么 42 的平方就是 1764
+- 将得到的数字取中加你的数字，那么现在就是 76
+- 然后将得到的数据作为新的种子，然后继续新一轮的迭代
+
+![](./image/Middle_square_method.jpg)
+
+```C#
+public class Random {
+    public static int round = 10;
+
+    public static int Next(int seed) {
+        for(int i = 0; i < round; i++) {
+            seed = NextRandom(seed)
+        }
+        return seed;
+    }
+
+    private static int NextRandom(int seed){
+        var result = (seed * seed).ToString();
+        if (result.Length % 2 == 1) { // if odded
+            result += "0" + result;
+        }
+        var newSeed = result.SubString(1, result.Length - 1);
+        return Int.Prase(newSeed);
+    }
+}
+```
+
+2. 线性共轭生成器
+该方法通过线性函数生成一系列随机数， 用数学公式表达如下
+
+```
+X = (a * X + c) % m
+```
+这里包含了三个参数
+
+- `a` 是线性乘数:`0< a <m`
+- `c` 是增长数: `0 <= c < m`
+- `m` 是模: `0<= X <m` 
+
+```C#
+public class Random {
+    public static int a;
+    public static int c;
+    public static int m;
+
+    public static int Next(int X){
+        return (a * X + c) % m;
+    }
+}
+```
+
+3. 异或算法
+
+该方法采用了异或（`XOR`) 算法来得到一个随机数
+
+```Csharp
+public class Random {
+
+    public static int Next(int seed){
+       seed ^= seed << 13;
+       seed ^= seed >> 17;
+       seed ^= seed << 5;
+       return (seed < 0)? ~seed + 1; seed;
+    }
+}
 
 ## 9 编写简单的垃圾回收系统
 *todo*
