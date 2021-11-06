@@ -184,4 +184,72 @@ Cos
 ## 12 如何在不可靠的协议上开发出可靠通讯协议？
 *todo*
 ## 13 想象一下如果在你最喜欢的语言移除空引用的问题，你该如何做？会导致什么样的后果？
-*todo*
+
+> 空指针是有害的(Null is evil)
+
+几乎所有的软件开发人员都听说过这句话，最著名的是来自霍尔爵士的[一百万美元的错误](https://en.wikipedia.org/wiki/Tony_Hoare#Apologies_and_retractions)。那么该如何在开发语言中移除这个问题呢？
+
+1. 抛出异常
+
+```C#
+var contract = repository.Find(42);
+contract.Extend(12);
+```
+
+如果没有找到一个 `Id=12` 的对象，`Find` 方法就会返回一个 `null` 对象，那么在调用的 `Extend` 方法的时候，就会抛出 `NullReference` 的异常。那么我们应当在 `Find` 方法内部，如果没有找到 `id = 42` 的时候，应该直接抛出一个 `NotFoundException` 异常，而不是返回 `null`。这样设计的话，需要在每个可能返回 `null` 对象时候，检查是否抛出 `NotFoundException` 异常，而且抛出异常会降低程序的性能。
+
+2. 空类型
+
+我们应当抽象出 `Contract` 对象，定义 `IContract` 抽象，它包含的 `Contract` 需要完成的基本操作。对于存在的 `Contract`，返回一个真正能够工作的 `Contract`， 对于 `null` 类型，返回 `NullContract`。
+
+```C#
+public class NullContract : IContract 
+{
+    public void Extend(int months)
+    {
+        // do nothing deliberately.
+    }
+}
+```
+
+这样的做的，对于 API 上不会有任何改变，但是这样需要为每个类型创建一个空类型，而且如果使用第三方库的话，仍然需要检查是否返回的结果是否为 `null`。
+
+3. MayBe/Optional 模式
+
+`MayBe/Optional` 模式通过容器来包装我们对象，然后通过 `Optional` 类的方法或者属性指示是否出现为 `Null` 类型。
+
+```C#
+public class Optional<T> 
+{
+    private T value;
+
+    private bool isNull;
+
+    public T Value => value;
+
+    public bool HasValue => !isNull;
+
+    public Optional(T val)
+    {
+        if (val is null)
+        {
+            isNull = true;
+        }
+        else
+        {
+            value = val;
+        }
+    }
+}
+```
+
+通过 `Optional` 模式，我们之前的代码可以改写成这样
+
+```C#
+Optioanl<Contract> contract = repository.Find(42);
+if (contract.HasValue)
+{
+    contract.Value.Extend(12);
+}
+```
+通过 `Optional` 模式，我们引入另外一种类型，这样在需要 `Contract` 类型的接口中，我们需要考虑其是否可能为 `Null`。
