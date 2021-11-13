@@ -209,6 +209,7 @@ public class Random {
        return (seed < 0)? ~seed + 1; seed;
     }
 }
+```
 
 ## 9 编写简单的垃圾回收系统
 *todo*
