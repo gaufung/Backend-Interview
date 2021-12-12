@@ -7,19 +7,18 @@
 7. [命名空间（namespace)是做什么的？能够发明一个可替代性的东西？](#7-ming-ming-kong-jian-namespace-shi-zuo-shen-me-de-neng-gou-fa-ming-yi-ge-ke-ti-dai-xing-de-dong-xi)
 8. [编写两个函数，一个是引用透明（Referentially Transparent)，另一个是引用不透明（Referentially Opaque）](#8-bian-xie-liang-ge-han-shu-yi-ge-shi-yin-yong-tou-ming-referentially-transparent-ling-yi-ge-shi-yin-yong-bu-tou-ming-referentially-opaque)
 9. [为什么在有些语言设计中没有异常机制？那么它们有什么优势和弊端？](#9-wei-shen-me-zai-you-xie-yu-yan-she-ji-zhong-mei-you-yi-chang-ji-zhi-na-me-ta-men-you-shen-me-you-shi-he-bi-duan)
-10. [为什么在JAVA，或者C#中，构造函数不是接口的一部分？](#10-wei-shen-me-zai-java-huo-zheczhong-gou-zao-han-shu-bu-shi-jie-kou-de-yi-bu-fen)
+10. [为什么在 JAVA，或者 C#中，构造函数不是接口的一部分？](#10-wei-shen-me-zai-java-huo-zheczhong-gou-zao-han-shu-bu-shi-jie-kou-de-yi-bu-fen)
 11. [泛型是用来做什么的？](#11-fan-xing-shi-yong-lai-zuo-shen-me-de)
 12. [语言将函数当做一等公民意味什么？](#12-yu-yan-jiang-han-shu-dang-zuo-yi-deng-gong-min-yi-wei-shen-me)
 13. [展示一个例子来说明匿名函数是有用的；](#13-zhan-shi-yi-ge-li-zi-lai-shuo-ming-ni-ming-han-shu-shi-you-yong-de)
 14. [有许多不同的类型系统：静态类型和动态类型，强类型和弱类型等等。你能分享和讨论一下在开发一个企业级软件的时候，如何去选择特定的类型系统？](#14-you-xu-duo-bu-tong-de-lei-xing-xi-tong-jing-tai-lei-xing-he-dong-tai-lei-xing-qiang-lei-xing-he-ruo-lei-xing-deng-deng-ni-neng-fen-xiang-he-tao-lun-yi-xia-zai-kai-fa-yi-ge-qi-ye-ji-ruan-jian-de-shi-hou-ru-he-qu-xuan-ze-te-ding-de-lei-xing-xi-tong)
-15. [讨论一下JAVA和C#之间的互通性？](#15-tao-lun-yi-xia-java-heczhi-jian-de-hu-tong-xing)
-16. [为什么许多开发人员不喜欢JAVA？](#16-wei-shen-me-xu-duo-kai-fa-ren-yuan-bu-xi-huan-java)
+15. [讨论一下 JAVA 和 C#之间的互通性？](#15-tao-lun-yi-xia-java-heczhi-jian-de-hu-tong-xing)
+16. [为什么许多开发人员不喜欢 JAVA？](#16-wei-shen-me-xu-duo-kai-fa-ren-yuan-bu-xi-huan-java)
 17. [好语言的好和坏语言的坏各自在什么地方？](#17-hao-yu-yan-de-hao-he-huai-yu-yan-de-huai-ge-zi-zai-shen-me-di-fang)
-18. [在一些语言中，尤其是函数化倾向的语言中，有一种叫模式匹配（Pattern Matching)的技术，那么在模式匹配和Switch语言有什么区别？](#18-zai-yi-xie-yu-yan-zhong-you-qi-shi-han-shu-hua-qing-xiang-de-yu-yan-zhong-you-yi-zhong-jiao-mo-shi-pi-pei-pattern-matching-de-ji-shu-na-me-zai-mo-shi-pi-pei-he-switch-yu-yan-you-shen-me-qu-bie)
-19. [如果Cat是Animal，那么设计的时候是TakeCare还是TakeCare?](#19-ru-guo-cat-shi-animal-na-me-she-ji-de-shi-hou-shi-takecare-hai-shi-takecare)
-20. [最近几年，有很多关于Node的不实的宣传，那么你对这些原本运行在浏览器中的语言用作后端开发语言的看法是什么?](#20-zui-jin-ji-nian-you-hen-duo-guan-yu-node-de-bu-shi-de-xuan-chuan-na-me-ni-dui-zhe-xie-yuan-ben-yun-hang-zai-liu-lan-qi-zhong-de-yu-yan-yong-zuo-hou-duan-kai-fa-yu-yan-de-kan-fa-shi-shen-me)
-21. [假设你有一台时光机，能够穿梭到Java语言创建的时间点，并且能够和JDK的架构者交流，那么你将会说服他什么？比如移除检查异常（checked exception)机制?增加非符号的的基础类型？增加多继承？](#21-jia-she-ni-you-yi-tai-shi-guang-ji-neng-gou-chuan-suo-dao-java-yu-yan-chuang-jian-de-shi-jian-dian-bing-qie-neng-gou-he-jdk-de-jia-gou-zhe-jiao-liu-na-me-ni-jiang-hui-shuo-fu-ta-shen-me-bi-ru-yi-chu-jian-cha-yi-chang-checked-exception-ji-zhi-zeng-jia-fei-fu-hao-de-de-ji-chu-lei-xing-zeng-jia-duo-ji-cheng)
-
+18. [在一些语言中，尤其是函数化倾向的语言中，有一种叫模式匹配（Pattern Matching)的技术，那么在模式匹配和 Switch 语言有什么区别？](#18-zai-yi-xie-yu-yan-zhong-you-qi-shi-han-shu-hua-qing-xiang-de-yu-yan-zhong-you-yi-zhong-jiao-mo-shi-pi-pei-pattern-matching-de-ji-shu-na-me-zai-mo-shi-pi-pei-he-switch-yu-yan-you-shen-me-qu-bie)
+19. [如果 Cat 是 Animal，那么设计的时候是 TakeCare 还是 TakeCare?](#19-ru-guo-cat-shi-animal-na-me-she-ji-de-shi-hou-shi-takecare-hai-shi-takecare)
+20. [最近几年，有很多关于 Node 的不实的宣传，那么你对这些原本运行在浏览器中的语言用作后端开发语言的看法是什么?](#20-zui-jin-ji-nian-you-hen-duo-guan-yu-node-de-bu-shi-de-xuan-chuan-na-me-ni-dui-zhe-xie-yuan-ben-yun-hang-zai-liu-lan-qi-zhong-de-yu-yan-yong-zuo-hou-duan-kai-fa-yu-yan-de-kan-fa-shi-shen-me)
+21. [假设你有一台时光机，能够穿梭到 Java 语言创建的时间点，并且能够和 JDK 的架构者交流，那么你将会说服他什么？比如移除检查异常（checked exception)机制?增加非符号的的基础类型？增加多继承？](#21-jia-she-ni-you-yi-tai-shi-guang-ji-neng-gou-chuan-suo-dao-java-yu-yan-chuang-jian-de-shi-jian-dian-bing-qie-neng-gou-he-jdk-de-jia-gou-zhe-jiao-liu-na-me-ni-jiang-hui-shuo-fu-ta-shen-me-bi-ru-yi-chu-jian-cha-yi-chang-checked-exception-ji-zhi-zeng-jia-fei-fu-hao-de-de-ji-chu-lei-xing-zeng-jia-duo-ji-cheng)
 
 ## 1 说一下你最喜欢语言的三个缺陷
 
@@ -49,9 +48,9 @@ C# 语言
 尤其是在多线程运行环境中，这个问题就会被放大。通过函数式编程软件中所有的状态就会变得明确，同样使得
 诸如多线程的条件竞争等问题得到解决。纯函数是函数式编程重要的内容，它只关注传递给他的参数，返回根据
 传入的参数计算而得的值，没有逻辑上的副作用(`side effect`)。它不更新全局变量，不维持全局变量，
-也不会进行IO操作，更不会修改传入的参数。纯函数的有一下几点优势
+也不会进行 IO 操作，更不会修改传入的参数。纯函数的有一下几点优势
 
-- 线程安全：纯函数只使用参数，所以它是完全线程安全的的；所以很容易地将这些函数改造成并行执行，尤其在多核CPU中发挥优势；
+- 线程安全：纯函数只使用参数，所以它是完全线程安全的的；所以很容易地将这些函数改造成并行执行，尤其在多核 CPU 中发挥优势；
 - 可重用性：将纯函数转移到新的环境非常简单，只需要处理类型定义和函数调用，不会发生类似滚雪球效应；
 - 可测试性：纯函数是引用透明的，也就是说同样的参数调用无论如何都会返回正确的结果；
 - 可理解性和可维护性：只关心参数的输入和结果的输出，大大降低了维护者的理解难度
@@ -88,7 +87,7 @@ func func3() func() {
 }
 handler := func3()
 handler() // 11
-handler() // 12 
+handler() // 12
 ```
 
 在`go`语言中，函数是一等公民(`first class citizen`)，所以`func3`可以返回一个函数。该函数包含了局部变量`c`，所以在外面就可以访问`c`变量的方式。
@@ -151,8 +150,8 @@ func factorialRec(n int, val int) int {
 在编程领域中，命令空间主要解决变量，函数以及类它们之间的冲突。假设你的应用程序使用了两个库。
 
 ```C#
-// library A 
-public class FooBar 
+// library A
+public class FooBar
 {
     //...
 }
@@ -163,6 +162,7 @@ public class FooBar
     //...
 }
 ```
+
 我们可以看到，`FooBar` 两个类出现了两个库，我们的应用程序编译器不能区分它们，所以我们引入了命名空间。
 
 ```C#
@@ -217,7 +217,7 @@ int x = Add(2, Mult(3, 4));
 
 在上面的例子中， `Mult` 函数就是引用透明的，因为我们可以用 `12` 替换掉 `Mult(3, 4)` 而不会有任何影响；同样我们也可以用 `14` 替换 `Add(2, 12)`。
 
-下面再介绍一下引用不透明的例子 
+下面再介绍一下引用不透明的例子
 
 ```C#
 int Add(int a, int b){
@@ -250,26 +250,27 @@ public void PrintFibs(int limit){
 
 在这里我们不能用任何值代替 `Next` 方法的调用，因为这个方法在每次调用的时候就是不一样的。
 
-
 ## 9 为什么在有些语言设计中没有异常机制？那么它们有什么优势和弊端？
 
 异常的设计是随着语言的发展而发展的，在早期的语言，比如汇编语言并没有应用程序层面的异常，只需要顺序和跳转两中执行控制语句就可以完成全部的工作。现代语言通常封装了底层的逻辑，因此也提供了大量的高级的语言的特性，所以异常自然而然提出。
 
-**优势** 
+**优势**
+
 - 异常可以将错误处理代码和正常的逻辑流区分开来，这样代码就可以很容易的阅读，健壮和可拓展性
 
 举个例子如下
 
 使用异常处理
+
 ```c++
 // sample 1: A function that uses exceptions
 string get_html(const char* url, int port)
 {
     Socket client(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     client.connect(url, port);
-    
+
     stringstream request_stream;
-    request_stream << "GET / HTTP/1.1\r\nHost: " 
+    request_stream << "GET / HTTP/1.1\r\nHost: "
        << url << "\r\nConnection: Close\r\n\r\n";
 
     client.send(request_stream.str());
@@ -287,12 +288,12 @@ Socket::Err_code get_html(const char* url, int port, string* result)
     Socket client;
     Socket::Err_code err = client.init(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (err) return err;
-        
+
     err = client.connect(url, port);
     if (err) return err;
-    
+
     stringstream request_stream;
-    request_stream << "GET / HTTP/1.1\r\nHost: " << url 
+    request_stream << "GET / HTTP/1.1\r\nHost: " << url
        << "\r\nConnection: Close\r\n\r\n";
 
     err = client.send(request_stream.str());
@@ -361,7 +362,7 @@ void AppDialog::on_button()
 
 众所周知，异常对系统的性能是由损失的。
 
-## 10 为什么在JAVA，或者C#中，构造函数不是接口的一部分？
+## 10 为什么在 JAVA，或者 C#中，构造函数不是接口的一部分？
 
 构造函数是特殊的成员函数方法用来初始化新创建的对象，它会在类对象创建的时候自动被调用。但是构造函数并不是接口的一部分。
 
@@ -385,7 +386,7 @@ void AppDialog::on_button()
 
 ```C
 
-int search(void* a, size_t size, void* target, 
+int search(void* a, size_t size, void* target,
   size_t elem_size, int(*cmpFn)(void*, void*) )
 {
   for(int i=0; i<size; i++) {
@@ -404,10 +405,10 @@ int search(void* a, size_t size, void* target,
 ```C++
 
 template<typename T, typename Iter>
-Iter search(Iter pStart, Iter pEnd, T target) 
+Iter search(Iter pStart, Iter pEnd, T target)
 {
   for(Iter p = pStart; p != pEnd; p++) {
-    if ( *p == target ) 
+    if ( *p == target )
       return p;
   }
   return NULL;
@@ -415,10 +416,12 @@ Iter search(Iter pStart, Iter pEnd, T target)
 ```
 
 这里有个泛型参数
+
 - T 用来表示集合中数据的类型
 - Iter 用来表示迭代器，从而支持了不同集合的类型。
 
 这个也是 `C++` 的 `STL` 使用的泛型方法，其中包括了
+
 - 泛型的数据容器
 - 泛型数据容器的迭代器
 - 泛型的算法
@@ -440,16 +443,17 @@ T reduce (Iter start, Iter end, T init, Op op) {
 这里整个迭代器传入了一个 `operation`, 在迭代的每一步都是由传入的操作完成。在定义了这个 `reduce` 函数后，我们可以从 `Employees` 列表中获取总薪水和最高薪水。
 
 ```C++
-double sum_salaries = 
+double sum_salaries =
     reduce(staff.begin(), staff.end(), 0.0,
     [](double s, Employee e) { return s + e.salary; });
 
-double max_salary = 
+double max_salary =
     reduce(staff.begin(), staff.end(), 0.0,
     [](double s, Employee e) { return s > e.salary ? s : e.salary; });
 ```
 
 在了解了 `C++` 的泛型的例子后，我们来探讨一下泛型的本质。在编程世界中，我们需要做好两件事：
+
 1. 编程语言中的类型问题
 2. 对真实世界中业务代码的抽象，重用和拼装
 
@@ -461,10 +465,12 @@ double max_salary =
 4. 抽象化：可以让开发人员以较高层次的方式思考，而不是底层的细节
 
 总结来讲
+
 - 类型是对了内存的抽象。不同的类型，会有不同的内存布局和内存分配的策略
 - 不同的类型，有不同的操作，所以对于特定的类型，也有特定的一组的操作。
 
 对于泛型需要做到如下的事情
+
 1. 标准化类型的内存操作，访问和访问
 2. 标准化内存的操作
 3. 标准化数据的容器的操作
@@ -472,29 +478,45 @@ double max_salary =
 
 ## 12 语言将函数当做一等公民意味什么？
 
-*todo*
+_todo_
 
 ## 13 展示一个例子来说明匿名函数是有用的；
 
-*todo*
+_todo_
 
 ## 14 有许多不同的类型系统：静态类型和动态类型，强类型和弱类型等等。你能分享和讨论一下在开发一个企业级软件的时候，如何去选择特定的类型系统？
 
-*todo*
+_todo_
 
-## 15 讨论一下JAVA和C#之间的互通性？
+## 15 讨论一下 JAVA 和 C#之间的互通性？
 
-*todo*
+_todo_
 
-## 16 为什么许多开发人员不喜欢JAVA？
+## 16 为什么许多开发人员不喜欢 JAVA？
 
-*todo*
+Java 是一门广泛使用的开发语言，长期霸占 `TIOBE` 榜单的头名，正如一句名言所说
+
+> 没有好语言和坏语言，只有没人用的语言和被人骂的语言
+
+既然 Java 被广泛使用，因此也会被广泛批评，主要观点如下
+
+- Java 太慢了有严重的性能问题
+  和 C/C++ 相比，Java 消耗了大量的内存但是运行还是显著的缓慢。主要原因是作为运行在虚拟机上的语言，需要增加额外的编译时间，而且还是在抽象层的 JVM 上运行。
+- Java GUI 功能太弱了
+  尽管 JAVA 有 Swing, SWT 等，但是它们的功能实在是太弱了，不能开发负责的 UI， 而且它们还是不是很稳定。
+
+- Java 需要大量的内存空间
+  由于 GC 　的特性，Java 在运行时候需要更大的内存空间，尤其与 C/C++ 这样的语言比起来而言。在 GC 运行的时候，内存使用效率非常低。
+
+- 繁琐和复杂的代码
+  Java 代码非常啰嗦，也就是说为了完成一个简单的功能，需要写很多长的代码。这些导致了理解它们非常耗时。
 
 ## 17 好语言的好和坏语言的坏各自在什么地方？
 
-*todo*
+_todo_
 
-## 18 在一些语言中，尤其是函数化倾向的语言中，有一种叫模式匹配（Pattern Matching)的技术，那么在模式匹配和Switch语言有什么区别？
+## 18 在一些语言中，尤其是函数化倾向的语言中，有一种叫模式匹配（Pattern Matching)的技术，那么在模式匹配和 Switch 语言有什么区别？
+
 在计算机科学中，模式匹配是一种行为，它用来检查一系列 `Token` 是否满足特定的模式条件，它只有**是/否**的两种选择。
 
 假设你熟悉 `if` 和 `Switch` 编程语法，接下来我们以 `C#` 编程语言支持的模式匹配为例。我们现有有不同的几何图形的类，但是不同于之前的继承关系，我们并没有引入这些概念。
@@ -544,7 +566,7 @@ public class Triangle
 
 现在我们有四个集合图形的类，需要来提供了公共的方法来计算它们的面积。
 
-**方案1**
+**方案 1**
 
 采用 `is` 表达式，这是最经典的表达，通过判断传入的类型来分别计算。
 
@@ -568,7 +590,7 @@ public static double ComputeArea(object shape)
 }
 ```
 
-**方案2**
+**方案 2**
 
 使用 `Switch` 表达式，在之前的 `C#` 语法中，每个 `Switch` 中的条件都是常量，而且只能是数字和 `String` 类型。
 
@@ -614,18 +636,17 @@ public static double ComputeAreaModernSwitch(object shape)
 
 通过模式匹配，避免了冗长繁琐的 `if-else` 比较操作，而且丰富的程序的表达形式。
 
-
-## 20 如果Cat是Animal，那么设计的时候是TakeCare<Cat>还是TakeCare<Animal>?
+## 20 如果 Cat 是 Animal，那么设计的时候是 TakeCare<Cat>还是 TakeCare<Animal>?
 
 从面向对象的角度来看，如果 `Cat` 是 `Animal` 的一个子类，那么应当是选择 `TakeCare<Animal>` 而不是 `TakeCare<Cat>`，主要原因有一下几点：
 
-- 从软件工程的角度来看，我们在实现 API 的时候应当选择: **对输入保持宽容，对输出保持严格**， 如果 API 的定义选择了 `Animal`, 那么任何继承 `Animal` 的类都可以调用这个 API。 
+- 从软件工程的角度来看，我们在实现 API 的时候应当选择: **对输入保持宽容，对输出保持严格**， 如果 API 的定义选择了 `Animal`, 那么任何继承 `Animal` 的类都可以调用这个 API。
 - 从语义的角度来看，使用 `Take<Animal>` 更加符合直挂的定义；通常我们会在 `Animal` 中定义好动物的行为，比如 `Sleep`, `Drink` 或者 `Eat` 等行为，每个具体的 `Animal` 都可以重载这些行为，而 `TakeCare` 方法中不用关心具体的实现。
 
-## 21 最近几年，有很多关于Node的不实的宣传，那么你对这些原本运行在浏览器中的语言用作后端开发语言的看法是什么?
+## 21 最近几年，有很多关于 Node 的不实的宣传，那么你对这些原本运行在浏览器中的语言用作后端开发语言的看法是什么?
 
-*todo*
+_todo_
 
-## 22 假设你有一台时光机，能够穿梭到Java语言创建的时间点，并且能够和JDK的架构者交流，那么你将会说服他什么？比如移除检查异常（checked exception)机制?增加非符号的的基础类型？增加多继承？
+## 22 假设你有一台时光机，能够穿梭到 Java 语言创建的时间点，并且能够和 JDK 的架构者交流，那么你将会说服他什么？比如移除检查异常（checked exception)机制?增加非符号的的基础类型？增加多继承？
 
-*todo*
+_todo_
