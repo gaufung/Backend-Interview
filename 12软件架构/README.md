@@ -105,7 +105,265 @@
 - 成本：越来越多的多核高性能机器上市，而且也非常便宜。如果单个机器也能满足你的需求，可以尝试使用纵向拓展的方式。
 
 ## 6 如何处理"故障切换(failover)"和"用户会话(user session)"？
-*todo*
+
+故障切换（Failover）是指当主服务器或组件发生故障时，系统自动切换到备用服务器或组件继续提供服务的机制。在处理故障切换时，用户会话（User Session）的管理是一个关键挑战，因为需要确保用户在切换过程中不会丢失会话状态。
+
+### 故障切换策略
+
+1. **主动-被动模式（Active-Passive）**
+   - 主服务器处理所有请求，备用服务器处于待命状态
+   - 主服务器故障时，备用服务器接管
+   - 优点：实现简单，资源利用率可控
+   - 缺点：备用资源在正常情况下闲置
+
+2. **主动-主动模式（Active-Active）**
+   - 多个服务器同时处理请求
+   - 任一服务器故障时，其他服务器分担负载
+   - 优点：资源利用率高，无单点故障
+   - 缺点：需要更复杂的负载均衡和数据同步
+
+### 用户会话处理策略
+
+#### 1. 粘性会话（Sticky Session）
+
+```C#
+// 负载均衡器配置示例（概念代码）
+public class StickySessionLoadBalancer
+{
+    private readonly Dictionary<string, Server> _sessionToServer = new();
+    private readonly List<Server> _servers;
+
+    public Server GetServer(HttpRequest request)
+    {
+        var sessionId = request.Cookies["SessionId"]?.Value;
+
+        if (sessionId != null && _sessionToServer.TryGetValue(sessionId, out var server))
+        {
+            if (server.IsHealthy)
+                return server;
+
+            // 服务器故障，需要重新分配
+            _sessionToServer.Remove(sessionId);
+        }
+
+        // 分配新服务器
+        var newServer = SelectHealthyServer();
+        if (sessionId != null)
+            _sessionToServer[sessionId] = newServer;
+
+        return newServer;
+    }
+}
+```
+
+**缺点**：当服务器故障时，该服务器上的所有会话都会丢失。
+
+#### 2. 集中式会话存储（Centralized Session Store）
+
+使用 Redis 或数据库存储会话，所有服务器共享同一个会话存储：
+
+```C#
+// 使用 Redis 存储会话
+public class RedisSessionStore : ISessionStore
+{
+    private readonly IConnectionMultiplexer _redis;
+    private readonly TimeSpan _sessionTimeout = TimeSpan.FromMinutes(30);
+
+    public RedisSessionStore(IConnectionMultiplexer redis)
+    {
+        _redis = redis;
+    }
+
+    public async Task<UserSession> GetSessionAsync(string sessionId)
+    {
+        var db = _redis.GetDatabase();
+        var data = await db.StringGetAsync($"session:{sessionId}");
+
+        if (data.IsNullOrEmpty)
+            return null;
+
+        return JsonSerializer.Deserialize<UserSession>(data);
+    }
+
+    public async Task SetSessionAsync(string sessionId, UserSession session)
+    {
+        var db = _redis.GetDatabase();
+        var data = JsonSerializer.Serialize(session);
+        await db.StringSetAsync($"session:{sessionId}", data, _sessionTimeout);
+    }
+
+    public async Task RemoveSessionAsync(string sessionId)
+    {
+        var db = _redis.GetDatabase();
+        await db.KeyDeleteAsync($"session:{sessionId}");
+    }
+}
+
+// ASP.NET Core 配置
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddStackExchangeRedisCache(options =>
+    {
+        options.Configuration = "redis-server:6379";
+        options.InstanceName = "SessionStore:";
+    });
+
+    services.AddSession(options =>
+    {
+        options.IdleTimeout = TimeSpan.FromMinutes(30);
+        options.Cookie.HttpOnly = true;
+        options.Cookie.IsEssential = true;
+    });
+}
+```
+
+**优点**：任何服务器都可以访问用户会话，故障切换透明。
+**缺点**：引入了额外的基础设施依赖，需要确保 Redis 本身的高可用。
+
+#### 3. 无状态设计 + JWT Token
+
+将会话状态存储在客户端的 Token 中：
+
+```C#
+public class JwtSessionService
+{
+    private readonly string _secretKey;
+
+    public string CreateToken(UserInfo user)
+    {
+        var claims = new[]
+        {
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Name, user.Username),
+            new Claim(ClaimTypes.Role, user.Role),
+            new Claim("Permissions", JsonSerializer.Serialize(user.Permissions))
+        };
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
+        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        var token = new JwtSecurityToken(
+            issuer: "your-app",
+            audience: "your-app",
+            claims: claims,
+            expires: DateTime.UtcNow.AddHours(1),
+            signingCredentials: credentials
+        );
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    public ClaimsPrincipal ValidateToken(string token)
+    {
+        var handler = new JwtSecurityTokenHandler();
+        var validationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = "your-app",
+            ValidAudience = "your-app",
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey))
+        };
+
+        return handler.ValidateToken(token, validationParameters, out _);
+    }
+}
+```
+
+**优点**：完全无状态，天然支持故障切换和水平扩展。
+**缺点**：Token 无法主动失效（除非使用黑名单），Token 大小有限制。
+
+#### 4. 会话复制（Session Replication）
+
+在服务器之间同步会话数据：
+
+```C#
+public class ReplicatedSessionStore : ISessionStore
+{
+    private readonly Dictionary<string, UserSession> _localSessions = new();
+    private readonly IClusterCommunication _cluster;
+
+    public async Task SetSessionAsync(string sessionId, UserSession session)
+    {
+        _localSessions[sessionId] = session;
+
+        // 广播到其他节点
+        await _cluster.BroadcastAsync(new SessionUpdateMessage
+        {
+            SessionId = sessionId,
+            Session = session
+        });
+    }
+
+    public void HandleSessionUpdate(SessionUpdateMessage message)
+    {
+        // 接收其他节点的会话更新
+        _localSessions[message.SessionId] = message.Session;
+    }
+}
+```
+
+**优点**：每个服务器都有完整的会话数据，切换快速。
+**缺点**：网络开销大，不适合大规模集群。
+
+### 最佳实践建议
+
+1. **小规模应用**：使用粘性会话 + 集中式会话存储的组合
+2. **中等规模应用**：使用 Redis 集群作为集中式会话存储
+3. **大规模应用**：采用无状态设计 + JWT Token，会话数据存储在客户端
+4. **微服务架构**：使用 JWT Token 在服务间传递用户身份信息
+
+### 故障检测与切换
+
+```C#
+public class HealthCheckService
+{
+    private readonly List<ServerNode> _nodes;
+    private readonly TimeSpan _checkInterval = TimeSpan.FromSeconds(5);
+    private readonly int _failureThreshold = 3;
+
+    public async Task StartMonitoringAsync()
+    {
+        while (true)
+        {
+            foreach (var node in _nodes)
+            {
+                var isHealthy = await CheckNodeHealthAsync(node);
+
+                if (!isHealthy)
+                {
+                    node.FailureCount++;
+                    if (node.FailureCount >= _failureThreshold)
+                    {
+                        await MarkNodeUnhealthyAsync(node);
+                        await TriggerFailoverAsync(node);
+                    }
+                }
+                else
+                {
+                    node.FailureCount = 0;
+                }
+            }
+
+            await Task.Delay(_checkInterval);
+        }
+    }
+
+    private async Task TriggerFailoverAsync(ServerNode failedNode)
+    {
+        // 将流量从故障节点转移到健康节点
+        var healthyNodes = _nodes.Where(n => n.IsHealthy).ToList();
+        await _loadBalancer.RedistributeTrafficAsync(failedNode, healthyNodes);
+
+        // 通知运维人员
+        await _alertService.SendAlertAsync($"Node {failedNode.Name} failed, failover triggered");
+    }
+}
+```
+
+通过合理设计会话管理策略和故障切换机制，可以确保系统在发生故障时仍能保持服务的连续性，为用户提供无缝的体验。
 ## 7 什么是CQRS（Command Query Responsibility Segregation)? 它和最初的有什么区别？
 
 `Command Query Responsibility Segregation` 是一种特定的架构模式，用来解决应用程序设计中的一种场景的情形。

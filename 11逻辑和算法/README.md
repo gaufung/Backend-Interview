@@ -65,7 +65,100 @@ public int Fib(n)
 ```
 
 ## 3 使用尾递归版本的Fraction方法
-*todo*
+
+尾递归（Tail Recursion）是一种特殊的递归形式，其中递归调用是函数中的最后一个操作。编译器可以对尾递归进行优化（Tail Call Optimization, TCO），将其转换为循环，从而避免栈溢出问题。
+
+**普通递归版本的阶乘（Factorial）：**
+
+```C#
+// 普通递归：每次调用都需要保存当前栈帧
+public static long Factorial(int n)
+{
+    if (n <= 1)
+        return 1;
+    return n * Factorial(n - 1);  // 递归调用后还需要乘以n，不是尾递归
+}
+```
+
+在普通递归中，调用 `Factorial(5)` 的执行过程如下：
+```
+Factorial(5)
+= 5 * Factorial(4)
+= 5 * (4 * Factorial(3))
+= 5 * (4 * (3 * Factorial(2)))
+= 5 * (4 * (3 * (2 * Factorial(1))))
+= 5 * (4 * (3 * (2 * 1)))
+= 120
+```
+每一层递归都需要保存在栈中，直到递归基返回。
+
+**尾递归版本的阶乘：**
+
+```C#
+// 尾递归版本：递归调用是最后一个操作
+public static long FactorialTailRecursive(int n)
+{
+    return FactorialHelper(n, 1);
+}
+
+private static long FactorialHelper(int n, long accumulator)
+{
+    if (n <= 1)
+        return accumulator;
+    return FactorialHelper(n - 1, n * accumulator);  // 尾递归：没有后续操作
+}
+```
+
+尾递归版本的执行过程：
+```
+FactorialHelper(5, 1)
+-> FactorialHelper(4, 5)
+-> FactorialHelper(3, 20)
+-> FactorialHelper(2, 60)
+-> FactorialHelper(1, 120)
+-> 120
+```
+每一步的结果都累积在 `accumulator` 参数中，不需要保存中间栈帧。
+
+**使用表达式体方法的简洁写法：**
+
+```C#
+public static class MathExtensions
+{
+    // 尾递归阶乘
+    public static long Factorial(int n) => FactorialTail(n, 1);
+
+    private static long FactorialTail(int n, long acc) =>
+        n <= 1 ? acc : FactorialTail(n - 1, n * acc);
+
+    // 尾递归斐波那契
+    public static long Fibonacci(int n) => FibonacciTail(n, 0, 1);
+
+    private static long FibonacciTail(int n, long a, long b) =>
+        n == 0 ? a : FibonacciTail(n - 1, b, a + b);
+}
+```
+
+**尾递归的特点：**
+
+1. **累加器模式**：使用额外的参数来累积计算结果
+2. **无后续操作**：递归调用是函数的最后一个操作
+3. **栈优化**：支持TCO的编译器可以将其优化为循环，避免栈溢出
+
+**注意**：C# 编译器默认不进行尾调用优化，但 .NET JIT 在某些情况下会进行优化。如果需要处理大量递归，建议使用显式循环：
+
+```C#
+// 使用循环的版本（最安全）
+public static long FactorialIterative(int n)
+{
+    long result = 1;
+    for (int i = 2; i <= n; i++)
+    {
+        result *= i;
+    }
+    return result;
+}
+```
 
 ## 4 使用你最熟悉的语言，来实现一个REPL，它将输出任何输出；执行RPN表达式
 

@@ -347,10 +347,479 @@ public FileStream Read(string filePath)
 
 ## 13 改变实现方式而不影响客户端的能力叫做数据抽象 `Data Abstraction`，那么编写一个违反这个属性的例子，并且修复它。
 
-*todo*
+数据抽象是面向对象编程中的核心概念，它允许我们隐藏实现细节，只暴露必要的接口给客户端。当我们违反数据抽象原则时，客户端代码会直接依赖于具体的实现细节，导致任何实现的改变都会影响到客户端代码。
+
+**违反数据抽象的例子：**
+
+```C#
+// 违反数据抽象：直接暴露内部实现细节
+public class ShoppingCart
+{
+    // 直接暴露内部数据结构
+    public List<Product> Items = new List<Product>();
+
+    public decimal GetTotal()
+    {
+        decimal total = 0;
+        foreach (var item in Items)
+        {
+            total += item.Price * item.Quantity;
+        }
+        return total;
+    }
+}
+
+// 客户端代码直接依赖于List<Product>的实现
+public class OrderProcessor
+{
+    public void ProcessOrder(ShoppingCart cart)
+    {
+        // 客户端直接操作内部数据结构
+        for (int i = 0; i < cart.Items.Count; i++)
+        {
+            // 直接使用List的索引访问
+            Console.WriteLine($"Processing: {cart.Items[i].Name}");
+        }
+
+        // 直接修改内部状态
+        cart.Items.Clear();
+    }
+}
+```
+
+在上面的例子中，`ShoppingCart` 类直接暴露了内部的 `List<Product>` 数据结构。如果将来我们需要将其改为 `Dictionary` 或 `HashSet`，所有依赖于 `List` 特定方法的客户端代码都需要修改。
+
+**修复后的代码：**
+
+```C#
+// 遵循数据抽象：隐藏实现细节，提供抽象接口
+public class ShoppingCart
+{
+    // 私有化内部数据结构
+    private readonly List<Product> _items = new List<Product>();
+
+    // 只读属性，返回副本或只读集合
+    public IReadOnlyCollection<Product> Items => _items.AsReadOnly();
+
+    public int ItemCount => _items.Count;
+
+    public void AddItem(Product product)
+    {
+        var existing = _items.FirstOrDefault(p => p.Id == product.Id);
+        if (existing != null)
+        {
+            existing.Quantity += product.Quantity;
+        }
+        else
+        {
+            _items.Add(product);
+        }
+    }
+
+    public bool RemoveItem(int productId)
+    {
+        var item = _items.FirstOrDefault(p => p.Id == productId);
+        if (item != null)
+        {
+            return _items.Remove(item);
+        }
+        return false;
+    }
+
+    public void Clear()
+    {
+        _items.Clear();
+    }
+
+    public decimal GetTotal()
+    {
+        return _items.Sum(item => item.Price * item.Quantity);
+    }
+}
+
+// 客户端代码通过抽象接口操作
+public class OrderProcessor
+{
+    public void ProcessOrder(ShoppingCart cart)
+    {
+        // 通过抽象接口遍历
+        foreach (var item in cart.Items)
+        {
+            Console.WriteLine($"Processing: {item.Name}");
+        }
+
+        // 通过方法操作，而不是直接修改内部状态
+        cart.Clear();
+    }
+}
+```
+
+修复后的代码有以下优点：
+1. **封装性**：内部数据结构对外不可见，客户端无法直接修改
+2. **灵活性**：可以随时更换内部实现（如改为 `Dictionary`），而不影响客户端代码
+3. **可维护性**：所有对数据的操作都通过方法进行，便于添加验证、日志等逻辑
+4. **安全性**：返回只读集合，防止外部意外修改内部状态
 ## 14 编写一个代码片段并且违法DRY (Don't Repeat Yourself)原则，并且修复它。
-*todo*
+
+DRY（Don't Repeat Yourself）原则强调"每一个知识点在系统中都应该有一个单一、明确、权威的表示"。违反DRY原则会导致代码冗余、维护困难，并增加引入bug的风险。
+
+**违反DRY原则的例子：**
+
+```C#
+public class UserService
+{
+    public void CreateUser(string email, string password)
+    {
+        // 重复的邮箱验证逻辑
+        if (string.IsNullOrEmpty(email))
+            throw new ArgumentException("Email cannot be empty");
+        if (!email.Contains("@") || !email.Contains("."))
+            throw new ArgumentException("Invalid email format");
+        if (email.Length > 255)
+            throw new ArgumentException("Email is too long");
+
+        // 重复的密码验证逻辑
+        if (string.IsNullOrEmpty(password))
+            throw new ArgumentException("Password cannot be empty");
+        if (password.Length < 8)
+            throw new ArgumentException("Password must be at least 8 characters");
+        if (!password.Any(char.IsDigit))
+            throw new ArgumentException("Password must contain at least one digit");
+
+        // 创建用户...
+    }
+
+    public void UpdateEmail(int userId, string newEmail)
+    {
+        // 重复的邮箱验证逻辑（复制粘贴）
+        if (string.IsNullOrEmpty(newEmail))
+            throw new ArgumentException("Email cannot be empty");
+        if (!newEmail.Contains("@") || !newEmail.Contains("."))
+            throw new ArgumentException("Invalid email format");
+        if (newEmail.Length > 255)
+            throw new ArgumentException("Email is too long");
+
+        // 更新邮箱...
+    }
+
+    public void ResetPassword(int userId, string newPassword)
+    {
+        // 重复的密码验证逻辑（复制粘贴）
+        if (string.IsNullOrEmpty(newPassword))
+            throw new ArgumentException("Password cannot be empty");
+        if (newPassword.Length < 8)
+            throw new ArgumentException("Password must be at least 8 characters");
+        if (!newPassword.Any(char.IsDigit))
+            throw new ArgumentException("Password must contain at least one digit");
+
+        // 重置密码...
+    }
+}
+```
+
+上面的代码中，邮箱验证和密码验证的逻辑在多处重复出现。如果验证规则需要修改（例如密码长度要求从8改为10），需要在多处修改，容易遗漏。
+
+**修复后的代码：**
+
+```C#
+public class UserService
+{
+    private readonly IValidator<string> _emailValidator;
+    private readonly IValidator<string> _passwordValidator;
+
+    public UserService()
+    {
+        _emailValidator = new EmailValidator();
+        _passwordValidator = new PasswordValidator();
+    }
+
+    public void CreateUser(string email, string password)
+    {
+        _emailValidator.Validate(email);
+        _passwordValidator.Validate(password);
+        // 创建用户...
+    }
+
+    public void UpdateEmail(int userId, string newEmail)
+    {
+        _emailValidator.Validate(newEmail);
+        // 更新邮箱...
+    }
+
+    public void ResetPassword(int userId, string newPassword)
+    {
+        _passwordValidator.Validate(newPassword);
+        // 重置密码...
+    }
+}
+
+// 抽象验证器接口
+public interface IValidator<T>
+{
+    void Validate(T value);
+}
+
+// 邮箱验证器 - 单一职责，集中管理邮箱验证规则
+public class EmailValidator : IValidator<string>
+{
+    public void Validate(string email)
+    {
+        if (string.IsNullOrEmpty(email))
+            throw new ArgumentException("Email cannot be empty");
+        if (!email.Contains("@") || !email.Contains("."))
+            throw new ArgumentException("Invalid email format");
+        if (email.Length > 255)
+            throw new ArgumentException("Email is too long");
+    }
+}
+
+// 密码验证器 - 单一职责，集中管理密码验证规则
+public class PasswordValidator : IValidator<string>
+{
+    private const int MinLength = 8;
+
+    public void Validate(string password)
+    {
+        if (string.IsNullOrEmpty(password))
+            throw new ArgumentException("Password cannot be empty");
+        if (password.Length < MinLength)
+            throw new ArgumentException($"Password must be at least {MinLength} characters");
+        if (!password.Any(char.IsDigit))
+            throw new ArgumentException("Password must contain at least one digit");
+    }
+}
+```
+
+修复后的代码遵循DRY原则，具有以下优点：
+1. **单一来源**：验证逻辑只存在于一处，修改规则只需改一个地方
+2. **可测试性**：验证器可以独立进行单元测试
+3. **可复用性**：验证器可以在其他服务中复用
+4. **可维护性**：代码更简洁，意图更清晰
+5. **常量化**：将魔术数字（如最小长度8）提取为常量，便于统一管理
 
 ## 15 问题拆分（Separation of Concerns)是一种设计原则，它将编程问题划分到不同的领域，每一个领域关注自己的的问题。有许多不同的机制来完成这个目标，比如使用对象，函数，模块，或者MVC等等。 你能讨论一下这个话题吗？
 
-*todo*
+关注点分离（Separation of Concerns，SoC）是软件工程中最重要的设计原则之一，由Edsger W. Dijkstra在1974年首次提出。其核心思想是将一个复杂的系统分解为不同的部分，每个部分只负责处理一个特定的"关注点"或"职责"。
+
+### 为什么需要关注点分离？
+
+1. **降低复杂度**：将大问题分解为小问题，更易于理解和管理
+2. **提高可维护性**：修改一个功能不会影响其他功能
+3. **增强可测试性**：独立的模块更容易进行单元测试
+4. **促进团队协作**：不同团队可以并行开发不同模块
+5. **提高代码复用性**：独立的组件可以在其他项目中复用
+
+### 实现关注点分离的机制
+
+#### 1. 函数级别的分离
+
+```C#
+// 违反SoC：一个函数做了太多事情
+public void ProcessOrder(Order order)
+{
+    // 验证订单
+    if (order.Items.Count == 0)
+        throw new InvalidOperationException("Order has no items");
+
+    // 计算总价
+    decimal total = 0;
+    foreach (var item in order.Items)
+        total += item.Price * item.Quantity;
+
+    // 应用折扣
+    if (order.Customer.IsPremium)
+        total *= 0.9m;
+
+    // 处理支付
+    var paymentResult = ProcessPayment(order.Customer, total);
+
+    // 发送邮件
+    SendEmail(order.Customer.Email, "Order Confirmed", $"Total: {total}");
+
+    // 更新库存
+    foreach (var item in order.Items)
+        UpdateInventory(item.ProductId, -item.Quantity);
+}
+
+// 遵循SoC：每个函数只做一件事
+public void ProcessOrder(Order order)
+{
+    ValidateOrder(order);
+    decimal total = CalculateTotal(order);
+    total = ApplyDiscount(order.Customer, total);
+    ProcessPayment(order.Customer, total);
+    SendOrderConfirmation(order.Customer, total);
+    UpdateInventory(order.Items);
+}
+
+private void ValidateOrder(Order order) { /* ... */ }
+private decimal CalculateTotal(Order order) { /* ... */ }
+private decimal ApplyDiscount(Customer customer, decimal total) { /* ... */ }
+private void SendOrderConfirmation(Customer customer, decimal total) { /* ... */ }
+private void UpdateInventory(IEnumerable<OrderItem> items) { /* ... */ }
+```
+
+#### 2. 类/对象级别的分离（单一职责原则）
+
+```C#
+// 违反SoC：一个类承担多个职责
+public class Employee
+{
+    public string Name { get; set; }
+    public decimal Salary { get; set; }
+
+    public decimal CalculateTax() { /* 税务计算 */ }
+    public void SaveToDatabase() { /* 数据持久化 */ }
+    public string GenerateReport() { /* 报表生成 */ }
+    public void SendPayslip() { /* 邮件发送 */ }
+}
+
+// 遵循SoC：每个类只有一个职责
+public class Employee
+{
+    public string Name { get; set; }
+    public decimal Salary { get; set; }
+}
+
+public class TaxCalculator
+{
+    public decimal CalculateTax(Employee employee) { /* ... */ }
+}
+
+public class EmployeeRepository
+{
+    public void Save(Employee employee) { /* ... */ }
+}
+
+public class PayslipGenerator
+{
+    public string Generate(Employee employee) { /* ... */ }
+}
+
+public class EmailService
+{
+    public void SendPayslip(Employee employee, string payslip) { /* ... */ }
+}
+```
+
+#### 3. 模块/层级别的分离（分层架构）
+
+```C#
+// 表示层（Presentation Layer）
+public class OrderController : Controller
+{
+    private readonly IOrderService _orderService;
+
+    public IActionResult CreateOrder(OrderViewModel model)
+    {
+        var dto = MapToDto(model);
+        _orderService.CreateOrder(dto);
+        return Ok();
+    }
+}
+
+// 业务逻辑层（Business Logic Layer）
+public class OrderService : IOrderService
+{
+    private readonly IOrderRepository _repository;
+    private readonly IInventoryService _inventoryService;
+
+    public void CreateOrder(OrderDto dto)
+    {
+        var order = new Order(dto);
+        _repository.Save(order);
+        _inventoryService.DeductStock(order.Items);
+    }
+}
+
+// 数据访问层（Data Access Layer）
+public class OrderRepository : IOrderRepository
+{
+    private readonly DbContext _context;
+
+    public void Save(Order order)
+    {
+        _context.Orders.Add(order);
+        _context.SaveChanges();
+    }
+}
+```
+
+#### 4. MVC模式的关注点分离
+
+```C#
+// Model - 数据和业务逻辑
+public class Product
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public decimal Price { get; set; }
+
+    public decimal GetDiscountedPrice(decimal discountPercent)
+    {
+        return Price * (1 - discountPercent / 100);
+    }
+}
+
+// View - 用户界面展示（Razor示例）
+// Products/Index.cshtml
+// @model IEnumerable<Product>
+// @foreach (var product in Model)
+// {
+//     <div>@product.Name - @product.Price</div>
+// }
+
+// Controller - 协调Model和View
+public class ProductsController : Controller
+{
+    private readonly IProductService _productService;
+
+    public IActionResult Index()
+    {
+        var products = _productService.GetAllProducts();
+        return View(products);
+    }
+}
+```
+
+#### 5. 横切关注点的分离（AOP - 面向切面编程）
+
+```C#
+// 使用特性/拦截器分离横切关注点（如日志、缓存、事务）
+public class OrderService : IOrderService
+{
+    [Log]                    // 日志关注点
+    [Cache(Duration = 300)]  // 缓存关注点
+    [Transaction]            // 事务关注点
+    public Order GetOrder(int id)
+    {
+        // 核心业务逻辑，不包含横切关注点的代码
+        return _repository.GetById(id);
+    }
+}
+
+// 日志切面实现
+public class LogAttribute : ActionFilterAttribute
+{
+    public override void OnActionExecuting(ActionExecutingContext context)
+    {
+        _logger.LogInformation($"Executing: {context.ActionDescriptor.DisplayName}");
+    }
+
+    public override void OnActionExecuted(ActionExecutedContext context)
+    {
+        _logger.LogInformation($"Executed: {context.ActionDescriptor.DisplayName}");
+    }
+}
+```
+
+### 总结
+
+关注点分离是软件设计的基石，它通过多种机制实现：
+- **函数**：将复杂操作分解为小的、单一目的的函数
+- **类/对象**：遵循单一职责原则，每个类只负责一个功能
+- **模块/包**：将相关功能组织在一起，形成内聚的模块
+- **层/架构**：如MVC、三层架构，将表示、业务、数据分离
+- **切面/拦截器**：处理横切关注点如日志、安全、事务
+
+良好的关注点分离使代码更易于理解、测试、维护和扩展，是构建高质量软件系统的关键。
