@@ -69,17 +69,22 @@ jobs:
           for chapter in "${chapters[@]}"; do
             if [ -f "${chapter}/README.md" ]; then
               echo "" >> combined.md
-              # Fix image paths to be relative to the chapter folder (handle both 'images/' and 'image/')
+              # Fix image paths and strip control characters (like backspace ^H)
               sed -e "s|\./images/|${chapter}/images/|g" \
                   -e "s|(images/|(${chapter}/images/|g" \
                   -e "s|\./image/|${chapter}/image/|g" \
                   -e "s|(image/|(${chapter}/image/|g" \
-                  "${chapter}/README.md" >> combined.md
+                  "${chapter}/README.md" | tr -d '\010' >> combined.md
               echo "" >> combined.md
               echo "\\newpage" >> combined.md
               echo "" >> combined.md
             fi
           done
+
+      - name: Clean control characters
+        run: |
+          # Remove any remaining control characters that could break LaTeX
+          LC_ALL=C sed -i 's/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]//g' combined.md
 
       - name: Generate PDF
         run: |
