@@ -18,7 +18,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y pandoc texlive-xetex texlive-fonts-recommended \
-            texlive-lang-chinese fonts-noto-cjk texlive-latex-extra
+            texlive-lang-chinese fonts-noto-cjk fonts-noto texlive-latex-extra
 
       - name: Combine markdown files
         run: |
@@ -69,8 +69,12 @@ jobs:
           for chapter in "${chapters[@]}"; do
             if [ -f "${chapter}/README.md" ]; then
               echo "" >> combined.md
-              # Fix image paths to be relative to the chapter folder
-              sed "s|\./images/|${chapter}/images/|g; s|(images/|(${chapter}/images/|g" "${chapter}/README.md" >> combined.md
+              # Fix image paths to be relative to the chapter folder (handle both 'images/' and 'image/')
+              sed -e "s|\./images/|${chapter}/images/|g" \
+                  -e "s|(images/|(${chapter}/images/|g" \
+                  -e "s|\./image/|${chapter}/image/|g" \
+                  -e "s|(image/|(${chapter}/image/|g" \
+                  "${chapter}/README.md" >> combined.md
               echo "" >> combined.md
               echo "\\newpage" >> combined.md
               echo "" >> combined.md
