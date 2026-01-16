@@ -1,0 +1,109 @@
+name: Release PDF
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build-pdf:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc texlive-xetex texlive-fonts-recommended \
+            texlive-lang-chinese fonts-noto-cjk texlive-latex-extra
+
+      - name: Combine markdown files
+        run: |
+          # Create a combined markdown file with all chapters in order
+          cat << 'HEADER' > combined.md
+          ---
+          title: "后端开发者面试问题"
+          author: "高峰 (gaufung@outlook.com)"
+          documentclass: article
+          geometry: margin=1in
+          toc: true
+          toc-depth: 2
+          numbersections: true
+          ---
+
+          HEADER
+
+          # Add introduction from root README (skip the header lines)
+          echo "" >> combined.md
+          echo "# 简介" >> combined.md
+          echo "" >> combined.md
+          tail -n +9 README.md | head -n -6 >> combined.md
+          echo "" >> combined.md
+          echo "\\newpage" >> combined.md
+          echo "" >> combined.md
+
+          # Add each chapter in order
+          chapters=(
+            "01关于设计模式"
+            "02代码设计"
+            "03语言"
+            "04Web开发"
+            "05数据库"
+            "06NoSQL"
+            "07代码版本管理"
+            "08并发"
+            "09分布式系统"
+            "10软件生命周期和团队管理"
+            "11逻辑和算法"
+            "12软件架构"
+            "13SOA和Microservices"
+            "14安全"
+            "15通用问题"
+            "16开放问题"
+            "17BillGates问题"
+          )
+
+          for chapter in "${chapters[@]}"; do
+            if [ -f "${chapter}/README.md" ]; then
+              echo "" >> combined.md
+              # Fix image paths to be relative to the chapter folder
+              sed "s|\./images/|${chapter}/images/|g; s|(images/|(${chapter}/images/|g" "${chapter}/README.md" >> combined.md
+              echo "" >> combined.md
+              echo "\\newpage" >> combined.md
+              echo "" >> combined.md
+            fi
+          done
+
+      - name: Generate PDF
+        run: |
+          pandoc combined.md -o backend-interview.pdf \
+            --pdf-engine=xelatex \
+            -V CJKmainfont="Noto Sans CJK SC" \
+            -V mainfont="Noto Sans" \
+            -V monofont="Noto Sans Mono" \
+            -V geometry:margin=1in \
+            -V colorlinks=true \
+            -V linkcolor=blue \
+            -V urlcolor=blue \
+            --highlight-style=tango \
+            --toc \
+            --toc-depth=2 \
+            -V toc-title="目录"
+
+      - name: Upload PDF as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-interview-pdf
+          path: backend-interview.pdf
+
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: backend-interview.pdf
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
