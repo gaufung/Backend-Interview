@@ -1,381 +1,482 @@
-1. [什么时候缓存是无用的，甚至是危险的？](#1-shen-me-shi-hou-huan-cun-shi-wu-yong-de-shen-zhi-shi-wei-xian-de)
-2. [为什么事件驱动架构提高可靠性？](#2-wei-shen-me-shi-jian-qu-dong-jia-gou-ti-gao-ke-kao-xing)
-3. [如何让代码可读？](#3-ru-he-rang-dai-ma-ke-du)
-4. [紧急设计(Emergent Design)和演化架构(Evolutionary Architecture)之间的区别是什么？](#4-jin-ji-she-ji-emergent-design-he-yan-hua-jia-gou-evolutionary-architecture-zhi-jian-de-qu-bie-shi-shen-me)
-5. [横向扩展和纵向扩展有什么区别？什么时候使用其中一个，而不是另外一个？](#5-heng-xiang-kuo-zhan-he-zong-xiang-kuo-zhan-you-shen-me-qu-bie-shen-me-shi-hou-shi-yong-qi-zhong-yi-ge-er-bu-shi-ling-wai-yi-ge)
-6. [如何处理"故障切换(failover)"和"用户会话(user session)"？](#6-ru-he-chu-li-gu-zhang-qie-huan-failover-he-yong-hu-hui-hua-user-session)
-7. [什么是CQRS（Command Query Responsibility Segregation)? 它和最初的有什么区别？](#7-shen-me-shi-cqrscommand-query-responsibility-segregation-ta-he-zui-chu-de-you-shen-me-qu-bie)
+1. [什么时候缓存是无用的，甚至是危险的？](#1-什么时候缓存是无用的甚至是危险的)
+2. [为什么事件驱动架构可能提高可靠性？](#2-为什么事件驱动架构可能提高可靠性)
+3. [如何让代码更可读？](#3-如何让代码更可读)
+4. [Emergent Design 和 Evolutionary Architecture 有什么区别？](#4-emergent-design-和-evolutionary-architecture-有什么区别)
+5. [横向扩展和纵向扩展有什么区别？什么时候选哪种？](#5-横向扩展和纵向扩展有什么区别什么时候选哪种)
+6. [如何处理故障切换（failover）和用户会话（session）？](#6-如何处理故障切换failover和用户会话session)
+7. [什么是 CQRS？它和传统做法有什么区别？](#7-什么是-cqrs它和传统做法有什么区别)
+
+---
 
 ## 1 什么时候缓存是无用的，甚至是危险的？
 
-缓存是在软件开发和系统设计中常用的技术，旨在通过存储数据副本来提高数据检索的速度。然而，在某些情况下，缓存可能是无用的，甚至是危险的。以下是一些具体情况：
+缓存很强大，但不是默认正确答案。
 
-1. 数据频繁变化
-当数据频繁变化时，缓存的数据很快就会过时。在这种情况下，缓存可能会导致用户看到陈旧或错误的信息。例如，股票交易应用中的实时股价，如果使用缓存，可能会导致用户根据过时的信息做出决策。
+它的本质是：
 
-2. 缓存一致性问题
-在分布式系统中，维护缓存一致性是一大挑战。如果系统中的不同部分无法有效同步更新，就可能导致数据不一致。这种情况下，缓存可能会引起错误的结果或数据冲突。
+> 用额外的存储和一致性复杂度，换取更低延迟、更高吞吐或更低下游压力。
 
-3. 安全敏感数据
-对于需要高度安全保护的敏感数据，如密码或个人身份信息，使用缓存可能增加数据泄露的风险。如果攻击者能够访问到缓存的数据，就可能对用户的隐私造成威胁。
+所以当这个交换不划算时，缓存就可能无用，甚至有害。
 
-4. 缓存穿透问题
-缓存穿透指的是查询不存在的数据导致请求直接穿透到数据库，可能会对数据库造成压力。如果没有合适的缓存无效数据的策略，这可能会成为系统的薄弱环节。
+### 什么时候缓存价值很低
 
-5. 缓存资源消耗
-虽然缓存可以提高性能，但它也需要消耗额外的内存和存储资源。在资源有限的情况下，不当的缓存策略可能导致资源浪费，甚至影响系统的稳定性。
+#### 1. 命中率很低
 
-6. 错误的缓存策略
-错误的缓存策略，比如错误的过期时间设置，可能导致缓存无法达到预期的效果。例如，设置了过长的缓存时间，可能导致用户无法及时看到更新的数据；而设置了过短的缓存时间，则可能导致缓存的作用大打折扣。
+如果数据访问非常分散，几乎每次都查不同 key，缓存只是在增加一层额外开销。
 
-结论
-虽然缓存是一个强大的工具，能够在很多情况下提高系统性能，但在设计和实现缓存策略时，需要考虑上述问题，以避免缓存变得无用或带来潜在风险。正确的做法是根据应用的具体需求，合理设计缓存的大小、类型、过期策略和更新机制。
+#### 2. 数据本身很便宜
 
-## 2 为什么事件驱动架构提高可靠性？
+如果一次查询本来就极快、成本低、且下游压力可接受，缓存收益可能不明显。
 
-事件驱动的架构使用事件来触发和通信各个服务组件， 一个事件可以是状态的改变或者更新，事件即可以是包含状态信息也可以只是一个标识符。一个事件驱动的架构主要有三个重要的组件：事件的生产者，事件的路由和事件的消费者。事件的生产者发布事件到路由，路由包含了过滤器然后将这些事件推送到消费者那边。这样生产者的消费者就解耦了，允许它们各自独立扩容，更新和部署。
+#### 3. 数据变化太频繁
+
+如果数据刚放进缓存就失效，缓存既浪费资源，也难以稳定命中。
+
+### 什么时候缓存是危险的
+
+#### 1. 强一致场景
+
+例如：
+
+- 余额
+- 库存扣减
+- 权限变化立即生效
+- 风控状态
+
+这类数据如果缓存处理不当，可能直接带来业务错误。
+
+#### 2. 缓存一致性难以保证时
+
+典型问题包括：
+
+- cache aside 更新竞态
+- 多副本缓存不一致
+- 失效广播延迟
+- 跨地域缓存陈旧
+
+#### 3. 安全敏感数据
+
+如果缓存中放了敏感数据，又缺少访问控制、隔离或加密，风险会放大。
+
+#### 4. 被缓存放大故障
+
+例如：
+
+- 缓存雪崩
+- 缓存击穿
+- 缓存穿透
+- 热点 key 打爆单点缓存实例
+
+### 现代实践建议
+
+缓存设计至少要回答这些问题：
+
+- 缓存的对象是什么？
+- 可接受多长时间的陈旧？
+- 失效策略是什么？
+- 缓存错了会造成什么业务后果？
+- 下游挂掉时缓存是否承担降级职责？
+
+### 面试回答要点
+
+> 缓存不是“加了就更快”的银弹。它适合高重复读、高下游成本的场景；但在强一致、频繁变更或一致性难控的场景下，缓存可能比不缓存更危险。关键是先明确陈旧容忍度和失效策略。
+
+---
+
+## 2 为什么事件驱动架构可能提高可靠性？
+
+注意是“可能”，不是必然。
+
+事件驱动架构（EDA）能提高可靠性的前提，是你用它来做：
+
+- 解耦
+- 缓冲
+- 异步恢复
+- 故障隔离
+
+而不是只是把同步调用换成“发消息”。
 
 ![](./images/Event-Driven-Architecture.png)
 
-使用这个架构的好处是
+### 它为什么可能更可靠
 
-1. 扩容和宕机是独立
-通过解耦服务，让它们只知道事件路由器，而不知道彼此的存在，这就意味着你们的服务是互操作的。但是如果一个服务宕机，剩下的服务仍然可以继续运行。
+#### 1. 降低同步耦合
 
-2. 开发的敏捷性
-这也就意味你没有必要再编写代码来 poll, 过滤和路由事件。事件路由自动的过滤和推送事件到消费端，而且它还起初了服务的生产者和消费者之间的同步问题，可以加速开的的流程。
+服务之间不必同时在线、同时成功。
 
-3. 审计更加容易
+例如下单后：
 
-一个事件路由充当了中心化的角色，可以通过它来审计应用程序和策略。这些策略可以用来限制谁可以推送和订阅事件路由，为数据的访问增加权限控制。
+- 订单服务写本地事务
+- 发出 `OrderCreated` 事件
+- 库存、通知、营销等异步消费
 
-4. 降低成本
+这使得某个下游暂时故障，不一定阻断主流程。
 
-事件驱动是基于推送的，所以每一件事都是基于改变才会进行的。通过这种方式，你可以不必要为持续的查询 （poll) 检查事件来付费。这也就意味着更少的网络带宽，更少的 CPU 使用，更少的 SSL/TSL 的握手请求。
+#### 2. 提供缓冲能力
 
-## 3 如何让代码可读？
+消息队列 / 事件流可以吸收突发流量，避免所有压力瞬间压到下游。
 
-1. 添加合适的注释和文档：合适注释和文档可以帮助他人了解我们代码，并且快速上手。但是注意不要**过度**注释；
-2. 一致的缩进换行格式：不同的人有不同的代码风格，但是在同一份的代码创库中应当保证只有一种代码风格，比如缩进的大小，括号换行的位置等等；
-3. 使用代码块：很多时候，一些代码行组合起来完成特定的功能。所以可以将这些行的代码组合起来，以便和其他行代码区分开来；
-4. 一致的命令习惯：命名是软件开发中头疼的事情，需要保证这些命名规则是一致的，比如说 `strpos()` 和 `str_pos()`不能混合使用，还有驼峰和下划线的区分；
-5. `DRY`原则： `Don't Repeat Yourself` 原则是不要尝试重复写同样逻辑的代码，而是只保留一份；
-6. 避免深度嵌套：嵌套多层会导致逻辑复杂度和增加，增加阅读者的心智负担；
-7. 行长度限制：代码中每一行的长度应当限制在特定的数目，比如 80 或者 120 
-8. 文件和文件加组织： 按照功能将代码文件和文件夹组织在一起。
+#### 3. 更容易局部失败、局部恢复
 
+某个消费者挂了，可以：
 
-## 4 紧急设计(Emergent Design)和演化架构(Evolutionary Architecture)之间的区别是什么？
+- 暂停消费
+- 重试
+- 从 offset / checkpoint 恢复
 
-紧急设计（Emergent Design）和演化架构（Evolutionary Architecture）是软件开发中两种相关但有所区别的概念，它们都强调了软件设计和架构应对变化的能力。下面是这两个概念的比较：
+而不是让整条同步链路直接失败。
 
-- 紧急设计 (Emergent Design)
-定义：紧急设计是一种在软件开发过程中逐步形成的设计策略，特别是在使用敏捷开发方法时。它强调从简单的设计开始，并随着项目的进展，根据实际需求和问题解决方案的出现而调整和优化设计。
-侧重点：侧重于代码层面的设计和重构。它鼓励开发者在开发过程中不断地重构代码，以提高代码的可读性、可维护性和扩展性。
-实践方法：通过代码审查、持续重构、测试驱动开发（TDD）和配对编程等实践来实现和维护。
-目标：通过持续的小步骤改进来应对需求变化，优化项目的技术实现，而不是一开始就试图设计一个完美的系统。
+#### 4. 更适合重放与审计
 
-- 演化架构 (Evolutionary Architecture)
-定义：演化架构指的是设计和实施软件架构的过程，使其能够在未来容易地进行修改和扩展。它强调架构应具备适应变化的能力，包括技术变化、业务需求变化等。
-侧重点：侧重于整个系统级别的架构设计和决策。它关注于确保系统的各个部分都能灵活适应变化，同时维持系统的整体一致性和性能。
-实践方法：通过定义架构决策的健壮性、可扩展性和可替换性等属性，以及使用中间件、微服务架构、模块化设计等技术策略来实现。
-目标：创建一个能够随着时间推移而适应新技术、新业务需求而不断进化的软件架构。
-区别总结
-焦点差异：紧急设计更多关注于代码层面和开发实践，而演化架构更加关注于系统级别的结构和长期的架构策略。
-实施层面：紧急设计通常在项目的具体实施阶段中形成和优化，演化架构则需要在项目早期就考虑到架构的可适应性和长期演变。
-目标和策略：紧急设计的目标是通过不断的重构和改进来优化项目的技术实现，而演化架构的目标是建立一个能够适应未来变化的稳定而灵活的架构基础。
-虽然两者有所不同，但它们都强调了在软件开发过程中应对变化的重要性，并且在实际应用中往往是相辅相成的。紧急设计可以看作是演化架构理念在代码和开发实践层面的体现。
+如果事件被持久化，很多系统可以：
 
-## 5 横向扩展和纵向扩展有什么区别？什么时候使用其中一个，而不是另外一个？
+- 重放消息
+- 重建投影
+- 审计处理轨迹
 
-当你的应用由于请求量的增加，需要增加计算资源以便能够处理这些请求。这时你有两种方式方法来完成这个目标：1）横向扩展(`Scale Up`)；2）纵向扩展(`Scale Out`)，它们可以用下面这张图来表示
+### 但它也可能降低可靠性
+
+如果设计不好，事件驱动也会引入新的风险：
+
+- 重复消息
+- 乱序消息
+- poison message
+- 积压
+- 消费延迟
+- 事件模式演进困难
+- 最终一致性带来的业务复杂度
+
+### 现代实践建议
+
+想让事件驱动真正提升可靠性，通常要配套：
+
+- 幂等消费
+- 死信队列
+- retry / backoff
+- schema 管理
+- 可观测性
+- 重放和回溯机制
+
+### 面试回答要点
+
+> 事件驱动架构提高可靠性的核心，不是“用了 MQ”，而是通过异步解耦、流量缓冲和消费者可恢复性，减少同步级联失败。但它也会引入顺序、重复和最终一致性复杂度，所以必须配套幂等和监控体系。
+
+---
+
+## 3 如何让代码更可读？
+
+可读性不是“代码看起来整齐”这么简单，而是：
+
+> 维护者能否快速理解代码意图、边界、约束和变化点。
+
+### 最重要的原则
+
+#### 1. 用命名表达意图
+
+好的命名能替代大量低价值注释。
+
+- `x` 不如 `retryCount`
+- `data` 不如 `pendingOrders`
+
+#### 2. 控制函数和模块职责
+
+如果一个函数同时做：
+
+- 参数校验
+- DB 写入
+- 远程调用
+- 日志拼接
+- 错误翻译
+
+那它大概率难读。
+
+#### 3. 减少嵌套和隐式分支
+
+深层 `if/else`、复杂布尔表达式、隐藏副作用都很伤可读性。
+
+#### 4. 让相同抽象层次的代码放在一起
+
+不要在一个函数里混杂：
+
+- 高层业务编排
+- 低层 SQL 拼接
+- JSON 细节处理
+
+### 哪些实践很重要
+
+- 一致的格式化规则
+- 小而清晰的函数
+- 明确的边界和错误处理
+- 必要时用注释解释“为什么”
+- 保持重复最少但不过度抽象
+
+### 面试回答要点
+
+> 代码可读性的核心是意图清晰、职责单一和抽象层次一致。真正难读的代码通常不是因为格式差，而是因为边界不清、命名差、职责混乱和副作用隐蔽。
+
+---
+
+## 4 Emergent Design 和 Evolutionary Architecture 有什么区别？
+
+这两个概念都强调“系统不要一次性设计死”，但关注层次不同。
+
+### Emergent Design（涌现式设计）
+
+更偏向代码和局部设计层面。
+
+它强调：
+
+> 从尽可能简单的实现开始，在持续反馈、重构和测试保护下，让更合适的设计逐步浮现出来。
+
+它常见于：
+
+- TDD
+- 持续重构
+- 小步演进
+- 避免过早设计
+
+### Evolutionary Architecture（演化式架构）
+
+更偏向系统和架构层面。
+
+它强调：
+
+> 架构要被设计成可以持续变化，并通过技术和治理手段让关键架构特性可持续演进。
+
+常关注：
+
+- 可替换性
+- 模块边界
+- fitness functions
+- 架构治理
+- 技术雷达
+- 渐进式迁移
+
+### 核心区别
+
+| 维度 | Emergent Design | Evolutionary Architecture |
+|---|---|---|
+| 焦点 | 代码 / 模块设计 | 系统 / 架构演进 |
+| 时间尺度 | 更短期、迭代内 | 更长期、系统级 |
+| 主要手段 | 重构、测试、简化 | 架构约束、演进策略、自动校验 |
+
+### 它们的关系
+
+可以理解为：
+
+- Emergent Design 是局部设计如何演进
+- Evolutionary Architecture 是整体架构如何演进
+
+两者并不冲突，反而经常配合使用。
+
+### 面试回答要点
+
+> Emergent Design 更强调通过反馈和重构让局部设计自然演进，Evolutionary Architecture 更强调系统级架构要具备持续变化能力。一个偏代码层，一个偏架构层，但底层思想都是拥抱变化而非一次性设计完美方案。
+
+---
+
+## 5 横向扩展和纵向扩展有什么区别？什么时候选哪种？
 
 ![](./images/horizontal-vs-vertical-scaling-diagram.png)
 
-1. 纵向扩展类似购买性能更加强劲的服务器，比如更快的 CPU，更大的内存等等，这样就能处理大流量请求。
-2. 横向扩展类似购买更多的普通的机器，将它们作为一个集群来处理大流量请求。
+这两个概念经常被混淆，先统一术语：
 
-那么我们一般怎么去选择相应的扩展方式呢？
+- **纵向扩展（scale up）**：给单机增加 CPU、内存、磁盘、网卡等资源
+- **横向扩展（scale out）**：增加更多机器 / 实例共同承担负载
 
-- 性能：由于横向扩展只要堆积机器即可，理论上来讲可以达到很高的性能表现；但是对于纵向拓展，单台机器的硬件配置是有限的，当我们达到工业界的临界值的时候，就无法再继续扩展；
-- 灵活性：如果你的系统原本就是为单点设计的，那么使用纵向扩展就非常容易，代价最小。如果你想灵活的配置启动设置，并且优化成本和性能，可以选择横向拓展
-- 系统升级：如果你的系统升级比较频繁，那么单点机器的话就比较困难，几乎不可能有宕机的时间；但是对于水平扩展的机器就没有这个问题。
-- 冗余性：横向扩展的的系统可以很好的避免单点故障这个问题。
-- 地理分布：如果你的系统是分布在全球以减低延迟，避免自然灾害等等，那么使用横向扩展是一个最好的选择，没有任何理由将系统放在一台机器上。
-- 成本：越来越多的多核高性能机器上市，而且也非常便宜。如果单个机器也能满足你的需求，可以尝试使用纵向拓展的方式。
+### 纵向扩展的特点
 
-## 6 如何处理"故障切换(failover)"和"用户会话(user session)"？
+优点：
 
-故障切换（Failover）是指当主服务器或组件发生故障时，系统自动切换到备用服务器或组件继续提供服务的机制。在处理故障切换时，用户会话（User Session）的管理是一个关键挑战，因为需要确保用户在切换过程中不会丢失会话状态。
+- 简单直接
+- 对单体系统友好
+- 不需要立刻处理分布式复杂度
 
-### 故障切换策略
+缺点：
 
-1. **主动-被动模式（Active-Passive）**
-   - 主服务器处理所有请求，备用服务器处于待命状态
-   - 主服务器故障时，备用服务器接管
-   - 优点：实现简单，资源利用率可控
-   - 缺点：备用资源在正常情况下闲置
+- 有硬件上限
+- 单点风险更大
+- 升级常常需要停机或迁移
 
-2. **主动-主动模式（Active-Active）**
-   - 多个服务器同时处理请求
-   - 任一服务器故障时，其他服务器分担负载
-   - 优点：资源利用率高，无单点故障
-   - 缺点：需要更复杂的负载均衡和数据同步
+### 横向扩展的特点
 
-### 用户会话处理策略
+优点：
+
+- 理论扩展空间更大
+- 更适合高可用和多地域部署
+- 更利于滚动发布和弹性伸缩
+
+缺点：
+
+- 会引入分布式一致性、路由、状态管理等复杂度
+- 不是所有工作负载都容易 scale out
+
+### 什么时候选纵向扩展
+
+- 系统规模还不大
+- 单机已能满足需求
+- 业务还没到值得承担分布式复杂度的阶段
+- 需要快速、低风险提升容量
+
+### 什么时候选横向扩展
+
+- 单机已经接近极限
+- 需要高可用
+- 需要弹性伸缩
+- 流量分布在多地域
+- 发布和故障恢复要求更高
+
+### 现代实践建议
+
+真实世界里通常不是二选一，而是：
+
+- 先适度纵向扩展
+- 到瓶颈后再做关键组件横向扩展
+
+### 面试回答要点
+
+> 纵向扩展简单、适合早期和单机问题；横向扩展更适合高可用和长期规模化，但会带来分布式复杂度。工程上通常先尽量用简单手段解决问题，再在必要时引入 scale out。
+
+---
+
+## 6 如何处理故障切换（failover）和用户会话（session）？
+
+这个问题的核心矛盾是：
+
+> 故障切换要求任意实例都能接手流量，而有状态会话却会把用户绑定到某个实例或某份状态上。
+
+所以总体方向通常是：
+
+> 尽量减少应用实例本地持有的会话状态。
+
+### 常见方案
 
 #### 1. 粘性会话（Sticky Session）
 
-```C#
-// 负载均衡器配置示例（概念代码）
-public class StickySessionLoadBalancer
-{
-    private readonly Dictionary<string, Server> _sessionToServer = new();
-    private readonly List<Server> _servers;
+负载均衡器尽量把同一用户请求打到同一台机器。
 
-    public Server GetServer(HttpRequest request)
-    {
-        var sessionId = request.Cookies["SessionId"]?.Value;
+优点：
 
-        if (sessionId != null && _sessionToServer.TryGetValue(sessionId, out var server))
-        {
-            if (server.IsHealthy)
-                return server;
+- 实现简单
 
-            // 服务器故障，需要重新分配
-            _sessionToServer.Remove(sessionId);
-        }
+缺点：
 
-        // 分配新服务器
-        var newServer = SelectHealthyServer();
-        if (sessionId != null)
-            _sessionToServer[sessionId] = newServer;
+- 节点故障时会话容易丢
+- 不利于弹性扩缩容
+- 不利于多地域和滚动升级
 
-        return newServer;
-    }
-}
-```
+通常只适合作为过渡方案。
 
-**缺点**：当服务器故障时，该服务器上的所有会话都会丢失。
+#### 2. 集中式会话存储
 
-#### 2. 集中式会话存储（Centralized Session Store）
+把 session 放到共享存储中，例如：
 
-使用 Redis 或数据库存储会话，所有服务器共享同一个会话存储：
+- Redis
+- 数据库
+- 专用 session store
 
-```C#
-// 使用 Redis 存储会话
-public class RedisSessionStore : ISessionStore
-{
-    private readonly IConnectionMultiplexer _redis;
-    private readonly TimeSpan _sessionTimeout = TimeSpan.FromMinutes(30);
+优点：
 
-    public RedisSessionStore(IConnectionMultiplexer redis)
-    {
-        _redis = redis;
-    }
+- 任意实例都可接管
+- 故障切换更平滑
 
-    public async Task<UserSession> GetSessionAsync(string sessionId)
-    {
-        var db = _redis.GetDatabase();
-        var data = await db.StringGetAsync($"session:{sessionId}");
+缺点：
 
-        if (data.IsNullOrEmpty)
-            return null;
+- 新增基础设施依赖
+- session store 自身必须高可用
 
-        return JsonSerializer.Deserialize<UserSession>(data);
-    }
+#### 3. 无状态认证（例如 Token / JWT）
 
-    public async Task SetSessionAsync(string sessionId, UserSession session)
-    {
-        var db = _redis.GetDatabase();
-        var data = JsonSerializer.Serialize(session);
-        await db.StringSetAsync($"session:{sessionId}", data, _sessionTimeout);
-    }
+把身份信息放进签名 token，由服务端做验证。
 
-    public async Task RemoveSessionAsync(string sessionId)
-    {
-        var db = _redis.GetDatabase();
-        await db.KeyDeleteAsync($"session:{sessionId}");
-    }
-}
+优点：
 
-// ASP.NET Core 配置
-public void ConfigureServices(IServiceCollection services)
-{
-    services.AddStackExchangeRedisCache(options =>
-    {
-        options.Configuration = "redis-server:6379";
-        options.InstanceName = "SessionStore:";
-    });
+- 天然适合水平扩展和 failover
+- 应用层更无状态
 
-    services.AddSession(options =>
-    {
-        options.IdleTimeout = TimeSpan.FromMinutes(30);
-        options.Cookie.HttpOnly = true;
-        options.Cookie.IsEssential = true;
-    });
-}
-```
+缺点：
 
-**优点**：任何服务器都可以访问用户会话，故障切换透明。
-**缺点**：引入了额外的基础设施依赖，需要确保 Redis 本身的高可用。
+- token 撤销复杂
+- 权限变更即时失效困难
+- 不适合把大量动态会话状态都塞到 token 里
 
-#### 3. 无状态设计 + JWT Token
+### 最佳实践思路
 
-将会话状态存储在客户端的 Token 中：
+- 身份认证尽量无状态化
+- 需要服务端会话时使用集中式存储
+- 把真正动态、频繁变化的状态放后端，不放 token
+- 为 session store 本身设计高可用和监控
 
-```C#
-public class JwtSessionService
-{
-    private readonly string _secretKey;
+### 面试回答要点
 
-    public string CreateToken(UserInfo user)
-    {
-        var claims = new[]
-        {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Name, user.Username),
-            new Claim(ClaimTypes.Role, user.Role),
-            new Claim("Permissions", JsonSerializer.Serialize(user.Permissions))
-        };
+> failover 和 session 的矛盾在于“服务要能随时切换，状态却不该绑在单机上”。所以现代系统通常尽量无状态化，或者把 session 放进高可用共享存储，而不是依赖粘性会话。
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
-        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+---
 
-        var token = new JwtSecurityToken(
-            issuer: "your-app",
-            audience: "your-app",
-            claims: claims,
-            expires: DateTime.UtcNow.AddHours(1),
-            signingCredentials: credentials
-        );
+## 7 什么是 CQRS？它和传统做法有什么区别？
 
-        return new JwtSecurityTokenHandler().WriteToken(token);
-    }
+CQRS（Command Query Responsibility Segregation）指的是：
 
-    public ClaimsPrincipal ValidateToken(string token)
-    {
-        var handler = new JwtSecurityTokenHandler();
-        var validationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = "your-app",
-            ValidAudience = "your-app",
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey))
-        };
+> 把“写操作模型”和“读操作模型”在职责上分离。
 
-        return handler.ValidateToken(token, validationParameters, out _);
-    }
-}
-```
+这里的关键不是简单地“分两个类”，而是：
 
-**优点**：完全无状态，天然支持故障切换和水平扩展。
-**缺点**：Token 无法主动失效（除非使用黑名单），Token 大小有限制。
+- **Command**：修改状态
+- **Query**：读取数据
 
-#### 4. 会话复制（Session Replication）
+并且两者可以使用不同的模型、不同的存储、不同的扩展策略。
 
-在服务器之间同步会话数据：
+### 传统做法
 
-```C#
-public class ReplicatedSessionStore : ISessionStore
-{
-    private readonly Dictionary<string, UserSession> _localSessions = new();
-    private readonly IClusterCommunication _cluster;
+很多系统会用统一的领域模型 / repository 同时处理：
 
-    public async Task SetSessionAsync(string sessionId, UserSession session)
-    {
-        _localSessions[sessionId] = session;
+- 写入业务规则
+- 查询展示需求
 
-        // 广播到其他节点
-        await _cluster.BroadcastAsync(new SessionUpdateMessage
-        {
-            SessionId = sessionId,
-            Session = session
-        });
-    }
+这在简单系统里完全可行，但在复杂系统中容易产生冲突：
 
-    public void HandleSessionUpdate(SessionUpdateMessage message)
-    {
-        // 接收其他节点的会话更新
-        _localSessions[message.SessionId] = message.Session;
-    }
-}
-```
+- 写模型追求一致性和约束
+- 读模型追求查询效率和展示便利
 
-**优点**：每个服务器都有完整的会话数据，切换快速。
-**缺点**：网络开销大，不适合大规模集群。
+### CQRS 的价值
 
-### 最佳实践建议
+#### 1. 读写优化目标不同
 
-1. **小规模应用**：使用粘性会话 + 集中式会话存储的组合
-2. **中等规模应用**：使用 Redis 集群作为集中式会话存储
-3. **大规模应用**：采用无状态设计 + JWT Token，会话数据存储在客户端
-4. **微服务架构**：使用 JWT Token 在服务间传递用户身份信息
+- 写模型适合保持业务不变量
+- 读模型适合按页面 / API 查询需求定制
 
-### 故障检测与切换
+#### 2. 更适合读多写少场景
 
-```C#
-public class HealthCheckService
-{
-    private readonly List<ServerNode> _nodes;
-    private readonly TimeSpan _checkInterval = TimeSpan.FromSeconds(5);
-    private readonly int _failureThreshold = 3;
+例如：
 
-    public async Task StartMonitoringAsync()
-    {
-        while (true)
-        {
-            foreach (var node in _nodes)
-            {
-                var isHealthy = await CheckNodeHealthAsync(node);
+- 电商商品详情
+- 订单查询中心
+- 报表和 dashboard
 
-                if (!isHealthy)
-                {
-                    node.FailureCount++;
-                    if (node.FailureCount >= _failureThreshold)
-                    {
-                        await MarkNodeUnhealthyAsync(node);
-                        await TriggerFailoverAsync(node);
-                    }
-                }
-                else
-                {
-                    node.FailureCount = 0;
-                }
-            }
+#### 3. 便于扩展不同侧的能力
 
-            await Task.Delay(_checkInterval);
-        }
-    }
+例如写模型保持主事务库，读模型同步到：
 
-    private async Task TriggerFailoverAsync(ServerNode failedNode)
-    {
-        // 将流量从故障节点转移到健康节点
-        var healthyNodes = _nodes.Where(n => n.IsHealthy).ToList();
-        await _loadBalancer.RedistributeTrafficAsync(failedNode, healthyNodes);
+- 只读副本
+- Elasticsearch
+- 宽表
+- cache / projection store
 
-        // 通知运维人员
-        await _alertService.SendAlertAsync($"Node {failedNode.Name} failed, failover triggered");
-    }
-}
-```
+### 代价和复杂度
 
-通过合理设计会话管理策略和故障切换机制，可以确保系统在发生故障时仍能保持服务的连续性，为用户提供无缝的体验。
-## 7 什么是CQRS（Command Query Responsibility Segregation)? 它和最初的有什么区别？
+CQRS 不是白来的，它会引入：
 
-`Command Query Responsibility Segregation` 是一种特定的架构模式，用来解决应用程序设计中的一种场景的情形。
+- 数据同步复杂度
+- 最终一致性
+- 模型数量增加
+- 调试和观测难度提升
 
-假设我们有一个电子商务的网站，或许会有一个 `Order` 这样一个实体和 `OrderRepository` 接口负责数据库的读写操作。理论上来讲这是非常理想的解决方案，但是在现实世界中并没有这么简单，因为并不会只有简单的 `Order` 这样的实体，而且在用户接口展示不同数据之间查询和交互。这也就意味着我们需要模糊每个 `Repository` 之间的界限，或者让用户接口处遵循我们的架构的限制。通常的解决方案由两种：
+### 一个常见误区
 
-1. 使用不同的 `Repository` 查询得到相应的数据，然后将他们组装起来。
-2. 在每个 `Repository` 增加一个查找 （`Finder`）方法，让它来负责查询数据的责任。 
+CQRS 不等于必须上 Event Sourcing。
 
-还有一种使用场景是我们的应用程序的读和写是不平衡的，比如说某些情况下，大量的读取请求，但是写的次数比较小。
+两者可以组合，但不是同义词。
 
-CORS 是将一种将读写分离的架构，这也就意味着每个方法要么是一个 `Command` 来执行操作，要么是一个 `Query` 返回数据。同时也就意味着 `Command` 不返回数据而 `Query` 不修改数据。 回到之前的电子商务网站的例子，我们需要一个 `Command` 方法它只能增加或者更新 `Order` 实体；还需要增加另外的特定的 `Repository`，它只返回数据的视图。通过分离读写操作，每个方法有了特定的职责，当然实现方式也是多种多样的。
+### 面试回答要点
 
-- 可以使用两种不同的模型访问同一个数据库。
-- 也可以将数据存放在不同的数据库中，两个数据库之间有一个异步同步数据库之间的工具，这样能够提高读写数据的效率。而且对于扩展应用程序也是非常方便，因为只需要增加读的数据库数量即可。
+> CQRS 的核心是把读和写的职责、模型甚至存储分开，以分别优化一致性和查询效率。它适合复杂查询或读写特征差异很大的系统，但会引入同步和一致性复杂度，所以不应该为小系统过度设计。
