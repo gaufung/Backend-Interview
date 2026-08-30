@@ -1,13 +1,19 @@
-name: Release PDF
+name: Build Book Formats
 
 on:
   push:
+    branches:
+      - '**'
     tags:
       - 'v*'
   workflow_dispatch:
 
+concurrency:
+  group: book-build-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  build-pdf:
+  build-book:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,35 +23,22 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y pandoc texlive-xetex texlive-fonts-recommended \
-            texlive-lang-chinese fonts-noto-cjk fonts-noto texlive-latex-extra
+          sudo apt-get install -y \
+            pandoc \
+            texlive-xetex \
+            texlive-fonts-recommended \
+            texlive-lang-chinese \
+            texlive-latex-extra \
+            fonts-noto-cjk \
+            fonts-noto \
+            fonts-noto-core \
+            fonts-noto-mono
 
-      - name: Combine markdown files
+      - name: Build combined markdown
+        shell: bash
         run: |
-          # Create a combined markdown file with all chapters in order
-          cat << 'HEADER' > combined.md
-          ---
-          title: "后端开发者面试问题"
-          author: "高峰 (gaufung@outlook.com)"
-          documentclass: article
-          geometry: margin=1in
-          toc: true
-          toc-depth: 2
-          numbersections: true
-          ---
+          set -euo pipefail
 
-          HEADER
-
-          # Add introduction from root README (skip the header lines)
-          echo "" >> combined.md
-          echo "# 简介" >> combined.md
-          echo "" >> combined.md
-          tail -n +9 README.md | head -n -6 >> combined.md
-          echo "" >> combined.md
-          echo "\\newpage" >> combined.md
-          echo "" >> combined.md
-
-          # Add each chapter in order
           chapters=(
             "01关于设计模式"
             "02代码设计"
@@ -66,24 +59,45 @@ jobs:
             "17BillGates问题"
           )
 
+          cat > combined.md <<'EOF'
+          ---
+          title: "后端开发者面试问题"
+          author: "高峰 (gaufung@outlook.com)"
+          lang: zh-CN
+          documentclass: article
+          geometry: margin=1in
+          toc: true
+          toc-depth: 2
+          numbersections: true
+          ---
+
+          # 简介
+          EOF
+
+          awk '
+            BEGIN { printing = 0 }
+            /^## 这是什么$/ { printing = 1 }
+            /^## 全部目录$/ { printing = 0 }
+            printing { print }
+          ' README.md >> combined.md
+
+          printf '\n\\newpage\n\n' >> combined.md
+
           for chapter in "${chapters[@]}"; do
-            if [ -f "${chapter}/README.md" ]; then
-              echo "" >> combined.md
-              # Fix image paths and strip control characters (like backspace ^H)
-              sed -e "s|\./images/|${chapter}/images/|g" \
-                  -e "s|(images/|(${chapter}/images/|g" \
-                  -e "s|\./image/|${chapter}/image/|g" \
-                  -e "s|(image/|(${chapter}/image/|g" \
-                  "${chapter}/README.md" | tr -d '\010' >> combined.md
-              echo "" >> combined.md
-              echo "\\newpage" >> combined.md
-              echo "" >> combined.md
+            if [[ -f "${chapter}/README.md" ]]; then
+              sed \
+                -e "s|\./images/|${chapter}/images/|g" \
+                -e "s|(images/|(${chapter}/images/|g" \
+                -e "s|\./image/|${chapter}/image/|g" \
+                -e "s|(image/|(${chapter}/image/|g" \
+                "${chapter}/README.md" | tr -d '\010' >> combined.md
+
+              printf '\n\\newpage\n\n' >> combined.md
             fi
           done
 
       - name: Clean control characters
         run: |
-          # Remove any remaining control characters that could break LaTeX
           LC_ALL=C sed -i 's/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]//g' combined.md
 
       - name: Generate PDF
@@ -97,22 +111,54 @@ jobs:
             -V colorlinks=true \
             -V linkcolor=blue \
             -V urlcolor=blue \
+            -V toc-title="目录" \
             --highlight-style=tango \
             --toc \
-            --toc-depth=2 \
-            -V toc-title="目录"
+            --toc-depth=2
 
-      - name: Upload PDF as artifact
+      - name: Generate EPUB
+        shell: bash
+        run: |
+          cat > epub.css <<'CSS'
+          body {
+            line-height: 1.6;
+            font-family: sans-serif;
+          }
+          code, pre {
+            font-family: monospace;
+          }
+          img {
+            max-width: 100%;
+            height: auto;
+          }
+          CSS
+
+          pandoc combined.md -o backend-interview.epub \
+            --toc \
+            --toc-depth=2 \
+            --metadata title="后端开发者面试问题" \
+            --metadata language="zh-CN" \
+            --css epub.css
+
+      - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
         with:
           name: backend-interview-pdf
           path: backend-interview.pdf
 
-      - name: Create Release
+      - name: Upload EPUB artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-interview-epub
+          path: backend-interview.epub
+
+      - name: Create GitHub Release assets
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: backend-interview.pdf
+          files: |
+            backend-interview.pdf
+            backend-interview.epub
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
